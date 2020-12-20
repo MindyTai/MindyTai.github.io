@@ -172,6 +172,80 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/11/24/test/test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="From Zero to Yee">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/24/test/test/" class="post-title-link" itemprop="url">CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-24 00:00:00" itemprop="dateCreated datePublished" datetime="2019-11-24T00:00:00+08:00">2019-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-20 17:42:23" itemprop="dateModified" datetime="2020-12-20T17:42:23+08:00">2020-12-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>身處在講求效率的時代，完整的開發流程當然少不了 CI/CD。什麼是 CI/CD 呢？CI ( Continuous Integration ) 中文為「持續性整合」，目的是讓專案能夠在每一次的變動中都能通過一些檢驗來確保專案品質。CD ( Continuous Deployment ) 中文則為「自動化佈署」，讓專案能夠自動在每次變動後能以最新版本呈現。<br>由於想要體會 CI/CD 到底有多方便，於是想要藉由實做一個簡單的 Node.js 專案來實際體驗看看。</p>
+<h2 id="內容架構"><a href="#內容架構" class="headerlink" title="內容架構"></a>內容架構</h2><p>1.寫簡易的 Node.js Server<br>2.使用 CircleCI 整合 eslint／jest（CI）<br>3.使用 CircleCI deploy 到 GCP App Engine（CD)</p>
+<h2 id="NodejS-Hello-CICD-demo"><a href="#NodejS-Hello-CICD-demo" class="headerlink" title="NodejS Hello CICD demo"></a>NodejS Hello CICD demo</h2><p>這是專案最終架構：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">├── app.yaml </span><br><span class="line">├── babel.config.js</span><br><span class="line">├── build</span><br><span class="line">│ └── server.js</span><br><span class="line">├── lint-staged.config.js</span><br><span class="line">├── nodemon.json</span><br><span class="line">├── package.json</span><br><span class="line">├── src</span><br><span class="line">│ └── server.js</span><br><span class="line">├── test</span><br><span class="line">│ └── server.test.js</span><br><span class="line">└── yarn.lock</span><br></pre></td></tr></table></figure>
+<p>哇！看起來很複雜？別急，下面會一一帶你做一遍！</p>
+<h2 id="Step-by-Step"><a href="#Step-by-Step" class="headerlink" title="Step by Step"></a>Step by Step</h2><h3 id="建立資料夾"><a href="#建立資料夾" class="headerlink" title="建立資料夾"></a>建立資料夾</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir demo-server</span><br><span class="line">cd demo-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化專案"><a href="#初始化專案" class="headerlink" title="初始化專案"></a>初始化專案</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init</span><br></pre></td></tr></table></figure>
+<p>這時會出現問題問你，若沒有特殊設定可以一路按 Enter 就好，回答完後就會出現 package.json 。</p>
+<p><img src="/package.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
     <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/04/%E7%B6%B2%E7%AB%99%E6%96%B0%E6%94%B6%E7%9B%8A%20%E6%8C%96%E7%A4%A6%E5%8F%96%E4%BB%A3%E5%82%B3%E7%B5%B1%E5%BB%A3%E5%91%8A/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -472,12 +546,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
