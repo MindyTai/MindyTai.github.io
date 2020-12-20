@@ -145,7 +145,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/21/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/11/24/deploy-to-GCP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -159,7 +159,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/21/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/2019/11/24/deploy-to-GCP/" class="post-title-link" itemprop="url">CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine</a>
         </h2>
 
         <div class="post-meta">
@@ -169,8 +169,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2020-12-21 01:26:02" itemprop="dateCreated datePublished" datetime="2020-12-21T01:26:02+08:00">2020-12-21</time>
+              <time title="Created: 2019-11-24 00:00:00" itemprop="dateCreated datePublished" datetime="2019-11-24T00:00:00+08:00">2019-11-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-21 01:23:27" itemprop="dateModified" datetime="2020-12-21T01:23:27+08:00">2020-12-21</time>
+              </span>
 
           
 
@@ -183,15 +190,263 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+          <p>身處在講求效率的時代，完整的開發流程當然少不了 CI/CD。什麼是 CI/CD 呢？CI ( Continuous Integration ) 中文為「持續性整合」，目的是讓專案能夠在每一次的變動中都能通過一些檢驗來確保專案品質。CD ( Continuous Deployment ) 中文則為「自動化佈署」，讓專案能夠自動在每次變動後能以最新版本呈現。<br>由於想要體會 CI/CD 到底有多方便，於是想要藉由實做一個簡單的 Node.js 專案來實際體驗看看。</p>
+<h2 id="內容架構"><a href="#內容架構" class="headerlink" title="內容架構"></a>內容架構</h2><p>1.寫簡易的 Node.js Server<br>2.使用 CircleCI 整合 eslint／jest（CI）<br>3.使用 CircleCI deploy 到 GCP App Engine（CD)</p>
+<h2 id="NodejS-Hello-CICD-demo"><a href="#NodejS-Hello-CICD-demo" class="headerlink" title="NodejS Hello CICD demo"></a>NodejS Hello CICD demo</h2><p>這是專案最終架構：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">├── app.yaml </span><br><span class="line">├── babel.config.js</span><br><span class="line">├── build</span><br><span class="line">│ └── server.js</span><br><span class="line">├── lint-staged.config.js</span><br><span class="line">├── nodemon.json</span><br><span class="line">├── package.json</span><br><span class="line">├── src</span><br><span class="line">│ └── server.js</span><br><span class="line">├── test</span><br><span class="line">│ └── server.test.js</span><br><span class="line">└── yarn.lock</span><br></pre></td></tr></table></figure>
+<p>哇！看起來很複雜？別急，下面會一一帶你做一遍！</p>
+<h2 id="Step-by-Step"><a href="#Step-by-Step" class="headerlink" title="Step by Step"></a>Step by Step</h2><h3 id="建立資料夾"><a href="#建立資料夾" class="headerlink" title="建立資料夾"></a>建立資料夾</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir demo-server</span><br><span class="line">cd demo-server</span><br></pre></td></tr></table></figure>
+<h3 id="初始化專案"><a href="#初始化專案" class="headerlink" title="初始化專案"></a>初始化專案</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init</span><br></pre></td></tr></table></figure>
+<p>這時會出現問題問你，若沒有特殊設定可以一路按 Enter 就好，回答完後就會出現 <code>package.json</code> 。</p>
+<p><img src="package.jpg" alt="這樣就能產生出 package.json 囉"><br>這樣就能產生出 package.json 囉！</p>
+<p>開發專案少不了版本控制，這樣就能開始使用 git 了 🥳</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>而不必要的檔案記得寫進 .gitignore 讓 git 忽略。</p>
+<h2 id="新增-gitignore"><a href="#新增-gitignore" class="headerlink" title="新增 .gitignore"></a>新增 .gitignore</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br></pre></td></tr></table></figure>
+<h2 id="安裝-express-及-babel"><a href="#安裝-express-及-babel" class="headerlink" title="安裝 express 及 babel"></a>安裝 express 及 babel</h2><p>express 是一個 Node.js 的後端框架，這次 demo 會用來處理 server。 由於 Node.js 處理檔案引入和匯出方法為 require 及 module.export ， 而 es6 出現了 import 及 export，如要使用就要使用 babel 來 transpile。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add express</span><br><span class="line">yarn add @babel&#x2F;preset-env @babel-node @babel&#x2F;core @babel&#x2F;cli --dev</span><br></pre></td></tr></table></figure>
+<p>babel 只有在開發會用到，注意後面要加 — dev。</p>
+<h2 id="建立-src-server-js"><a href="#建立-src-server-js" class="headerlink" title="建立 src/server.js"></a>建立 src/server.js</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">&#x27;express&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> &#123; PORT = <span class="number">3000</span> &#125; = process.env;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> IS_TEST = !!<span class="built_in">module</span>.parent; </span><br><span class="line"><span class="comment">// If there&#x27;s another file imports server.js, then module.parent will become true</span></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.status(<span class="number">200</span>).send(<span class="string">&#x27;Hello!CI/CD!&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!IS_TEST) &#123;</span><br><span class="line">  app.listen(PORT, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Server is running on PORT:&#x27;</span>, PORT);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> app;</span><br></pre></td></tr></table></figure>
+<h2 id="本機跑起來"><a href="#本機跑起來" class="headerlink" title="本機跑起來"></a>本機跑起來</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn babel-node src&#x2F;server.js</span><br></pre></td></tr></table></figure>
+<p>babel-node 會在 node runtime 即時使用 babel transpile javascript。<br>這樣就能在 localhost 跑起來了 😌</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/04/%E7%B6%B2%E7%AB%99%E6%96%B0%E6%94%B6%E7%9B%8A%20%E6%8C%96%E7%A4%A6%E5%8F%96%E4%BB%A3%E5%82%B3%E7%B5%B1%E5%BB%A3%E5%91%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/04/%E7%B6%B2%E7%AB%99%E6%96%B0%E6%94%B6%E7%9B%8A%20%E6%8C%96%E7%A4%A6%E5%8F%96%E4%BB%A3%E5%82%B3%E7%B5%B1%E5%BB%A3%E5%91%8A/" class="post-title-link" itemprop="url">網站新收益 挖礦取代傳統廣告</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-04 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-04T00:00:00+08:00">2019-07-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-20 15:42:19" itemprop="dateModified" datetime="2020-12-20T15:42:19+08:00">2020-12-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><em>此文同步刊載於<a target="_blank" rel="noopener" href="https://castnet.nctu.edu.tw/castnet/article/11077?issueID=662">喀報</a></em></p>
+<p>根據 Torrent Freak 報導，知名 BitTorrent 網站海盜灣（The Pirate Bay）利用使用者停留在網頁上時，悄悄地讓他們的電腦進行挖礦，以賺取數位貨幣。這種行為的原理是什麼？一般人該怎麼防範？本文將從數位貨幣之母比特幣與其核心 — — 區塊鏈開始，帶領讀者一起了解電腦挖礦與海盜灣事件的相關技術。</p>
+<h2 id="比特幣-點對點交易的數位貨幣系統"><a href="#比特幣-點對點交易的數位貨幣系統" class="headerlink" title="比特幣 點對點交易的數位貨幣系統"></a>比特幣 點對點交易的數位貨幣系統</h2><blockquote>
+<p>「比特幣讓人們第一次可以在網路上交易身家財產，而且是安全的，沒有人可以挑戰其合法性。」- Marc Andreessen（Netscape創辦人）</p>
+</blockquote>
+<p>中本聰，比特幣系統創造者，其真實身份到目前未定論。他在 2008 年發表了論文〈比特幣：P2P的數位貨幣系統〉中提到，比特幣系統是一個點對點的電子支付系統，讓雙方能直接交易。相較於傳統的電子支付需仰賴金融機構作為第三方，要經過雙方提供許多額外的個人資料以作為信任基礎；比特幣系統用電腦（節點）間的共識決取代第三方的監管，能讓交易更多元化，達到最高的經濟效益。</p>
+<p>比特幣是一種數位貨幣，數位貨幣的功能就像是現實世界的實體貨幣一樣，能夠用來交換物品以產生價值，現今一塊比特幣市值大概相當於 11 萬新台幣。</p>
+<h2 id="區塊鏈-比特幣系統中心概念"><a href="#區塊鏈-比特幣系統中心概念" class="headerlink" title="區塊鏈 比特幣系統中心概念"></a>區塊鏈 比特幣系統中心概念</h2><p>比特幣系統是最先被實作出來的區塊鏈應用。在這個區塊鏈系統中，有一本帳本（ledger），儲存所有參與者的交易記錄。帳本擁有無數個副本，散佈於系統網路上的每一個節點，讓每一筆帳都能透明、低耗能又安全地被記錄下來，這也是區塊鏈的正式名稱「分散式帳本技術」的命名原因。這項技術去中心化（Decentralization）和資訊公開的特點 — — 加上為一個開源專案，人人皆能取得原始碼而創造新的區塊鏈，讓它應用極為廣泛，並迅速在各個行業中發展。</p>
+<p>2015 年 10 月，區塊鏈純商業性質平台 Ujo Music 成立。此平台讓音樂創作者在區塊鏈上登記自己的音樂以及管理自己的版權，閱聽人能夠從平台上購買音樂，音樂創作者從而獲得收益，不受第三方經紀公司的控制。閱聽人向Ujo 發出購買訊息，從電子錢包轉出數位貨幣。此時，去中心化的系統會公告在線用戶（節點）徵求「檢驗員」，檢視雙方交易的合法性、過去交易紀錄等。最快完成的「檢驗員」在取得其他節點的共識後，決定交易是否成功。成功以後，系統自動把數位貨幣依比例分配，「檢驗員」從中收到報酬。交易結束後，音樂創作者就會寄出歌曲存放位置供買家下載，買家會收到隨機發送一組亂數當作交易代碼，透過代碼取得音樂。交易中間，不需要是Ujo會員，也不需要手續費。</p>
+<h2 id="電腦挖礦-驗證區塊鏈交易的礦工"><a href="#電腦挖礦-驗證區塊鏈交易的礦工" class="headerlink" title="電腦挖礦 驗證區塊鏈交易的礦工"></a>電腦挖礦 驗證區塊鏈交易的礦工</h2><p>前文所提 Ujo Music 例子中的「檢驗員」，事實上就相當於電腦挖礦中的礦工。</p>
+<p>挖礦，是一個比喻。在網路上，系統使用特定函數設計複雜的數學難題，讓候選區塊（candidate block）的礦工運用自身資源運算出答案。得出答案後，告知其他參與的解題者，由他們驗證是否正確。驗證後，便會成為鏈上的最新區塊，而區塊鏈也會給予礦工回饋金（數位貨幣）；回饋金是一種獎勵機制，以推動礦工去建立更多節點，同時也促使礦工貢獻計算資源來幫助區塊鏈的運作及安全。挖礦事實上是對區塊鏈及礦工雙方均有利的機制。</p>
+<p>中本聰依現實世界中採礦的概念：愈到後期金礦愈少，挖到的難度愈高 — — 愈多礦工投入，解題的困難度將會節節高升，報酬將會愈低。由於難度的上升，運算資源少的礦工幾乎不可能獨自解題，於是礦工們組織礦池一起合作，以增加成功解題的機率。得到的報酬將就各個礦工的貢獻程度依比例分配，並從各個礦工報酬中抽取些微報酬以維護礦池，使礦工們驗證的候選區塊能夠放到鏈上成為正式區塊。</p>
+<p>為追求更快的挖礦速度，礦工們的硬體也要隨之提升。以比特幣來說，硬體從最初的 CPU（中央處理器）、GPU（顯示卡）、FPGA（可程式化邏輯閘陣列），到後來甚至出現專門用於挖礦的ASIC（客製化晶片），ASIC 挖礦速度約為顯卡的百倍以上。然而有些幣種的演算法屬於 Anti-ASIC，廠商難以設計出相對應的 ASIC 來進行運算。其目的是避免大量算力集中在少數人手中，維持去中心化的主旨，保護區塊鏈安全。</p>
+<h2 id="Pirate-Bay-讓用戶成為礦工"><a href="#Pirate-Bay-讓用戶成為礦工" class="headerlink" title="Pirate Bay 讓用戶成為礦工"></a>Pirate Bay 讓用戶成為礦工</h2><p>根據 Torrent Freak 報導，著名 BT 網站海盜灣在未告知用戶的情況下，在網站嵌入挖礦程式，使得使用者在瀏覽頁面時，電腦的 CPU 將協助進行門羅貨幣（Monero）的挖礦。現今一塊門羅幣市值約為 2600 新台幣，採取一種Anti-ASIC 的演算法，特色為匿名交易，隱匿性極高。事發後，海盜灣向大眾坦承，他們計畫利用這種方式來獲得收益，希望最終能夠取代傳統廣告投放。</p>
+<p>海盜灣所嵌入的挖礦程式，由為一個德國的圖床網站所開發。鑒於現今使用者多用 AdBlock 等廣告阻擋工具來阻擋廣告，導致網頁廣告收益銳減，造成網站財務困難，於是才決定開啟了這項實驗性的 Coinhive 專案，讓嵌入挖礦程式的網站藉由使用者的電腦進行電腦挖礦。網站獲得收益的同時，專案方也從中抽取約30%的收益來維持服務運作。此專案核心的挖礦程式利用 WebAssembly 技術大幅提升瀏覽器高強度運算的效率，再透過服務提供的應用程式介面（API），讓人們能輕鬆透過瀏覽器用 CPU 挖門羅幣。海盜灣正是透過這樣的方式，暗地地讓使用者幫他挖礦而獲利。</p>
+<p>但事實上，Coinhive 服務早已被普遍利用，甚至有些瀏覽器的附加元件（Add-On）皆有使用 Coinhive 服務，以進行獲利。</p>
+<p>在海盜灣事件發生後幾天，門羅幣台灣正體中文站（Monero-Taiwan）發出了公告，告知網站使用者將透過 Coinhive 在使用者的電腦進行挖礦。網站在公告中明確說明，主要是想透過這樣的方式維持社群與網站的運作。同時也公開原始碼，說明可能的風險，並教導使用者如何停止此項服務。相較於海盜灣事件，Monero-Taiwan 明確告知使用者，網站將透過使用者進行電腦挖礦以維持運作，讓使用者能選擇是否同意此做法。海盜灣未事先告知不僅傷害網站信譽，也有道德上的疑慮。</p>
+<p>使用者未來必須更加小心是否有網站或瀏覽器附加元件在未知會的情況下利用使用者的電腦進行挖礦。而判斷的方法很簡單，檢查電腦 CPU 使用率有無特別升高即可。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/" class="post-title-link" itemprop="url">2018 仲夏夜之夢，我在五倍紅寶石實習</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-04 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-04T00:00:00+08:00">2018-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-20 15:09:02" itemprop="dateModified" datetime="2020-12-20T15:09:02+08:00">2020-12-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>會申請五倍紅寶石的實習最一開始的契機是系上的實習課，老師鼓勵同學出去找實習，這剛好讓一直對實習躊躇的我再也沒藉口不去外面闖闖。而大約在半年前，在偶然下，我從同校學長的facebook分享得知五倍紅寶石公司，對這家公司在做的事覺得蠻特別的，於是一直有在觀察公司的動態，後來看到公司在徵2018年暑假的實習生，於是趁此機會鼓起勇氣投投看履歷，結果非常幸運的接獲了面試通知。</p>
+<h2 id="申請流程"><a href="#申請流程" class="headerlink" title="申請流程"></a>申請流程</h2><p>我申請的流程是，把自己的作品集集結起來放在自己的網站上，並附上個人履歷直接寄至公司信箱，由於我幾乎是公司一釋出實習消息就申請了，所以有蠻長的時間可以準備面試，但最終仍覺得沒準備充裕就上陣了。面試我的面試官是蒼時跟慕凡哥，身為全公司技術力最強的蒼時，在面試時狂戳我的技術點，問到讓我覺得我差不多可以回家洗洗睡了，而慕凡哥則是問一些比較軟性的問題，像是「為什麼會知道我們公司？」、「想在這裡學什麼東西？」等等，面試過程氣氛其實是相當輕鬆的，面試長度大概是半小時左右，建議之後要申請五倍實習的人若自己本身有名片，可以準備一下，方便在面試結束之後跟面試官交換名片。雖然面試完一度覺得蠻喪氣的，但是過一陣子竟然收到錄取通知，真的既高興又驚訝，但也有點不安，擔心自己技術力上不了臺面，但往好處想，人生就是這樣才有趣啊，剛好藉此踏出舒適圈，去闖闖看。</p>
+<h2 id="序曲，實習生大會"><a href="#序曲，實習生大會" class="headerlink" title="序曲，實習生大會"></a>序曲，實習生大會</h2><p>在實習開始之前，有一次的實習生大會，主要的目的是讓實習生認識公司成員，以及告知實習應該注意的事項，透過參與這次的大會，我認識了我的mentor也認識了未來的實習夥伴們，發現大家其實都很友善也很風趣，心中不安的程度比較減輕了，反而更期待接下來的實習生活。</p>
+<h2 id="實習開始！"><a href="#實習開始！" class="headerlink" title="實習開始！"></a>實習開始！</h2><blockquote>
+<p>先接案，再做教材</p>
+</blockquote>
+<p>五倍的實習生進來公司是有既定的教材要完成的，完成教材才能接公司內部案子或是商業案，而公司針對不同的實習職缺會有不同份的教材。但由於剛好遇到公司內部官網在進行改版，我就接下了改寫官網的公司內部案子，展開人生的第一份接案生活。<br>了解要接的專案後，才發現我有很大的洞要補，Git沒什麼概念要重頭學也缺少專案協作的概念，實習初期我每天花了很多時間在補齊這些能力，加上因為新竹台北兩地通車真的是身心俱疲，到專案中期發現自己要搞懂的觀念越來越多，除了要熟悉ruby語法利用ruby做資料串接外，還要拆分共用的元件重複利用，這些都是我陌生的部分，但幸運的是公司的夥伴們都十分願意幫助我學習，真的非常感謝大家❤️過程雖然很累但我仍感到開心充實，畢竟每天一步一步堅實的走著啊。<br>專案結束後，我開始做前端React教材，這對我來說真的是新世界啊，有種思維被強制更新的感覺，但其實React概念還蠻有趣的，感覺自己可以做的事又更多了呢 XD</p>
+<blockquote>
+<p>Work hard,play hard</p>
+</blockquote>
+<p>忙碌的實習生活中除了被負責的專案占滿外，玩樂的時間也沒少。公司有一個特別的社群活動叫作「默默會」，每個禮拜二晚上固定會舉辦，不限定來參加的人，想來的人都可以來，來這裡可以做自己的事或是與在場的大家交流，有時候會有桌遊團或是switch團嗨翻現場，是個十分有意思的活動。若你是酒友，你會發現這裡是天堂(X。</p>
+<blockquote>
+<p>白天實習，晚上假日上課</p>
+</blockquote>
+<p>公司還有一個特別的地方是會提供課程給實習生上課，通常大部分的課可以自由選修，我總共上了3門課，分別是「網頁前端設計女性專班 — 台北夜間平日班」、「客製化進階 RWD 手機版網頁設計班 — 台北假日班」以及「坐上 Git 時光機-版本控制課程」，從這些課中，我補齊了基礎，也讓自己的觀念更扎實，雖然因為晚上上課，回到家都快午夜十二點了，真的連自己個人時間都沒有，但是也是因為這樣讓自己能快速學習。這陣子真的像是一個狂吸水的海綿，瘋狂學習吸收，能力跟前兩個月剛進來比，真的可以說是大躍進，回頭看這些日子，真的是好瘋狂啊，沒想到在大學最後一年的暑假也能過得這麼刺激啊 XD</p>
+<h2 id="結業式，不是終曲，是開始"><a href="#結業式，不是終曲，是開始" class="headerlink" title="結業式，不是終曲，是開始"></a>結業式，不是終曲，是開始</h2><p>在實習的最後，公司用心地為實習生舉辦了結業式，每個實習生都要上台報告這兩個月的心得，內容呈現方式不限，每個實習生都心得滿滿，大家在這裡都待的蠻愉快的，彼此相處的很融洽，也彼此教學相長。<br>到底是什麼樣的緣分讓我們聚在一起呢？真的十分幸運遇到公司大家❤️因為這次的實習讓自己未來的路逐漸清晰，我告訴自己，再更努力一點，再堅持一點，最終會成為自己想要的樣子的！</p>
+<h1 id="在理想這條路上，跪著也要走完"><a href="#在理想這條路上，跪著也要走完" class="headerlink" title="在理想這條路上，跪著也要走完"></a>在理想這條路上，跪著也要走完</h1><p>2018五倍實習生Mindy下台一鞠躬。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/04/22/%E5%8D%80%E5%A1%8A%E9%8F%88%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%8F%AF%E4%BB%A5%E5%90%83%E5%97%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/04/22/%E5%8D%80%E5%A1%8A%E9%8F%88%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%8F%AF%E4%BB%A5%E5%90%83%E5%97%8E/" class="post-title-link" itemprop="url">區塊鏈是什麼？可以吃嗎？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-04-22 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-22T00:00:00+08:00">2018-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-20 15:34:51" itemprop="dateModified" datetime="2020-12-20T15:34:51+08:00">2020-12-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><em>此文同步刊載於<a target="_blank" rel="noopener" href="https://castnet.nctu.edu.tw/castnet/article/12630?issueID=689">喀報</a></em></p>
+<blockquote>
+<p>第一代數位革命帶給我們資訊豐富的網際網路，以區塊鏈技術為基礎的第二代數位革命，則帶給我們充滿價值的網際網路。 ──《區塊鏈革命》作者 Don Tapscott</p>
+</blockquote>
+<p>比特幣早在 2009 年就在網路上流通，隨著時間的推演，比特幣的底層技術區塊鏈越來越成熟，直至 2016 年時，區塊鏈終於普遍被認為是一項有前景的技術，其不需要中間人監管的特性，讓技術人員紛紛開始投入研究。究竟令人著迷的的區塊鏈為何物？</p>
+<h2 id="拜占庭問題催生區塊鏈概念"><a href="#拜占庭問題催生區塊鏈概念" class="headerlink" title="拜占庭問題催生區塊鏈概念"></a>拜占庭問題催生區塊鏈概念</h2><p>談到為何有區塊鏈的誕生，就要搞清楚何謂拜占庭問題。在國土極為遼闊的東羅馬帝國時代，戰爭頻仍，將軍們常帶領士兵各自前往分配的要塞駐守，而每個要塞距離都十分地遠，各個將軍之間很難互相傳遞訊息，若是在已知有內賊的情況下，形勢更加雪上加霜。如何在這樣的狀況下彼此取得共識、傳遞正確訊息以及決定是否出兵，就是著名的「拜占庭問題 ( The Byzantine Generals Problem )」。<br>區塊鏈相關概念是 1982 年美國計算機科學家萊斯利．蘭波特試圖在運算領域解決拜占庭問題時衍生而出。蘭波特建立具容錯性的分散式獨立系統，也是當今被視為區塊鏈的雛形。該系統不需要依靠全部節點仍可順利運作，並讓彼此陌生的節點達成共識，使資訊內容傳遞一致。<br>相關的研究一直在進行著，而在 2008 年世界金融危機，雷曼兄弟倒閉後兩週，一位自稱中本聰的人發表了〈比特幣:一種點對點的電子現金系統〉論文，該文中的比特幣即建立在區塊鏈上。隔年，中本聰率先實作出比特幣系統，區塊鏈於焉出世。</p>
+<h2 id="區塊鏈為何方神聖"><a href="#區塊鏈為何方神聖" class="headerlink" title="區塊鏈為何方神聖"></a>區塊鏈為何方神聖</h2><p>區塊鏈是比特幣的底層技術，那它到底如何運作？其實可以把區塊鏈想像成是帳本系統。把區塊鏈以字拆開，「區塊」是帳本的內頁，用來記錄交易，並標有頁碼（蓋時間戳），這不僅能夠防止重複支付問題，也能確保區塊的前後相連。那麽時間戳由誰來蓋？由一群參與記帳的「礦工」來執行這個任務。中本聰讓他們去競爭記帳權，規則是在正確記帳的同時也要解 SHA256演算法難題，誰最先解出題目，誰就能得到記帳權並獲得獎勵（二十五個比特幣）。<br>「鏈」則是指在每個礦工的電腦中都保存著相同的帳本，裡頭的每一筆資料皆要互相達成共識，才能確保帳本內容是同步的。換句話說，礦工都擁有同一份帳本，而每一筆交易都必須由全部記帳者核對正確才能被記錄於帳本中，這樣的機制使中本聰完美地創造出「去中心化」的信用系統，以群體共識取代中央信任，不需要中間人的存在。<br>區塊鏈不可忽略的特性是安全性十足。在網路世界，資安是令人擔憂的問題，而區塊鍊藉由必須讓礦工集體達成共識才能記錄於帳本的特性，使得駭客若想變更交易紀錄，必須讓 51% 的礦工達成共識，這比單單駭入銀行系統還難上許多，這個特性使得區塊鏈安全性較高。</p>
+<p>區塊鏈可以細分為私有鍊（private blockchain）、公共鍊（public blockchain）及聯盟鍊（consortium blockchain）。它們之間的關係可以想像成是學校課程。公共鍊是大學通識課，供任何人選修，每筆交易都是匿名公開，是區塊鏈最原始的樣貌，知名的比特幣區塊鏈即屬此類。這樣的特性無法滿足企業對交易資訊隱私的要求，於是出現具有排他性的私有鍊以及聯盟鍊。私有鍊有限制性，可以比擬做限大學本科系選修的課，而聯盟鍊則居於公共鏈及私有鏈中間，可以比擬做某學程開的課，不限任何系只要是該學程的學生都能選修。<br>事物總有一體兩面，講完優點，就該講缺點了。區塊鏈雖能確保資料在傳遞過程中不被竄改，但並沒辦法驗證作為源頭的資料是否正確，是導致現今區塊鏈無法普遍應用在各行業的主因，舉例來說，某物流公司運用區塊鏈技術來紀錄貨物從發出到接受過程中的所有資訊，然而若運送人員作假標示成已出貨，因區塊鏈無法驗證源頭資料，使客戶無從知曉鏈上資訊的真實性。另外，區塊鏈運作效率仍有待提升，當在鏈上的礦工越來越多時，就會加長取得共識的時間，處理速度也會越來越緩慢。雖然已陸續研究出應對方法，但可惜的是目前仍沒辦法完美地解決問題。</p>
+<h2 id="ICO與代幣經濟"><a href="#ICO與代幣經濟" class="headerlink" title="ICO與代幣經濟"></a>ICO與代幣經濟</h2><p>區塊鏈的應用十分多元，ICO（Initial Coin Offering，中譯：首次代幣眾籌）即是基於區塊鏈概念衍生而出。ICO 可以比擬做區塊鏈世界的 IPO（Initial Public Offerings，中譯：首次公開募股），ICO 通常結合專案發行數位貨幣，概念相當於IPO的公司股票，差別是 ICO 的貨幣募資後能夠兌換服務，而這樣的特性衍生出代幣經濟。舉個例子，假設現在要買雞排，那就要拿 60元跟店家換一塊雞排，而在代幣經濟下，就像是去電子遊樂場換限量的代幣一樣，拿錢去換「雞排幣」，然後再用「雞排幣」去買雞排，發行「雞排幣」的動作就是 ICO。值得討論的是，直接拿法幣買跟用代幣「雞排幣」買有什麼差別？其實，發行「雞排幣」的行為對不論是消費者還是生產者某種程度上都是更有利的。對生產者而言，能夠降低生產風險，在投入大部分成本之前，就能基於募資的程度先勘查市場；對消費而言，能夠因為「雞排幣」的稀有性而讓幣值水漲船高，使得「雞排幣」有類似股票的特性。</p>
+<p>在投資 ICO 專案以前，通常有白皮書（相當於說明書）可以看，這可以讓人判斷是否要投資，換句話說，我們可以推得白皮書是需要受管制的。若不在適當管制之下，白皮書內容就能夠隨意增添，天花亂墜的內容將可能造成投資者吃虧。現今 ICO 的多數國家包括台灣都沒有明確的法令規範，這使得內容品質優劣不一，有些專案甚至不提供白皮書，在這樣的情況下，漸漸有端看發起人的名氣決定是否投資的情勢，讓投機者有機可趁。中國、韓國則採嚴禁態度，視 ICO 為非法行為；而德國、日本也逐漸正視其問題，強化 ICO 的法規，防止民眾因為盲從而造成財物損失。</p>
+<h2 id="是未來還是泡沫"><a href="#是未來還是泡沫" class="headerlink" title="是未來還是泡沫"></a>是未來還是泡沫</h2><p>區塊鏈的出現達成了資產交易的去中心化，免除了是否要信任中間者的疑慮，加上應用的多元性，為人們的生活帶來相當大的方便。然而，有心者仍可利用區塊鏈特性造成他人利益的損害，例如前面提過的 ICO 專案，即是看準投資人對代幣經濟的信心，而賺取利潤；另外，人稱「股壇長毛」的大衛韋伯曾說過建立在區塊鏈上的比特幣是世上首個分散式的龐式騙局，在加密貨幣市場上擁有大批資源的大戶掌控相當大比例的貨幣，運用技巧讓幣值大起大落，高賣低買，謀取利益。區塊鏈是一門具高競爭力、高前景的技術，但就如同雙面刃一樣，必須小心發展。儘管風險不低，仍是一場你我不能錯過的數位革命。</p>
 
       
     </div>
@@ -273,9 +528,13 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
       </div>
   </nav>
 </div>
