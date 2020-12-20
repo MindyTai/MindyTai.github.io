@@ -145,7 +145,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2019/11/24/deploy-to-GCP/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/11/25/GCP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -159,7 +159,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/24/deploy-to-GCP/" class="post-title-link" itemprop="url">CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine</a>
+            <a href="/2019/11/25/GCP/" class="post-title-link" itemprop="url">CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine</a>
         </h2>
 
         <div class="post-meta">
@@ -169,14 +169,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-11-24 00:00:00" itemprop="dateCreated datePublished" datetime="2019-11-24T00:00:00+08:00">2019-11-24</time>
+              <time title="Created: 2019-11-25 00:00:00" itemprop="dateCreated datePublished" datetime="2019-11-25T00:00:00+08:00">2019-11-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-21 01:23:27" itemprop="dateModified" datetime="2020-12-21T01:23:27+08:00">2020-12-21</time>
+                <time title="Modified: 2020-12-21 01:45:44" itemprop="dateModified" datetime="2020-12-21T01:45:44+08:00">2020-12-21</time>
               </span>
 
           
@@ -198,7 +198,7 @@
 <h2 id="Step-by-Step"><a href="#Step-by-Step" class="headerlink" title="Step by Step"></a>Step by Step</h2><h3 id="建立資料夾"><a href="#建立資料夾" class="headerlink" title="建立資料夾"></a>建立資料夾</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir demo-server</span><br><span class="line">cd demo-server</span><br></pre></td></tr></table></figure>
 <h3 id="初始化專案"><a href="#初始化專案" class="headerlink" title="初始化專案"></a>初始化專案</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init</span><br></pre></td></tr></table></figure>
 <p>這時會出現問題問你，若沒有特殊設定可以一路按 Enter 就好，回答完後就會出現 <code>package.json</code> 。</p>
-<p><img src="package.jpg" alt="這樣就能產生出 package.json 囉"><br>這樣就能產生出 package.json 囉！</p>
+<p><img src="/2019/11/25/GCP/package.jpg" alt="這樣就能產生出 package.json 囉"><br>這樣就能產生出 package.json 囉！</p>
 <p>開發專案少不了版本控制，這樣就能開始使用 git 了 🥳</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
 <p>而不必要的檔案記得寫進 .gitignore 讓 git 忽略。</p>

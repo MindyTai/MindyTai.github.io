@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="身處在講求效率的時代，完整的開發流程當然少不了 CI&#x2F;CD。什麼是 CI&#x2F;CD 呢？CI ( Continuous Integration ) 中文為「持續性整合」，目的是讓專案能夠在每一次的變動中都能通過一些檢驗來確保專案品質。CD ( Continuous Deployment ) 中文則為「自動化佈署」，讓專案能夠自動在每次變動後能以最新版本呈現。由於想要體會 CI&#x2F;CD 到底有多方便，於是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CI&#x2F;CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine">
+<meta property="og:url" content="http://example.com/2019/11/25/GCP/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="身處在講求效率的時代，完整的開發流程當然少不了 CI&#x2F;CD。什麼是 CI&#x2F;CD 呢？CI ( Continuous Integration ) 中文為「持續性整合」，目的是讓專案能夠在每一次的變動中都能通過一些檢驗來確保專案品質。CD ( Continuous Deployment ) 中文則為「自動化佈署」，讓專案能夠自動在每次變動後能以最新版本呈現。由於想要體會 CI&#x2F;CD 到底有多方便，於是">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://example.com/2019/11/25/GCP/package.jpg">
+<meta property="article:published_time" content="2019-11-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-20T17:45:44.398Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="nodejs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2019/11/25/GCP/package.jpg">
+
+<link rel="canonical" href="http://example.com/2019/11/25/GCP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-tw'
+  };
+</script>
+
+  <title>CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/11/25/GCP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-25 00:00:00" itemprop="dateCreated datePublished" datetime="2019-11-25T00:00:00+08:00">2019-11-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-21 01:45:44" itemprop="dateModified" datetime="2020-12-21T01:45:44+08:00">2020-12-21</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>身處在講求效率的時代，完整的開發流程當然少不了 CI/CD。什麼是 CI/CD 呢？CI ( Continuous Integration ) 中文為「持續性整合」，目的是讓專案能夠在每一次的變動中都能通過一些檢驗來確保專案品質。CD ( Continuous Deployment ) 中文則為「自動化佈署」，讓專案能夠自動在每次變動後能以最新版本呈現。<br>由於想要體會 CI/CD 到底有多方便，於是想要藉由實做一個簡單的 Node.js 專案來實際體驗看看。</p>
+<h2 id="內容架構"><a href="#內容架構" class="headerlink" title="內容架構"></a>內容架構</h2><p>1.寫簡易的 Node.js Server<br>2.使用 CircleCI 整合 eslint／jest（CI）<br>3.使用 CircleCI deploy 到 GCP App Engine（CD)</p>
+<h2 id="NodejS-Hello-CICD-demo"><a href="#NodejS-Hello-CICD-demo" class="headerlink" title="NodejS Hello CICD demo"></a>NodejS Hello CICD demo</h2><p>這是專案最終架構：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">├── app.yaml </span><br><span class="line">├── babel.config.js</span><br><span class="line">├── build</span><br><span class="line">│ └── server.js</span><br><span class="line">├── lint-staged.config.js</span><br><span class="line">├── nodemon.json</span><br><span class="line">├── package.json</span><br><span class="line">├── src</span><br><span class="line">│ └── server.js</span><br><span class="line">├── test</span><br><span class="line">│ └── server.test.js</span><br><span class="line">└── yarn.lock</span><br></pre></td></tr></table></figure>
+<p>哇！看起來很複雜？別急，下面會一一帶你做一遍！</p>
+<h2 id="Step-by-Step"><a href="#Step-by-Step" class="headerlink" title="Step by Step"></a>Step by Step</h2><h3 id="建立資料夾"><a href="#建立資料夾" class="headerlink" title="建立資料夾"></a>建立資料夾</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir demo-server</span><br><span class="line">cd demo-server</span><br></pre></td></tr></table></figure>
+<h3 id="初始化專案"><a href="#初始化專案" class="headerlink" title="初始化專案"></a>初始化專案</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init</span><br></pre></td></tr></table></figure>
+<p>這時會出現問題問你，若沒有特殊設定可以一路按 Enter 就好，回答完後就會出現 <code>package.json</code> 。</p>
+<p><img src="/2019/11/25/GCP/package.jpg" alt="這樣就能產生出 package.json 囉"><br>這樣就能產生出 package.json 囉！</p>
+<p>開發專案少不了版本控制，這樣就能開始使用 git 了 🥳</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>而不必要的檔案記得寫進 .gitignore 讓 git 忽略。</p>
+<h2 id="新增-gitignore"><a href="#新增-gitignore" class="headerlink" title="新增 .gitignore"></a>新增 .gitignore</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br></pre></td></tr></table></figure>
+<h2 id="安裝-express-及-babel"><a href="#安裝-express-及-babel" class="headerlink" title="安裝 express 及 babel"></a>安裝 express 及 babel</h2><p>express 是一個 Node.js 的後端框架，這次 demo 會用來處理 server。 由於 Node.js 處理檔案引入和匯出方法為 require 及 module.export ， 而 es6 出現了 import 及 export，如要使用就要使用 babel 來 transpile。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add express</span><br><span class="line">yarn add @babel&#x2F;preset-env @babel-node @babel&#x2F;core @babel&#x2F;cli --dev</span><br></pre></td></tr></table></figure>
+<p>babel 只有在開發會用到，注意後面要加 — dev。</p>
+<h2 id="建立-src-server-js"><a href="#建立-src-server-js" class="headerlink" title="建立 src/server.js"></a>建立 src/server.js</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">&#x27;express&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> &#123; PORT = <span class="number">3000</span> &#125; = process.env;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> IS_TEST = !!<span class="built_in">module</span>.parent; </span><br><span class="line"><span class="comment">// If there&#x27;s another file imports server.js, then module.parent will become true</span></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.status(<span class="number">200</span>).send(<span class="string">&#x27;Hello!CI/CD!&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!IS_TEST) &#123;</span><br><span class="line">  app.listen(PORT, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Server is running on PORT:&#x27;</span>, PORT);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> app;</span><br></pre></td></tr></table></figure>
+<h2 id="本機跑起來"><a href="#本機跑起來" class="headerlink" title="本機跑起來"></a>本機跑起來</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn babel-node src&#x2F;server.js</span><br></pre></td></tr></table></figure>
+<p>babel-node 會在 node runtime 即時使用 babel transpile javascript。<br>這樣就能在 localhost 跑起來了 😌</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/04/%E7%B6%B2%E7%AB%99%E6%96%B0%E6%94%B6%E7%9B%8A%20%E6%8C%96%E7%A4%A6%E5%8F%96%E4%BB%A3%E5%82%B3%E7%B5%B1%E5%BB%A3%E5%91%8A/" rel="prev" title="網站新收益 挖礦取代傳統廣告">
+      <i class="fa fa-chevron-left"></i> 網站新收益 挖礦取代傳統廣告
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A7%E5%AE%B9%E6%9E%B6%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">內容架構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NodejS-Hello-CICD-demo"><span class="nav-number">2.</span> <span class="nav-text">NodejS Hello CICD demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-by-Step"><span class="nav-number">3.</span> <span class="nav-text">Step by Step</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E8%B3%87%E6%96%99%E5%A4%BE"><span class="nav-number">3.1.</span> <span class="nav-text">建立資料夾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%88%E6%A1%88"><span class="nav-number">3.2.</span> <span class="nav-text">初始化專案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E-gitignore"><span class="nav-number">4.</span> <span class="nav-text">新增 .gitignore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-express-%E5%8F%8A-babel"><span class="nav-number">5.</span> <span class="nav-text">安裝 express 及 babel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-src-server-js"><span class="nav-number">6.</span> <span class="nav-text">建立 src&#x2F;server.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E6%A9%9F%E8%B7%91%E8%B5%B7%E4%BE%86"><span class="nav-number">7.</span> <span class="nav-text">本機跑起來</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
