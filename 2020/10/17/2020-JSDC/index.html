@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JSDC 是著名的 JS 開發者年會，這次非常榮幸能夠受邀為講者，分享 React Hooks 底層運作。 之前在公司有做過零星幾個分享，這次對外大眾演講倒是第一次，其實心中非常忐忑緊張，還好身邊有很多朋友聽我試講，感恩各位大大。 以此篇紀錄演講內容。 自己的工具自己造，咱們來 React Hooks這次的演講主題同標題，主要想要向大家分享 React hooks 的底層運作。這次挑了 useEf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Experience of being 2020 JSDC Speaker">
+<meta property="og:url" content="http://example.com/2020/10/17/2020-JSDC/index.html">
+<meta property="og:site_name" content="From Zero to Yee">
+<meta property="og:description" content="JSDC 是著名的 JS 開發者年會，這次非常榮幸能夠受邀為講者，分享 React Hooks 底層運作。 之前在公司有做過零星幾個分享，這次對外大眾演講倒是第一次，其實心中非常忐忑緊張，還好身邊有很多朋友聽我試講，感恩各位大大。 以此篇紀錄演講內容。 自己的工具自己造，咱們來 React Hooks這次的演講主題同標題，主要想要向大家分享 React hooks 的底層運作。這次挑了 useEf">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://example.com/2020/10/17/2020-JSDC/counter.gif">
+<meta property="og:image" content="http://example.com/2020/10/17/2020-JSDC/fiber.png">
+<meta property="article:published_time" content="2020-10-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-22T09:43:11.180Z">
+<meta property="article:tag" content="speaker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/10/17/2020-JSDC/counter.gif">
+
+<link rel="canonical" href="http://example.com/2020/10/17/2020-JSDC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-tw'
+  };
+</script>
+
+  <title>The Experience of being 2020 JSDC Speaker | From Zero to Yee</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">From Zero to Yee</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/10/17/2020-JSDC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="From Zero to Yee">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          The Experience of being 2020 JSDC Speaker
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-17 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-17T00:00:00+08:00">2020-10-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-22 17:43:11" itemprop="dateModified" datetime="2020-12-22T17:43:11+08:00">2020-12-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>JSDC 是著名的 JS 開發者年會，這次非常榮幸能夠受邀為講者，分享 React Hooks 底層運作。</p>
+<p>之前在公司有做過零星幾個分享，這次對外大眾演講倒是第一次，其實心中非常忐忑緊張，還好身邊有很多朋友聽我試講，感恩各位大大。</p>
+<p>以此篇紀錄演講內容。</p>
+<h2 id="自己的工具自己造，咱們來-React-Hooks"><a href="#自己的工具自己造，咱們來-React-Hooks" class="headerlink" title="自己的工具自己造，咱們來 React Hooks"></a>自己的工具自己造，咱們來 React Hooks</h2><p>這次的演講主題同標題，主要想要向大家分享 React hooks 的底層運作。這次挑了 useEffect 及 useState 兩個 hooks 作討論。</p>
+<h2 id="沒有-Hooks-的世界長什麼樣子呢"><a href="#沒有-Hooks-的世界長什麼樣子呢" class="headerlink" title="沒有 Hooks 的世界長什麼樣子呢"></a>沒有 Hooks 的世界長什麼樣子呢</h2><p>Hooks 是 React 16.8 釋出的新功能，在 Hooks 尚未釋出以前，在實作 component (以下皆會用「元件」來稱呼) 會是以 class（class component） 實作。class 是 Javascript 的語法糖，讓 Javascript 能夠更加物件導向。而 Hooks 的出現讓元件能夠以 function 實作 (functional component)，更加方便簡短。</p>
+<p>試看以下程式碼：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;</span><br><span class="line">      count: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;&gt;</span><br><span class="line">        &lt;p&gt;You clicked &#123;<span class="built_in">this</span>.state.count&#125; times.&lt;/p&gt;</span><br><span class="line">        &lt;button onClick=&#123;<span class="function">() =&gt;</span> <span class="built_in">this</span>.setState(&#123; <span class="attr">count</span>: <span class="built_in">this</span>.state.count + <span class="number">1</span> &#125;)&#125;&gt; &lt;/button&gt;</span><br><span class="line">      &lt;/&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這段程式碼是在實作一個按鈕，使用者每按一下，count 就會加一。畫面大概會長這樣：</p>
+<p><img src="/2020/10/17/2020-JSDC/counter.gif"></p>
+<p>在實作上，會需要一個  constructor function 來初始化 state，最後會有一個 render function 來把畫面呈現出來。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">this</span>.setState(&#123; <span class="attr">count</span>: <span class="built_in">this</span>.state.count + <span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>是讓 count 改變的最主要的函式。</p>
+<p>改成 hooks 版本後，程式碼如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Counter = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>)</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;p&gt;You clicked &#123; count &#125; times.&lt;/p&gt;</span><br><span class="line">      &lt;button onClick=&#123; <span class="function">() =&gt;</span> setCount(count + <span class="number">1</span>) &#125;&gt;&lt;/button&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>程式碼與 class 相比精簡相當多，setCount 這個 hook function 就能夠改變 state 的值。</p>
+<p>那麼有了 hooks 後，除了程式碼精簡許多外，還有怎麼樣的優點呢？</p>
+<h2 id="Hooks-可以解決什麼問題？"><a href="#Hooks-可以解決什麼問題？" class="headerlink" title="Hooks 可以解決什麼問題？"></a>Hooks 可以解決什麼問題？</h2><h4 id="共用邏輯可抽出做使用"><a href="#共用邏輯可抽出做使用" class="headerlink" title="共用邏輯可抽出做使用"></a>共用邏輯可抽出做使用</h4><p>hooks 基本上是 function，會繼承 function 的屬性。在寫程式的過程中，會盡量符合 「DRY」（ Don’t repeat yourself ）原則，會把重複性的程式邏輯抽出來共用，對 hooks 而言，可以抽出來做 <a target="_blank" rel="noopener" href="https://medium.com/r/?url=https://reactjs.org/docs/hooks-custom.html%23extracting-a-custom-hook">custom hooks</a>。</p>
+<h4 id="邏輯拆分更加清楚不混亂"><a href="#邏輯拆分更加清楚不混亂" class="headerlink" title="邏輯拆分更加清楚不混亂"></a>邏輯拆分更加清楚不混亂</h4><p>假設一個情境：因為某些特殊狀況需要在同一個元件裡處理兩支 API，若是以 class component 實作，會需要在同個 lifecycle （ 通常為 <strong>componentDidmount</strong> ）裡處理這兩支 API，邏輯會相當混雜。</p>
+<p>而 hooks 的出現，可以在同一個元件裡使用複數個相同的 hooks ( 通常為 useEffect )，可以讓這兩支 API 可以分開實作，邏輯更加清楚。</p>
+<p>試看以下程式碼：</p>
+<h4 id="class-component"><a href="#class-component" class="headerlink" title="class component"></a>class component</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount () &#123;</span><br><span class="line">  A API handler.....</span><br><span class="line">  B API handler.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="functional-component"><a href="#functional-component" class="headerlink" title="functional component"></a>functional component</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useEffect(<span class="function">()=&gt;</span> &#123;</span><br><span class="line">    A API handler</span><br><span class="line">&#125;)</span><br><span class="line">useEffect(<span class="function">()=&gt;</span> &#123;</span><br><span class="line">    B API handler</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Hooks-的規則"><a href="#Hooks-的規則" class="headerlink" title="Hooks 的規則"></a>Hooks 的規則</h2><h4 id="不能在迴圈、條件式-、nested-functions-裡使用-hooks"><a href="#不能在迴圈、條件式-、nested-functions-裡使用-hooks" class="headerlink" title="不能在迴圈、條件式 、nested functions 裡使用 hooks"></a>不能在迴圈、條件式 、nested functions 裡使用 hooks</h4><p>在 function 裡面的 function 就是 nested function，例如 callback function 即是一種。<br>原因為 react 在記錄元件的 hooks 的順序是依靠 <code>fiber</code> 實作，以 linked list 方式依在元件內呼叫順序儲存 hooks，而如果在剛剛提到的三個條件做使用，會使 react 在呼叫 hooks 的時候順序亂掉，以至於會呼叫到錯的 state。</p>
+<p>fiber 廬山真面目大概長這樣子：</p>
+<img src="./fiber.png" width="500"/>
+
+<h4 id="只會在-functional-component-或是在-custom-hooks-使用-hooks"><a href="#只會在-functional-component-或是在-custom-hooks-使用-hooks" class="headerlink" title="只會在 functional component 或是在 custom hooks 使用 hooks"></a>只會在 functional component 或是在 custom hooks 使用 hooks</h4><p>custom hooks 即為元件間共用的 hooks function</p>
+<blockquote>
+<p>可以想像 hooks 實作概念為操作 array 的過程</p>
+</blockquote>
+<h2 id="實作-useState"><a href="#實作-useState" class="headerlink" title="實作 useState"></a>實作 useState</h2><p>還記得前面 Counter 例子有出現以下這行嗎？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>useState 是很常使用到的 hook，本身是一個用來改變現在 state 狀態的 function，回傳值為陣列。陣列解構賦值後就能取得現在 state 的狀態及改變 state 的 function。</p>
+<p>以下為以操作陣列為概念實作出的 useState 程式碼：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">React= &#123;</span><br><span class="line"> index: <span class="number">0</span>,</span><br><span class="line">  state: [],</span><br><span class="line">  useState: <span class="function">(<span class="params">initialVal</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> currentIdx = React.index</span><br><span class="line">    <span class="keyword">if</span>(!React.state[currentIdx])&#123;</span><br><span class="line">      React.state[currentIdx] = initialVal</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> currentState = React.state[currentIdx]</span><br><span class="line">    <span class="keyword">const</span> setCurrentState = <span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">      React.state[currentIdx] = val</span><br><span class="line">    &#125;</span><br><span class="line">    React.index ++</span><br><span class="line">    <span class="keyword">return</span> [currentState, setCurrentState]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="實作-useEffect"><a href="#實作-useEffect" class="headerlink" title="實作 useEffect"></a>實作 useEffect</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useEffect(<span class="function">()=&gt;</span> callback, [dependencies])</span><br></pre></td></tr></table></figure>
+<p>useEffect 為處理 side effects 的 hooks function，會用到的場景通常為處理 API、訂閱、間聽事件。</p>
+<h4 id="關於-useEffect-的執行順序"><a href="#關於-useEffect-的執行順序" class="headerlink" title="關於 useEffect 的執行順序"></a>關於 useEffect 的執行順序</h4><p>決定是否要執行的條件：有無 dependencies。</p>
+<table>
+<thead>
+<tr>
+<th>dependencies</th>
+<th>useEffect 執行時機</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>無</td>
+<td>每次 component render 後都會執行</td>
+</tr>
+<tr>
+<td>[ ]</td>
+<td>只會執行一次，往後的 render 不會執行</td>
+</tr>
+<tr>
+<td>有</td>
+<td>只有 dependencies 有變化才會執行</td>
+</tr>
+</tbody></table>
+<p>要特別注意執行順序是在元件 render 後。</p>
+<p>以下為實作 useEffect 的程式碼：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">React = &#123;</span><br><span class="line">  index: <span class="number">0</span>,</span><br><span class="line">  state: [],</span><br><span class="line">  useEffect: <span class="function">(<span class="params">callback, dependencies</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> currentIdx = React.index</span><br><span class="line">    <span class="keyword">const</span> hasChanged = React.state[currentIdx] !== dependencies</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!dependencies || hasChanged)&#123;</span><br><span class="line">      callback()</span><br><span class="line">      React.state[currentIdx] = dependencies</span><br><span class="line">    &#125;</span><br><span class="line">    React.index ++</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Recap"><a href="#Recap" class="headerlink" title="Recap"></a>Recap</h2><p>這次會分享這個主題是拜公司讀書會所賜，當時對解構 hooks 底層實作非常有興趣，於是經過一番研究後，決定分享給更多人認識 hooks。<br>這次參加 JSDC 頗有收獲，認識了很多平常有在 follow 的大大們，非常開心。</p>
+<p>此為演講 live coding <a target="_blank" rel="noopener" href="https://gist.github.com/MindyTai/ccae45fc1e87fba03312fd682298f34e">範例程式碼</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/speaker/" rel="tag"># speaker</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/11/how-js-asychronize-works/" rel="prev" title="無痛理解 JS | 非同步怎麼運作？">
+      <i class="fa fa-chevron-left"></i> 無痛理解 JS | 非同步怎麼運作？
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E5%85%B7%E8%87%AA%E5%B7%B1%E9%80%A0%EF%BC%8C%E5%92%B1%E5%80%91%E4%BE%86-React-Hooks"><span class="nav-number">1.</span> <span class="nav-text">自己的工具自己造，咱們來 React Hooks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B2%92%E6%9C%89-Hooks-%E7%9A%84%E4%B8%96%E7%95%8C%E9%95%B7%E4%BB%80%E9%BA%BC%E6%A8%A3%E5%AD%90%E5%91%A2"><span class="nav-number">2.</span> <span class="nav-text">沒有 Hooks 的世界長什麼樣子呢</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hooks-%E5%8F%AF%E4%BB%A5%E8%A7%A3%E6%B1%BA%E4%BB%80%E9%BA%BC%E5%95%8F%E9%A1%8C%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">Hooks 可以解決什麼問題？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B1%E7%94%A8%E9%82%8F%E8%BC%AF%E5%8F%AF%E6%8A%BD%E5%87%BA%E5%81%9A%E4%BD%BF%E7%94%A8"><span class="nav-number">3.0.1.</span> <span class="nav-text">共用邏輯可抽出做使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%8F%E8%BC%AF%E6%8B%86%E5%88%86%E6%9B%B4%E5%8A%A0%E6%B8%85%E6%A5%9A%E4%B8%8D%E6%B7%B7%E4%BA%82"><span class="nav-number">3.0.2.</span> <span class="nav-text">邏輯拆分更加清楚不混亂</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class-component"><span class="nav-number">3.0.3.</span> <span class="nav-text">class component</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#functional-component"><span class="nav-number">3.0.4.</span> <span class="nav-text">functional component</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hooks-%E7%9A%84%E8%A6%8F%E5%89%87"><span class="nav-number">4.</span> <span class="nav-text">Hooks 的規則</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E8%83%BD%E5%9C%A8%E8%BF%B4%E5%9C%88%E3%80%81%E6%A2%9D%E4%BB%B6%E5%BC%8F-%E3%80%81nested-functions-%E8%A3%A1%E4%BD%BF%E7%94%A8-hooks"><span class="nav-number">4.0.1.</span> <span class="nav-text">不能在迴圈、條件式 、nested functions 裡使用 hooks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AA%E6%9C%83%E5%9C%A8-functional-component-%E6%88%96%E6%98%AF%E5%9C%A8-custom-hooks-%E4%BD%BF%E7%94%A8-hooks"><span class="nav-number">4.0.2.</span> <span class="nav-text">只會在 functional component 或是在 custom hooks 使用 hooks</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C-useState"><span class="nav-number">5.</span> <span class="nav-text">實作 useState</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C-useEffect"><span class="nav-number">6.</span> <span class="nav-text">實作 useEffect</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%9C%E6%96%BC-useEffect-%E7%9A%84%E5%9F%B7%E8%A1%8C%E9%A0%86%E5%BA%8F"><span class="nav-number">6.0.1.</span> <span class="nav-text">關於 useEffect 的執行順序</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recap"><span class="nav-number">7.</span> <span class="nav-text">Recap</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
