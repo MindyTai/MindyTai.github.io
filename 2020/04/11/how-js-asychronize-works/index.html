@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="總以為世界的形狀我們早已熟悉，但到頭來卻發現並不是。 筆者每每在寫 Javascript 時，處處都會發現驚喜。 下面想舉一個曾經印象深刻的例子給大家看： 12console.log(&#39;Start&#39;);console.log(&#39;Stop&#39;); 印出的結果為 12StartStop 那中間如果加了 123setTimeOut(()&#x3D;&gt;&amp;#123; console">
+<meta property="og:type" content="article">
+<meta property="og:title" content="無痛理解 JS | 非同步怎麼運作？">
+<meta property="og:url" content="http://example.com/2020/04/11/how-js-asychronize-works/index.html">
+<meta property="og:site_name" content="From Zero to Yee">
+<meta property="og:description" content="總以為世界的形狀我們早已熟悉，但到頭來卻發現並不是。 筆者每每在寫 Javascript 時，處處都會發現驚喜。 下面想舉一個曾經印象深刻的例子給大家看： 12console.log(&#39;Start&#39;);console.log(&#39;Stop&#39;); 印出的結果為 12StartStop 那中間如果加了 123setTimeOut(()&#x3D;&gt;&amp;#123; console">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack.png">
+<meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/web_api.png">
+<meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack_1.png">
+<meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack_2.gif">
+<meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack_3.png">
+<meta property="article:published_time" content="2020-04-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-22T06:05:28.042Z">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack.png">
+
+<link rel="canonical" href="http://example.com/2020/04/11/how-js-asychronize-works/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-tw'
+  };
+</script>
+
+  <title>無痛理解 JS | 非同步怎麼運作？ | From Zero to Yee</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">From Zero to Yee</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/04/11/how-js-asychronize-works/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="From Zero to Yee">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          無痛理解 JS | 非同步怎麼運作？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-11 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-11T00:00:00+08:00">2020-04-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-22 14:05:28" itemprop="dateModified" datetime="2020-12-22T14:05:28+08:00">2020-12-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>總以為世界的形狀我們早已熟悉，但到頭來卻發現並不是。 筆者每每在寫 Javascript 時，處處都會發現驚喜。 下面想舉一個曾經印象深刻的例子給大家看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console.log(&#39;Start&#39;);</span><br><span class="line">console.log(&#39;Stop&#39;);</span><br></pre></td></tr></table></figure>
+<p>印出的結果為</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">Stop</span><br></pre></td></tr></table></figure>
+<p>那中間如果加了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setTimeOut(<span class="function">()=&gt;</span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;0 sec later&#x27;</span>);</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>變成</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Start&#x27;</span>);</span><br><span class="line"></span><br><span class="line">setTimeOut(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;0 sec later&#x27;</span>);</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Stop&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>則結果竟會變成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">Stop</span><br><span class="line">0 sec later</span><br></pre></td></tr></table></figure>
+<p>疑？怎麼會這樣呢？明明在中間加入了 0 sec later，為什麼 console 出來的順序會是這樣？<br>要搞懂這個結果，就必須先來了解 Javascript 擁有的 <strong>非同步特性</strong>。</p>
+<h2 id="阻塞-blocking-如果不存在非同步？"><a href="#阻塞-blocking-如果不存在非同步？" class="headerlink" title="阻塞(blocking) : 如果不存在非同步？"></a>阻塞(blocking) : 如果不存在非同步？</h2><p>不過，我們先來試著思考一個問題：非同步真的很重要嗎？沒有非同步的世界會怎樣呢？<br>在沒有非同步的世界裡，只剩下 <strong>同步 (Synchronous)</strong>  (這是廢話嗎)，而每天都會發生惱人的阻塞現象。</p>
+<blockquote>
+<p>阻塞的概念可以想成每年過年高速公路必塞車的現象，高速公路可以想成等等會提到的 Call Stack，而車子即相當於程式。</p>
+</blockquote>
+<p>在同步的世界裡，每跑一段程式就要花時間等待執行完畢，從 Call Stack 中跳走後，下一個程式才能執行，於是當前面某個程式很慢就會連帶影響之後的程式。在瀏覽器上我們會看到類似當機的畫面，什麼事都做不了。</p>
+<p>這種現象想當然爾會想要避免，而 Javascript 及瀏覽器做了一些事來處理這樣的狀況，那麼就來了解怎麼疏通高速公路吧！</p>
+<h2 id="一起來瞧瞧非同步的骨架"><a href="#一起來瞧瞧非同步的骨架" class="headerlink" title="一起來瞧瞧非同步的骨架"></a>一起來瞧瞧非同步的骨架</h2><p>JS 的主要特點有兩個：</p>
+<ul>
+<li>Single Thread (單線程)</li>
+<li>Synchronous (同步)</li>
+</ul>
+<p>說明 Javascript 一次只執行一件事，程式會逐行執行。<br>那為什麼在網頁我們仍可以處理像是滑鼠點擊之類看起來「一次處理很多事件」的非同步 ( asynchronous ) 事件而不會塞車呢？原因是當 Javascript 在 V8 Engine 執行時，其實也會執行瀏覽器提供的 API ( Web APIs，這裡已經不是在 V8 Engine 的範疇 )，前文提及的滑鼠點擊 (click）即屬於 Web APIs。</p>
+<blockquote>
+<p>Web APIs 讓我們可以非同步執行程式，<br>也就是說 JS 本身並無法非同步執行，<br>需要借助 Web APIs 才能達到非同步的效果。</p>
+</blockquote>
+<p>那非同步是怎麼運作的呢？</p>
+<p>首先，要先了解下面四點的定義：</p>
+<h2 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h2><blockquote>
+<p>Call Stack 本身為 Stack。<br>Stack 是資料結構的一種，會遵守 LIFO (Last In, First Out) 的原則。Call Stack 會繼承 Stack 原本的特性，即「最後被 call 的 function 會在最上層，而執行完後會最先從該 stack 離開（pop off）」。而 Javascript 是 Single Thread, 所以只會有一個 Call Stack。</p>
+</blockquote>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack.png"><br>(圖片來源 /wiki — <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack</a>)</p>
+<h2 id="Web-APIs"><a href="#Web-APIs" class="headerlink" title="Web APIs"></a>Web APIs</h2><blockquote>
+<p>瀏覽器提供的 API，例如常被使用的 setTimeout。<br>setTimeout 是瀏覽器所提供的計時器，常常搭配 callback function 使用。</p>
+</blockquote>
+<h2 id="Task-Queue"><a href="#Task-Queue" class="headerlink" title="Task Queue"></a>Task Queue</h2><blockquote>
+<p>又可以稱作 Callback Queue，<br>放在 Web APIs 的 function 在執行完後，會到 Task Queue 待命。<br>（e.g. setTimeOut 在秒數執行完後，會移至 Task Queue）</p>
+</blockquote>
+<h2 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h2><blockquote>
+<p>偵測到 Call Stack 為空時，<br>把在 Task Queue 裡等待的第一個 callback function 放到 stack 中去執行。</p>
+</blockquote>
+<p>好啦！解說到此，應該可以理解下面這張圖：</p>
+<p><img src="/2020/04/11/how-js-asychronize-works/web_api.png"><br>( Web APIs function 執行路線圖：紅色格子為使用 Web APIs 的 function )</p>
+<blockquote>
+<p>非同步的設計是讓需要執行較久時間的程式能夠移到別的地方去執行，<br>不要阻塞到 Main Thread(Call Stack)，<br>讓程式能夠暢通在 Call Stack 上執行。</p>
+</blockquote>
+<h3 id="舉個實例，以前面提的滑鼠點擊為例"><a href="#舉個實例，以前面提的滑鼠點擊為例" class="headerlink" title="舉個實例，以前面提的滑鼠點擊為例"></a>舉個實例，以前面提的滑鼠點擊為例</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Started.&#x27;</span>)</span><br><span class="line">$.on(<span class="string">&#x27;button&#x27;</span>, <span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">onClick</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;Button Clicked!&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Done.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Started</code> console 會執行，會先進入 Call Stack 中，再來執行滑鼠事件 <code>click</code> function，最後執行 console <code>Done</code></li>
+<li>click 為 Web APIs，所以之後會從 Call Stack 脫離到 Web APIs</li>
+<li>滑鼠點擊後，callback 就會到 Task Queue 中。Event Loop 在偵測 Call Stack 為空時，便會把 callback 放到 Call Stack 中去執行， onClick 這個 function 就會執行</li>
+</ul>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_1.png"></p>
+<p>所以我們可以理解為在點擊滑鼠時，<code>onClick</code> function 並不會立即執行，會先到 Task Queue 中等待，直到成為 Queue 中第一位且 Stack 為空時才會執行！</p>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_2.gif"></p>
+<blockquote>
+<p>操作自 <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=Y29uc29sZS5sb2coJ1N0YXJ0ZWQuJykKCiQub24oJ2J1dHRvbicsICdjbGljaycsIGZ1bmN0aW9uIG9uQ2xpY2sgKCkgewogIGNvbnNvbGUubG9nKCdCdXR0dG9uIENsaWNrZWQhJykKfSkKCmNvbnNvbGUubG9nKCdEb25lLicp!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">Loupe — by Philip Roberts</a>： Loupe 是一個由 Philip 做的視覺化工具，對瞭解 Javascript function 執行流程很有幫助。</p>
+</blockquote>
+<p>以上為 JS 如何在 <strong>Single Thread</strong> 下實現看似擁有 <strong>Multi Thread</strong> 的效果。</p>
+<h2 id="再來幾個例子"><a href="#再來幾個例子" class="headerlink" title="再來幾個例子"></a>再來幾個例子</h2><p>筆者在學習這個概念查找資料時，發現了一場精彩演講：<strong>What the heck is the event loop anyway?</strong> 講解頗為精闢，於是下面擇幾個非同步相關例子與讀者分享。</p>
+<ol>
+<li>非同步的 Ajax Request<br>Philip Roberts 曾在 JSConf 舉使用屬於 WebAPIs 的 Ajax 抓取資料的例子：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi&#x27;</span>)</span><br><span class="line">$.get(<span class="string">&#x27;url&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">cb</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;JSConfEU&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>因為 Ajax 為 WebAPIs 其中一種，所以並不在 Javascript Runtime 中。</p>
+<ul>
+<li>console <code>Hi</code> 會先執行，再來 Ajax 執行請求，這時 callback 移到了 Web APIs ，然後 console <code>JSConfEU</code> 緊接著執行</li>
+<li>Ajax 發出的 request 回應後（ success 或 error ），callback function 會移到 Task Queue 中</li>
+<li>Event Loop 在偵測 Call Stack為空時且 Ajax callback 在 Task Queue 的第一位時，就會把 callback 丟到 Call Stack 中執行</li>
+</ul>
+<p>所以執行結果為：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hi</span><br><span class="line">JSConfEU</span><br><span class="line">data(類型可能為 xml、html、text、script、json）</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_3.png"></p>
+<p>非同步讓 Ajax 從 sever 抓取資料到 client 的時間，<strong>可以讓 Javascript 並行 (非同步) 做別的事，減少阻塞</strong>程式運行的機率。</p>
+<ol start="2">
+<li>setTimeOut 不是真的就在那幾秒之後執行 callback function</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;5sec later?&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=c2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coJzVzZWMgbGF0ZXI/JykKfSwgNTAwMCk=!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
+</blockquote>
+<p>這會怎麼執行呢？</p>
+<ul>
+<li>setTimeOut 是屬於 WebAPIs，在執行 setTimeOut 時，會從 Call Stack 跳出至 WebAPIs 執行</li>
+<li>callback function 經過 5 秒後會跳至 Callback Queue</li>
+<li>等待最後跳至 Call Stack 被執行</li>
+</ul>
+<p>這整個過程中，其實已經花費不只 5 秒，也就是說 setTimeOut 只能保證<strong>最小執行時間是 5 秒，但並不能說執行時間是 5 秒</strong>。</p>
+<ol start="3">
+<li>Callback Queue 阻塞：scroll event</li>
+</ol>
+<p>scroll 屬於 WebAPIs 中 Events 的一種，一般在捲動滑鼠時，短時間內會頻繁的送出 scroll 的 event，造成 DOM 節點不斷的重新運算，Callback Queue 阻塞，滑動的頁面會非常的遲緩。</p>
+<p>要解決這個問題，Lodash 有提供 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#throttle">throttle</a> 跟 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#debounce">debounce</a> 兩種 method 可以快速方便解決。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>講到這裡，我們可以理解文章開頭所舉的例子了吧！</p>
+<blockquote>
+<p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=Y29uc29sZS5sb2coJ1N0YXJ0Jyk7CnNldFRpbWVvdXQoZnVuY3Rpb24gdGltZW91dCgpIHsKY29uc29sZS5sb2coJzBzZWMgbGF0ZXInKQp9LCAwKQpjb25zb2xlLmxvZygnU3RvcCcpOwoK!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
+</blockquote>
+<p>我們也可以清楚的知道 Javascript 如何非同步運作，達成同時具有同步以及非同步的特性。正因為如此，Javacript 是一個極為靈活彈性的語言，能夠悠遊於前端與後端，無往不利！</p>
+<p>此篇同步發表於 👉 <a target="_blank" rel="noopener" href="http://5xruby.tw/posts/how-js-synchronous-works/">五倍紅寶石</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/25/GCP/" rel="prev" title="CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine">
+      <i class="fa fa-chevron-left"></i> CI/CD 從零開始 - 使用 CircleCI 部署 Node.jS App 到 GCP App Engine
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E-blocking-%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">阻塞(blocking) : 如果不存在非同步？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%B5%B7%E4%BE%86%E7%9E%A7%E7%9E%A7%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E9%AA%A8%E6%9E%B6"><span class="nav-number">2.</span> <span class="nav-text">一起來瞧瞧非同步的骨架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Call-Stack"><span class="nav-number">3.</span> <span class="nav-text">Call Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-APIs"><span class="nav-number">4.</span> <span class="nav-text">Web APIs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Queue"><span class="nav-number">5.</span> <span class="nav-text">Task Queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-Loop"><span class="nav-number">6.</span> <span class="nav-text">Event Loop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%88%89%E5%80%8B%E5%AF%A6%E4%BE%8B%EF%BC%8C%E4%BB%A5%E5%89%8D%E9%9D%A2%E6%8F%90%E7%9A%84%E6%BB%91%E9%BC%A0%E9%BB%9E%E6%93%8A%E7%82%BA%E4%BE%8B"><span class="nav-number">6.1.</span> <span class="nav-text">舉個實例，以前面提的滑鼠點擊為例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E4%BE%86%E5%B9%BE%E5%80%8B%E4%BE%8B%E5%AD%90"><span class="nav-number">7.</span> <span class="nav-text">再來幾個例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">8.</span> <span class="nav-text">結語</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

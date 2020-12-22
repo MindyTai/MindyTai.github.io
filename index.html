@@ -144,6 +144,169 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/04/11/how-js-asychronize-works/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="From Zero to Yee">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/11/how-js-asychronize-works/" class="post-title-link" itemprop="url">無痛理解 JS | 非同步怎麼運作？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-11 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-11T00:00:00+08:00">2020-04-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-22 14:05:28" itemprop="dateModified" datetime="2020-12-22T14:05:28+08:00">2020-12-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>總以為世界的形狀我們早已熟悉，但到頭來卻發現並不是。 筆者每每在寫 Javascript 時，處處都會發現驚喜。 下面想舉一個曾經印象深刻的例子給大家看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console.log(&#39;Start&#39;);</span><br><span class="line">console.log(&#39;Stop&#39;);</span><br></pre></td></tr></table></figure>
+<p>印出的結果為</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">Stop</span><br></pre></td></tr></table></figure>
+<p>那中間如果加了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setTimeOut(<span class="function">()=&gt;</span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;0 sec later&#x27;</span>);</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>變成</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Start&#x27;</span>);</span><br><span class="line"></span><br><span class="line">setTimeOut(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;0 sec later&#x27;</span>);</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Stop&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>則結果竟會變成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">Stop</span><br><span class="line">0 sec later</span><br></pre></td></tr></table></figure>
+<p>疑？怎麼會這樣呢？明明在中間加入了 0 sec later，為什麼 console 出來的順序會是這樣？<br>要搞懂這個結果，就必須先來了解 Javascript 擁有的 <strong>非同步特性</strong>。</p>
+<h2 id="阻塞-blocking-如果不存在非同步？"><a href="#阻塞-blocking-如果不存在非同步？" class="headerlink" title="阻塞(blocking) : 如果不存在非同步？"></a>阻塞(blocking) : 如果不存在非同步？</h2><p>不過，我們先來試著思考一個問題：非同步真的很重要嗎？沒有非同步的世界會怎樣呢？<br>在沒有非同步的世界裡，只剩下 <strong>同步 (Synchronous)</strong>  (這是廢話嗎)，而每天都會發生惱人的阻塞現象。</p>
+<blockquote>
+<p>阻塞的概念可以想成每年過年高速公路必塞車的現象，高速公路可以想成等等會提到的 Call Stack，而車子即相當於程式。</p>
+</blockquote>
+<p>在同步的世界裡，每跑一段程式就要花時間等待執行完畢，從 Call Stack 中跳走後，下一個程式才能執行，於是當前面某個程式很慢就會連帶影響之後的程式。在瀏覽器上我們會看到類似當機的畫面，什麼事都做不了。</p>
+<p>這種現象想當然爾會想要避免，而 Javascript 及瀏覽器做了一些事來處理這樣的狀況，那麼就來了解怎麼疏通高速公路吧！</p>
+<h2 id="一起來瞧瞧非同步的骨架"><a href="#一起來瞧瞧非同步的骨架" class="headerlink" title="一起來瞧瞧非同步的骨架"></a>一起來瞧瞧非同步的骨架</h2><p>JS 的主要特點有兩個：</p>
+<ul>
+<li>Single Thread (單線程)</li>
+<li>Synchronous (同步)</li>
+</ul>
+<p>說明 Javascript 一次只執行一件事，程式會逐行執行。<br>那為什麼在網頁我們仍可以處理像是滑鼠點擊之類看起來「一次處理很多事件」的非同步 ( asynchronous ) 事件而不會塞車呢？原因是當 Javascript 在 V8 Engine 執行時，其實也會執行瀏覽器提供的 API ( Web APIs，這裡已經不是在 V8 Engine 的範疇 )，前文提及的滑鼠點擊 (click）即屬於 Web APIs。</p>
+<blockquote>
+<p>Web APIs 讓我們可以非同步執行程式，<br>也就是說 JS 本身並無法非同步執行，<br>需要借助 Web APIs 才能達到非同步的效果。</p>
+</blockquote>
+<p>那非同步是怎麼運作的呢？</p>
+<p>首先，要先了解下面四點的定義：</p>
+<h2 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h2><blockquote>
+<p>Call Stack 本身為 Stack。<br>Stack 是資料結構的一種，會遵守 LIFO (Last In, First Out) 的原則。Call Stack 會繼承 Stack 原本的特性，即「最後被 call 的 function 會在最上層，而執行完後會最先從該 stack 離開（pop off）」。而 Javascript 是 Single Thread, 所以只會有一個 Call Stack。</p>
+</blockquote>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack.png"><br>(圖片來源 /wiki — <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack</a>)</p>
+<h2 id="Web-APIs"><a href="#Web-APIs" class="headerlink" title="Web APIs"></a>Web APIs</h2><blockquote>
+<p>瀏覽器提供的 API，例如常被使用的 setTimeout。<br>setTimeout 是瀏覽器所提供的計時器，常常搭配 callback function 使用。</p>
+</blockquote>
+<h2 id="Task-Queue"><a href="#Task-Queue" class="headerlink" title="Task Queue"></a>Task Queue</h2><blockquote>
+<p>又可以稱作 Callback Queue，<br>放在 Web APIs 的 function 在執行完後，會到 Task Queue 待命。<br>（e.g. setTimeOut 在秒數執行完後，會移至 Task Queue）</p>
+</blockquote>
+<h2 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h2><blockquote>
+<p>偵測到 Call Stack 為空時，<br>把在 Task Queue 裡等待的第一個 callback function 放到 stack 中去執行。</p>
+</blockquote>
+<p>好啦！解說到此，應該可以理解下面這張圖：</p>
+<p><img src="/2020/04/11/how-js-asychronize-works/web_api.png"><br>( Web APIs function 執行路線圖：紅色格子為使用 Web APIs 的 function )</p>
+<blockquote>
+<p>非同步的設計是讓需要執行較久時間的程式能夠移到別的地方去執行，<br>不要阻塞到 Main Thread(Call Stack)，<br>讓程式能夠暢通在 Call Stack 上執行。</p>
+</blockquote>
+<h3 id="舉個實例，以前面提的滑鼠點擊為例"><a href="#舉個實例，以前面提的滑鼠點擊為例" class="headerlink" title="舉個實例，以前面提的滑鼠點擊為例"></a>舉個實例，以前面提的滑鼠點擊為例</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Started.&#x27;</span>)</span><br><span class="line">$.on(<span class="string">&#x27;button&#x27;</span>, <span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">onClick</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;Button Clicked!&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Done.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Started</code> console 會執行，會先進入 Call Stack 中，再來執行滑鼠事件 <code>click</code> function，最後執行 console <code>Done</code></li>
+<li>click 為 Web APIs，所以之後會從 Call Stack 脫離到 Web APIs</li>
+<li>滑鼠點擊後，callback 就會到 Task Queue 中。Event Loop 在偵測 Call Stack 為空時，便會把 callback 放到 Call Stack 中去執行， onClick 這個 function 就會執行</li>
+</ul>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_1.png"></p>
+<p>所以我們可以理解為在點擊滑鼠時，<code>onClick</code> function 並不會立即執行，會先到 Task Queue 中等待，直到成為 Queue 中第一位且 Stack 為空時才會執行！</p>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_2.gif"></p>
+<blockquote>
+<p>操作自 <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=Y29uc29sZS5sb2coJ1N0YXJ0ZWQuJykKCiQub24oJ2J1dHRvbicsICdjbGljaycsIGZ1bmN0aW9uIG9uQ2xpY2sgKCkgewogIGNvbnNvbGUubG9nKCdCdXR0dG9uIENsaWNrZWQhJykKfSkKCmNvbnNvbGUubG9nKCdEb25lLicp!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">Loupe — by Philip Roberts</a>： Loupe 是一個由 Philip 做的視覺化工具，對瞭解 Javascript function 執行流程很有幫助。</p>
+</blockquote>
+<p>以上為 JS 如何在 <strong>Single Thread</strong> 下實現看似擁有 <strong>Multi Thread</strong> 的效果。</p>
+<h2 id="再來幾個例子"><a href="#再來幾個例子" class="headerlink" title="再來幾個例子"></a>再來幾個例子</h2><p>筆者在學習這個概念查找資料時，發現了一場精彩演講：<strong>What the heck is the event loop anyway?</strong> 講解頗為精闢，於是下面擇幾個非同步相關例子與讀者分享。</p>
+<ol>
+<li>非同步的 Ajax Request<br>Philip Roberts 曾在 JSConf 舉使用屬於 WebAPIs 的 Ajax 抓取資料的例子：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi&#x27;</span>)</span><br><span class="line">$.get(<span class="string">&#x27;url&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">cb</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;JSConfEU&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>因為 Ajax 為 WebAPIs 其中一種，所以並不在 Javascript Runtime 中。</p>
+<ul>
+<li>console <code>Hi</code> 會先執行，再來 Ajax 執行請求，這時 callback 移到了 Web APIs ，然後 console <code>JSConfEU</code> 緊接著執行</li>
+<li>Ajax 發出的 request 回應後（ success 或 error ），callback function 會移到 Task Queue 中</li>
+<li>Event Loop 在偵測 Call Stack為空時且 Ajax callback 在 Task Queue 的第一位時，就會把 callback 丟到 Call Stack 中執行</li>
+</ul>
+<p>所以執行結果為：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hi</span><br><span class="line">JSConfEU</span><br><span class="line">data(類型可能為 xml、html、text、script、json）</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_3.png"></p>
+<p>非同步讓 Ajax 從 sever 抓取資料到 client 的時間，<strong>可以讓 Javascript 並行 (非同步) 做別的事，減少阻塞</strong>程式運行的機率。</p>
+<ol start="2">
+<li>setTimeOut 不是真的就在那幾秒之後執行 callback function</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;5sec later?&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=c2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coJzVzZWMgbGF0ZXI/JykKfSwgNTAwMCk=!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
+</blockquote>
+<p>這會怎麼執行呢？</p>
+<ul>
+<li>setTimeOut 是屬於 WebAPIs，在執行 setTimeOut 時，會從 Call Stack 跳出至 WebAPIs 執行</li>
+<li>callback function 經過 5 秒後會跳至 Callback Queue</li>
+<li>等待最後跳至 Call Stack 被執行</li>
+</ul>
+<p>這整個過程中，其實已經花費不只 5 秒，也就是說 setTimeOut 只能保證<strong>最小執行時間是 5 秒，但並不能說執行時間是 5 秒</strong>。</p>
+<ol start="3">
+<li>Callback Queue 阻塞：scroll event</li>
+</ol>
+<p>scroll 屬於 WebAPIs 中 Events 的一種，一般在捲動滑鼠時，短時間內會頻繁的送出 scroll 的 event，造成 DOM 節點不斷的重新運算，Callback Queue 阻塞，滑動的頁面會非常的遲緩。</p>
+<p>要解決這個問題，Lodash 有提供 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#throttle">throttle</a> 跟 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#debounce">debounce</a> 兩種 method 可以快速方便解決。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>講到這裡，我們可以理解文章開頭所舉的例子了吧！</p>
+<blockquote>
+<p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=Y29uc29sZS5sb2coJ1N0YXJ0Jyk7CnNldFRpbWVvdXQoZnVuY3Rpb24gdGltZW91dCgpIHsKY29uc29sZS5sb2coJzBzZWMgbGF0ZXInKQp9LCAwKQpjb25zb2xlLmxvZygnU3RvcCcpOwoK!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
+</blockquote>
+<p>我們也可以清楚的知道 Javascript 如何非同步運作，達成同時具有同步以及非同步的特性。正因為如此，Javacript 是一個極為靈活彈性的語言，能夠悠遊於前端與後端，無往不利！</p>
+<p>此篇同步發表於 👉 <a target="_blank" rel="noopener" href="http://5xruby.tw/posts/how-js-synchronous-works/">五倍紅寶石</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
     <link itemprop="mainEntityOfPage" href="http://example.com/2019/11/25/GCP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -620,12 +783,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
