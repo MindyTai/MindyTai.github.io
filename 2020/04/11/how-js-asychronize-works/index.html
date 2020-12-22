@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack_2.gif">
 <meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack_3.png">
 <meta property="article:published_time" content="2020-04-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-22T06:12:22.728Z">
+<meta property="article:modified_time" content="2020-12-22T06:14:27.727Z">
 <meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack.png">
@@ -186,7 +186,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-22 14:12:22" itemprop="dateModified" datetime="2020-12-22T14:12:22+08:00">2020-12-22</time>
+                <time title="Modified: 2020-12-22 14:14:27" itemprop="dateModified" datetime="2020-12-22T14:14:27+08:00">2020-12-22</time>
               </span>
 
           
@@ -228,17 +228,17 @@
 </blockquote>
 <p>那非同步是怎麼運作的呢？</p>
 <p>首先，要先了解下面四點的定義：</p>
-<h2 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h2><blockquote>
+<h3 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h3><blockquote>
 <p>Call Stack 本身為 Stack。<br>Stack 是資料結構的一種，會遵守 LIFO (Last In, First Out) 的原則。Call Stack 會繼承 Stack 原本的特性，即「最後被 call 的 function 會在最上層，而執行完後會最先從該 stack 離開（pop off）」。而 Javascript 是 Single Thread, 所以只會有一個 Call Stack。</p>
 </blockquote>
 <p><img src="/2020/04/11/how-js-asychronize-works/call_stack.png"><br>(圖片來源 /wiki — <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack</a>)</p>
-<h2 id="Web-APIs"><a href="#Web-APIs" class="headerlink" title="Web APIs"></a>Web APIs</h2><blockquote>
+<h3 id="Web-APIs"><a href="#Web-APIs" class="headerlink" title="Web APIs"></a>Web APIs</h3><blockquote>
 <p>瀏覽器提供的 API，例如常被使用的 setTimeout。<br>setTimeout 是瀏覽器所提供的計時器，常常搭配 callback function 使用。</p>
 </blockquote>
-<h2 id="Task-Queue"><a href="#Task-Queue" class="headerlink" title="Task Queue"></a>Task Queue</h2><blockquote>
+<h3 id="Task-Queue"><a href="#Task-Queue" class="headerlink" title="Task Queue"></a>Task Queue</h3><blockquote>
 <p>又可以稱作 Callback Queue，<br>放在 Web APIs 的 function 在執行完後，會到 Task Queue 待命。<br>（e.g. setTimeOut 在秒數執行完後，會移至 Task Queue）</p>
 </blockquote>
-<h2 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h2><blockquote>
+<h3 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h3><blockquote>
 <p>偵測到 Call Stack 為空時，<br>把在 Task Queue 裡等待的第一個 callback function 放到 stack 中去執行。</p>
 </blockquote>
 <p>好啦！解說到此，應該可以理解下面這張圖：</p>
@@ -371,7 +371,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E-blocking-%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">阻塞(blocking) : 如果不存在非同步？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%B5%B7%E4%BE%86%E7%9E%A7%E7%9E%A7%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E9%AA%A8%E6%9E%B6"><span class="nav-number">2.</span> <span class="nav-text">一起來瞧瞧非同步的骨架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Call-Stack"><span class="nav-number">3.</span> <span class="nav-text">Call Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-APIs"><span class="nav-number">4.</span> <span class="nav-text">Web APIs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Queue"><span class="nav-number">5.</span> <span class="nav-text">Task Queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-Loop"><span class="nav-number">6.</span> <span class="nav-text">Event Loop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%88%89%E5%80%8B%E5%AF%A6%E4%BE%8B%EF%BC%8C%E4%BB%A5%E5%89%8D%E9%9D%A2%E6%8F%90%E7%9A%84%E6%BB%91%E9%BC%A0%E9%BB%9E%E6%93%8A%E7%82%BA%E4%BE%8B"><span class="nav-number">6.1.</span> <span class="nav-text">舉個實例，以前面提的滑鼠點擊為例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E4%BE%86%E5%B9%BE%E5%80%8B%E4%BE%8B%E5%AD%90"><span class="nav-number">7.</span> <span class="nav-text">再來幾個例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84-Ajax-Request"><span class="nav-number">7.1.</span> <span class="nav-text">非同步的 Ajax Request</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setTimeOut-%E4%B8%8D%E6%98%AF%E7%9C%9F%E7%9A%84%E5%B0%B1%E5%9C%A8%E9%82%A3%E5%B9%BE%E7%A7%92%E4%B9%8B%E5%BE%8C%E5%9F%B7%E8%A1%8C-callback-function"><span class="nav-number">7.2.</span> <span class="nav-text">setTimeOut 不是真的就在那幾秒之後執行 callback function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Callback-Queue-%E9%98%BB%E5%A1%9E%EF%BC%9Ascroll-event"><span class="nav-number">7.3.</span> <span class="nav-text">Callback Queue 阻塞：scroll event</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">8.</span> <span class="nav-text">結語</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E-blocking-%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">阻塞(blocking) : 如果不存在非同步？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%B5%B7%E4%BE%86%E7%9E%A7%E7%9E%A7%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E9%AA%A8%E6%9E%B6"><span class="nav-number">2.</span> <span class="nav-text">一起來瞧瞧非同步的骨架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Call-Stack"><span class="nav-number">2.1.</span> <span class="nav-text">Call Stack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web-APIs"><span class="nav-number">2.2.</span> <span class="nav-text">Web APIs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Task-Queue"><span class="nav-number">2.3.</span> <span class="nav-text">Task Queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Event-Loop"><span class="nav-number">2.4.</span> <span class="nav-text">Event Loop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%88%89%E5%80%8B%E5%AF%A6%E4%BE%8B%EF%BC%8C%E4%BB%A5%E5%89%8D%E9%9D%A2%E6%8F%90%E7%9A%84%E6%BB%91%E9%BC%A0%E9%BB%9E%E6%93%8A%E7%82%BA%E4%BE%8B"><span class="nav-number">2.5.</span> <span class="nav-text">舉個實例，以前面提的滑鼠點擊為例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E4%BE%86%E5%B9%BE%E5%80%8B%E4%BE%8B%E5%AD%90"><span class="nav-number">3.</span> <span class="nav-text">再來幾個例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84-Ajax-Request"><span class="nav-number">3.1.</span> <span class="nav-text">非同步的 Ajax Request</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setTimeOut-%E4%B8%8D%E6%98%AF%E7%9C%9F%E7%9A%84%E5%B0%B1%E5%9C%A8%E9%82%A3%E5%B9%BE%E7%A7%92%E4%B9%8B%E5%BE%8C%E5%9F%B7%E8%A1%8C-callback-function"><span class="nav-number">3.2.</span> <span class="nav-text">setTimeOut 不是真的就在那幾秒之後執行 callback function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Callback-Queue-%E9%98%BB%E5%A1%9E%EF%BC%9Ascroll-event"><span class="nav-number">3.3.</span> <span class="nav-text">Callback Queue 阻塞：scroll event</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">4.</span> <span class="nav-text">結語</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

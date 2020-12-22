@@ -175,7 +175,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-22 14:12:22" itemprop="dateModified" datetime="2020-12-22T14:12:22+08:00">2020-12-22</time>
+                <time title="Modified: 2020-12-22 14:14:27" itemprop="dateModified" datetime="2020-12-22T14:14:27+08:00">2020-12-22</time>
               </span>
 
           
@@ -217,17 +217,17 @@
 </blockquote>
 <p>那非同步是怎麼運作的呢？</p>
 <p>首先，要先了解下面四點的定義：</p>
-<h2 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h2><blockquote>
+<h3 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h3><blockquote>
 <p>Call Stack 本身為 Stack。<br>Stack 是資料結構的一種，會遵守 LIFO (Last In, First Out) 的原則。Call Stack 會繼承 Stack 原本的特性，即「最後被 call 的 function 會在最上層，而執行完後會最先從該 stack 離開（pop off）」。而 Javascript 是 Single Thread, 所以只會有一個 Call Stack。</p>
 </blockquote>
 <p><img src="/2020/04/11/how-js-asychronize-works/call_stack.png"><br>(圖片來源 /wiki — <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack</a>)</p>
-<h2 id="Web-APIs"><a href="#Web-APIs" class="headerlink" title="Web APIs"></a>Web APIs</h2><blockquote>
+<h3 id="Web-APIs"><a href="#Web-APIs" class="headerlink" title="Web APIs"></a>Web APIs</h3><blockquote>
 <p>瀏覽器提供的 API，例如常被使用的 setTimeout。<br>setTimeout 是瀏覽器所提供的計時器，常常搭配 callback function 使用。</p>
 </blockquote>
-<h2 id="Task-Queue"><a href="#Task-Queue" class="headerlink" title="Task Queue"></a>Task Queue</h2><blockquote>
+<h3 id="Task-Queue"><a href="#Task-Queue" class="headerlink" title="Task Queue"></a>Task Queue</h3><blockquote>
 <p>又可以稱作 Callback Queue，<br>放在 Web APIs 的 function 在執行完後，會到 Task Queue 待命。<br>（e.g. setTimeOut 在秒數執行完後，會移至 Task Queue）</p>
 </blockquote>
-<h2 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h2><blockquote>
+<h3 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h3><blockquote>
 <p>偵測到 Call Stack 為空時，<br>把在 Task Queue 裡等待的第一個 callback function 放到 stack 中去執行。</p>
 </blockquote>
 <p>好啦！解說到此，應該可以理解下面這張圖：</p>
