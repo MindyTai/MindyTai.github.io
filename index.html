@@ -175,7 +175,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-22 14:05:28" itemprop="dateModified" datetime="2020-12-22T14:05:28+08:00">2020-12-22</time>
+                <time title="Modified: 2020-12-22 14:12:22" itemprop="dateModified" datetime="2020-12-22T14:12:22+08:00">2020-12-22</time>
               </span>
 
           
@@ -249,9 +249,7 @@
 </blockquote>
 <p>以上為 JS 如何在 <strong>Single Thread</strong> 下實現看似擁有 <strong>Multi Thread</strong> 的效果。</p>
 <h2 id="再來幾個例子"><a href="#再來幾個例子" class="headerlink" title="再來幾個例子"></a>再來幾個例子</h2><p>筆者在學習這個概念查找資料時，發現了一場精彩演講：<strong>What the heck is the event loop anyway?</strong> 講解頗為精闢，於是下面擇幾個非同步相關例子與讀者分享。</p>
-<ol>
-<li>非同步的 Ajax Request<br>Philip Roberts 曾在 JSConf 舉使用屬於 WebAPIs 的 Ajax 抓取資料的例子：</li>
-</ol>
+<h3 id="非同步的-Ajax-Request"><a href="#非同步的-Ajax-Request" class="headerlink" title="非同步的 Ajax Request"></a>非同步的 Ajax Request</h3><p>Philip Roberts 曾在 JSConf 舉使用屬於 WebAPIs 的 Ajax 抓取資料的例子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi&#x27;</span>)</span><br><span class="line">$.get(<span class="string">&#x27;url&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">cb</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;JSConfEU&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <p>因為 Ajax 為 WebAPIs 其中一種，所以並不在 Javascript Runtime 中。</p>
 <ul>
@@ -263,10 +261,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hi</span><br><span class="line">JSConfEU</span><br><span class="line">data(類型可能為 xml、html、text、script、json）</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/04/11/how-js-asychronize-works/call_stack_3.png"></p>
 <p>非同步讓 Ajax 從 sever 抓取資料到 client 的時間，<strong>可以讓 Javascript 並行 (非同步) 做別的事，減少阻塞</strong>程式運行的機率。</p>
-<ol start="2">
-<li>setTimeOut 不是真的就在那幾秒之後執行 callback function</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;5sec later?&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="setTimeOut-不是真的就在那幾秒之後執行-callback-function"><a href="#setTimeOut-不是真的就在那幾秒之後執行-callback-function" class="headerlink" title="setTimeOut 不是真的就在那幾秒之後執行 callback function"></a>setTimeOut 不是真的就在那幾秒之後執行 callback function</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;5sec later?&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=c2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coJzVzZWMgbGF0ZXI/JykKfSwgNTAwMCk=!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
 </blockquote>
@@ -277,10 +272,7 @@
 <li>等待最後跳至 Call Stack 被執行</li>
 </ul>
 <p>這整個過程中，其實已經花費不只 5 秒，也就是說 setTimeOut 只能保證<strong>最小執行時間是 5 秒，但並不能說執行時間是 5 秒</strong>。</p>
-<ol start="3">
-<li>Callback Queue 阻塞：scroll event</li>
-</ol>
-<p>scroll 屬於 WebAPIs 中 Events 的一種，一般在捲動滑鼠時，短時間內會頻繁的送出 scroll 的 event，造成 DOM 節點不斷的重新運算，Callback Queue 阻塞，滑動的頁面會非常的遲緩。</p>
+<h3 id="Callback-Queue-阻塞：scroll-event"><a href="#Callback-Queue-阻塞：scroll-event" class="headerlink" title="Callback Queue 阻塞：scroll event"></a>Callback Queue 阻塞：scroll event</h3><p>scroll 屬於 WebAPIs 中 Events 的一種，一般在捲動滑鼠時，短時間內會頻繁的送出 scroll 的 event，造成 DOM 節點不斷的重新運算，Callback Queue 阻塞，滑動的頁面會非常的遲緩。</p>
 <p>要解決這個問題，Lodash 有提供 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#throttle">throttle</a> 跟 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#debounce">debounce</a> 兩種 method 可以快速方便解決。</p>
 <h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>講到這裡，我們可以理解文章開頭所舉的例子了吧！</p>
 <blockquote>

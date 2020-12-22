@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack_2.gif">
 <meta property="og:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack_3.png">
 <meta property="article:published_time" content="2020-04-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-22T06:05:28.042Z">
+<meta property="article:modified_time" content="2020-12-22T06:12:22.728Z">
 <meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2020/04/11/how-js-asychronize-works/call_stack.png">
@@ -186,7 +186,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-22 14:05:28" itemprop="dateModified" datetime="2020-12-22T14:05:28+08:00">2020-12-22</time>
+                <time title="Modified: 2020-12-22 14:12:22" itemprop="dateModified" datetime="2020-12-22T14:12:22+08:00">2020-12-22</time>
               </span>
 
           
@@ -260,9 +260,7 @@
 </blockquote>
 <p>以上為 JS 如何在 <strong>Single Thread</strong> 下實現看似擁有 <strong>Multi Thread</strong> 的效果。</p>
 <h2 id="再來幾個例子"><a href="#再來幾個例子" class="headerlink" title="再來幾個例子"></a>再來幾個例子</h2><p>筆者在學習這個概念查找資料時，發現了一場精彩演講：<strong>What the heck is the event loop anyway?</strong> 講解頗為精闢，於是下面擇幾個非同步相關例子與讀者分享。</p>
-<ol>
-<li>非同步的 Ajax Request<br>Philip Roberts 曾在 JSConf 舉使用屬於 WebAPIs 的 Ajax 抓取資料的例子：</li>
-</ol>
+<h3 id="非同步的-Ajax-Request"><a href="#非同步的-Ajax-Request" class="headerlink" title="非同步的 Ajax Request"></a>非同步的 Ajax Request</h3><p>Philip Roberts 曾在 JSConf 舉使用屬於 WebAPIs 的 Ajax 抓取資料的例子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi&#x27;</span>)</span><br><span class="line">$.get(<span class="string">&#x27;url&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">cb</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;JSConfEU&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <p>因為 Ajax 為 WebAPIs 其中一種，所以並不在 Javascript Runtime 中。</p>
 <ul>
@@ -274,10 +272,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hi</span><br><span class="line">JSConfEU</span><br><span class="line">data(類型可能為 xml、html、text、script、json）</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/04/11/how-js-asychronize-works/call_stack_3.png"></p>
 <p>非同步讓 Ajax 從 sever 抓取資料到 client 的時間，<strong>可以讓 Javascript 並行 (非同步) 做別的事，減少阻塞</strong>程式運行的機率。</p>
-<ol start="2">
-<li>setTimeOut 不是真的就在那幾秒之後執行 callback function</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;5sec later?&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="setTimeOut-不是真的就在那幾秒之後執行-callback-function"><a href="#setTimeOut-不是真的就在那幾秒之後執行-callback-function" class="headerlink" title="setTimeOut 不是真的就在那幾秒之後執行 callback function"></a>setTimeOut 不是真的就在那幾秒之後執行 callback function</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;5sec later?&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=c2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coJzVzZWMgbGF0ZXI/JykKfSwgNTAwMCk=!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
 </blockquote>
@@ -288,10 +283,7 @@
 <li>等待最後跳至 Call Stack 被執行</li>
 </ul>
 <p>這整個過程中，其實已經花費不只 5 秒，也就是說 setTimeOut 只能保證<strong>最小執行時間是 5 秒，但並不能說執行時間是 5 秒</strong>。</p>
-<ol start="3">
-<li>Callback Queue 阻塞：scroll event</li>
-</ol>
-<p>scroll 屬於 WebAPIs 中 Events 的一種，一般在捲動滑鼠時，短時間內會頻繁的送出 scroll 的 event，造成 DOM 節點不斷的重新運算，Callback Queue 阻塞，滑動的頁面會非常的遲緩。</p>
+<h3 id="Callback-Queue-阻塞：scroll-event"><a href="#Callback-Queue-阻塞：scroll-event" class="headerlink" title="Callback Queue 阻塞：scroll event"></a>Callback Queue 阻塞：scroll event</h3><p>scroll 屬於 WebAPIs 中 Events 的一種，一般在捲動滑鼠時，短時間內會頻繁的送出 scroll 的 event，造成 DOM 節點不斷的重新運算，Callback Queue 阻塞，滑動的頁面會非常的遲緩。</p>
 <p>要解決這個問題，Lodash 有提供 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#throttle">throttle</a> 跟 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#debounce">debounce</a> 兩種 method 可以快速方便解決。</p>
 <h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>講到這裡，我們可以理解文章開頭所舉的例子了吧！</p>
 <blockquote>
@@ -379,7 +371,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E-blocking-%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">阻塞(blocking) : 如果不存在非同步？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%B5%B7%E4%BE%86%E7%9E%A7%E7%9E%A7%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E9%AA%A8%E6%9E%B6"><span class="nav-number">2.</span> <span class="nav-text">一起來瞧瞧非同步的骨架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Call-Stack"><span class="nav-number">3.</span> <span class="nav-text">Call Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-APIs"><span class="nav-number">4.</span> <span class="nav-text">Web APIs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Queue"><span class="nav-number">5.</span> <span class="nav-text">Task Queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-Loop"><span class="nav-number">6.</span> <span class="nav-text">Event Loop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%88%89%E5%80%8B%E5%AF%A6%E4%BE%8B%EF%BC%8C%E4%BB%A5%E5%89%8D%E9%9D%A2%E6%8F%90%E7%9A%84%E6%BB%91%E9%BC%A0%E9%BB%9E%E6%93%8A%E7%82%BA%E4%BE%8B"><span class="nav-number">6.1.</span> <span class="nav-text">舉個實例，以前面提的滑鼠點擊為例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E4%BE%86%E5%B9%BE%E5%80%8B%E4%BE%8B%E5%AD%90"><span class="nav-number">7.</span> <span class="nav-text">再來幾個例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">8.</span> <span class="nav-text">結語</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E-blocking-%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">阻塞(blocking) : 如果不存在非同步？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%B5%B7%E4%BE%86%E7%9E%A7%E7%9E%A7%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E9%AA%A8%E6%9E%B6"><span class="nav-number">2.</span> <span class="nav-text">一起來瞧瞧非同步的骨架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Call-Stack"><span class="nav-number">3.</span> <span class="nav-text">Call Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-APIs"><span class="nav-number">4.</span> <span class="nav-text">Web APIs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Queue"><span class="nav-number">5.</span> <span class="nav-text">Task Queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-Loop"><span class="nav-number">6.</span> <span class="nav-text">Event Loop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%88%89%E5%80%8B%E5%AF%A6%E4%BE%8B%EF%BC%8C%E4%BB%A5%E5%89%8D%E9%9D%A2%E6%8F%90%E7%9A%84%E6%BB%91%E9%BC%A0%E9%BB%9E%E6%93%8A%E7%82%BA%E4%BE%8B"><span class="nav-number">6.1.</span> <span class="nav-text">舉個實例，以前面提的滑鼠點擊為例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E4%BE%86%E5%B9%BE%E5%80%8B%E4%BE%8B%E5%AD%90"><span class="nav-number">7.</span> <span class="nav-text">再來幾個例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84-Ajax-Request"><span class="nav-number">7.1.</span> <span class="nav-text">非同步的 Ajax Request</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setTimeOut-%E4%B8%8D%E6%98%AF%E7%9C%9F%E7%9A%84%E5%B0%B1%E5%9C%A8%E9%82%A3%E5%B9%BE%E7%A7%92%E4%B9%8B%E5%BE%8C%E5%9F%B7%E8%A1%8C-callback-function"><span class="nav-number">7.2.</span> <span class="nav-text">setTimeOut 不是真的就在那幾秒之後執行 callback function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Callback-Queue-%E9%98%BB%E5%A1%9E%EF%BC%9Ascroll-event"><span class="nav-number">7.3.</span> <span class="nav-text">Callback Queue 阻塞：scroll event</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">8.</span> <span class="nav-text">結語</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
