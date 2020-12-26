@@ -144,6 +144,83 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/26/about-414-error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="From Zero to Yee">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/26/about-414-error/" class="post-title-link" itemprop="url">414 error URL is too large</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-12-26 15:57:56 / Modified: 17:03:11" itemprop="dateCreated datePublished" datetime="2020-12-26T15:57:56+08:00">2020-12-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h2><p>專案遇到一個狀況 ：form 是使用 <strong>GET</strong> 作操作，所以會遇到 <strong>url 過長</strong>的問題。</p>
+<h4 id="Browser-URL-Limit"><a href="#Browser-URL-Limit" class="headerlink" title="Browser URL Limit"></a>Browser URL Limit</h4><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/812925/what-is-the-maximum-possible-length-of-a-query-string#812962">其實 browser 可以到 64K 以上</a>，所以如果不是 browser 問題可以看 response 414 的 <strong>source</strong> 是誰。 如果是 Nginx ，就往下找 Nginx 問題。</p>
+<h4 id="Ngnix-Problem"><a href="#Ngnix-Problem" class="headerlink" title="Ngnix Problem"></a>Ngnix Problem</h4><p><strong>Limit File Upload with Nginx</strong></p>
+<blockquote>
+<p>Problem encountered: 414 url is too long error If the size in a request exceeds the configured value, the 413 (Request Entity Too Large) error is returned to the client.</p>
+</blockquote>
+<p>Default value: 1 MB</p>
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution:"></a>Solution:</h4><p>Set the <strong>client_max_body_size</strong> in <code>/etc/nginx/nginx.conf</code> to the proper size.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax: client_max_body_size size;</span><br><span class="line">Default: client_max_body_size 1MB;</span><br><span class="line">Context: http, server, location</span><br></pre></td></tr></table></figure>
+<p>This directive can be set in the <code>http</code>, <code>server</code> or <code>location</code> context.</p>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p><a target="_blank" rel="noopener" href="https://www.tecmint.com/limit-file-upload-size-in-nginx/">ref-1</a>｜<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size">ref-2</a>｜<a target="_blank" rel="noopener" href="https://www.reddit.com/r/linuxadmin/comments/9kuak3/nginx_uri_too_long/">ref-3</a>｜<a target="_blank" rel="noopener" href="https://thr3a.hatenablog.com/entry/20180316/1521176005">ref-4</a></p>
+<h2 id="Context-1"><a href="#Context-1" class="headerlink" title="Context"></a>Context</h2><p>調整 <strong>client_max_body_size</strong> 後可以 accept 的 url 長度有比較多，但是仍沒有顯著改善， 但回傳的已為 <strong>400</strong>。</p>
+<h5 id="找-Nginx-log"><a href="#找-Nginx-log" class="headerlink" title="找 Nginx log"></a>找 Nginx log</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh staging server</span><br><span class="line"><span class="built_in">cd</span> /var/<span class="built_in">log</span>/nginx</span><br><span class="line">cat error.log</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://benjr.tw/22380">Ref</a></p>
+<h5 id="發現是-Puma-問題"><a href="#發現是-Puma-問題" class="headerlink" title="發現是 Puma 問題"></a>發現是 Puma 問題</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[error] 2320#0: *1 connect() to unix:&#x2F;srv&#x2F;app&#x2F;shared&#x2F;tmp&#x2F;sockets&#x2F;puma.sock failed (111: Connection refused) while connecting to upstream, client: 172.31.5.28, server: , request: &quot;GET &#x2F;health_check HTTP&#x2F;1.1&quot;, upstream: &quot;http:&#x2F;&#x2F;unix:&#x2F;srv&#x2F;app&#x2F;shared&#x2F;tmp&#x2F;sockets&#x2F;puma.sock:&#x2F;health_check&quot;, host: &quot;172.31.25.150&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="找-Puma-error-log"><a href="#找-Puma-error-log" class="headerlink" title="找 Puma error log"></a>找 Puma error log</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ssh staging server</span><br><span class="line"><span class="built_in">cd</span> /srv/app/current</span><br><span class="line"><span class="built_in">cd</span> <span class="built_in">log</span></span><br><span class="line">cat puma_error.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HTTP parse error, malformed request (127.0.0.1&#x2F;amp&#x2F;api&#x2F;v1&#x2F;properties&#x2F;count): #&lt;Puma::HttpParserError: HTTP element QUERY_STRING is longer than the (1024 * 10) allowed length (was 10706）</span><br></pre></td></tr></table></figure>
+<p>可以發現已經超過 Puma 可以處理的長度。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>這邊有<a target="_blank" rel="noopener" href="https://github.com/puma/puma/issues/2273">關於超過 Puma QUERY_STRING 最大 size 的相關 issue</a>。偉哉我公司同事後來發了一個 PR 來擴充 Puma <strong>QUERY_STRING</strong> 的長度，這個問題有解喇。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
     <link itemprop="mainEntityOfPage" href="http://example.com/2020/10/17/2020-JSDC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -902,7 +979,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
