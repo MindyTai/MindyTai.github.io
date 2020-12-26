@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta property="og:type" content="website">
@@ -112,9 +112,14 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>CATEGORIES</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>ARCHIVE</a>
 
   </li>
   </ul>
@@ -131,6 +136,7 @@
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -167,12 +173,41 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-12-26 15:57:56 / Modified: 17:05:25" itemprop="dateCreated datePublished" datetime="2020-12-26T15:57:56+08:00">2020-12-26</time>
+              <time title="Created: 2020-12-26 15:57:56" itemprop="dateCreated datePublished" datetime="2020-12-26T15:57:56+08:00">2020-12-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-27 00:38:10" itemprop="dateModified" datetime="2020-12-27T00:38:10+08:00">2020-12-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NGINX/" itemprop="url" rel="index"><span itemprop="name">NGINX</span></a>
+                </span>
             </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2020/12/26/about-414-error/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/26/about-414-error/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -183,26 +218,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h2><p>專案遇到一個狀況 ：form 是使用 <strong>GET</strong> 作操作，所以會遇到 <strong>url 過長</strong>的問題。</p>
-<h4 id="Browser-URL-Limit"><a href="#Browser-URL-Limit" class="headerlink" title="Browser URL Limit"></a>Browser URL Limit</h4><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/812925/what-is-the-maximum-possible-length-of-a-query-string#812962">其實 browser 可以到 64K 以上</a>，所以如果不是 browser 問題可以看 response 414 的 <strong>source</strong> 是誰。 如果是 Nginx ，就往下找 Nginx 問題。</p>
-<h4 id="Ngnix-Problem"><a href="#Ngnix-Problem" class="headerlink" title="Ngnix Problem"></a>Ngnix Problem</h4><p><strong>Limit File Upload with Nginx</strong></p>
-<blockquote>
-<p>Problem encountered: 414 url is too long error If the size in a request exceeds the configured value, the 413 (Request Entity Too Large) error is returned to the client.</p>
-</blockquote>
-<p>Default value: 1 MB</p>
-<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution:"></a>Solution:</h4><p>Set the <strong>client_max_body_size</strong> in <code>/etc/nginx/nginx.conf</code> to the proper size.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax: client_max_body_size size;</span><br><span class="line">Default: client_max_body_size 1MB;</span><br><span class="line">Context: http, server, location</span><br></pre></td></tr></table></figure>
-<p>This directive can be set in the <code>http</code>, <code>server</code> or <code>location</code> context.</p>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p><a target="_blank" rel="noopener" href="https://www.tecmint.com/limit-file-upload-size-in-nginx/">ref-1</a>｜<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size">ref-2</a>｜<a target="_blank" rel="noopener" href="https://www.reddit.com/r/linuxadmin/comments/9kuak3/nginx_uri_too_long/">ref-3</a>｜<a target="_blank" rel="noopener" href="https://thr3a.hatenablog.com/entry/20180316/1521176005">ref-4</a></p>
-<h2 id="Context-1"><a href="#Context-1" class="headerlink" title="Context"></a>Context</h2><p>調整 <strong>client_max_body_size</strong> 後可以 accept 的 url 長度有比較多，但是仍沒有顯著改善， 但回傳的已為 <strong>400</strong>。</p>
-<h5 id="找-Nginx-log"><a href="#找-Nginx-log" class="headerlink" title="找 Nginx log"></a>找 Nginx log</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh staging server</span><br><span class="line"><span class="built_in">cd</span> /var/<span class="built_in">log</span>/nginx</span><br><span class="line">cat error.log</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="http://benjr.tw/22380">Ref</a></p>
-<h5 id="發現是-Puma-問題"><a href="#發現是-Puma-問題" class="headerlink" title="發現是 Puma 問題"></a>發現是 Puma 問題</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[error] 2320#0: *1 connect() to unix:&#x2F;srv&#x2F;app&#x2F;shared&#x2F;tmp&#x2F;sockets&#x2F;puma.sock failed (111: Connection refused) while connecting to upstream, client: 172.31.5.28, server: , request: &quot;GET &#x2F;health_check HTTP&#x2F;1.1&quot;, upstream: &quot;http:&#x2F;&#x2F;unix:&#x2F;srv&#x2F;app&#x2F;shared&#x2F;tmp&#x2F;sockets&#x2F;puma.sock:&#x2F;health_check&quot;, host: &quot;172.31.25.150&quot;</span><br></pre></td></tr></table></figure>
-<h4 id="找-Puma-error-log"><a href="#找-Puma-error-log" class="headerlink" title="找 Puma error log"></a>找 Puma error log</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ssh staging server</span><br><span class="line"><span class="built_in">cd</span> /srv/app/current</span><br><span class="line"><span class="built_in">cd</span> <span class="built_in">log</span></span><br><span class="line">cat puma_error.log</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HTTP parse error, malformed request (127.0.0.1&#x2F;amp&#x2F;api&#x2F;v1&#x2F;properties&#x2F;count): #&lt;Puma::HttpParserError: HTTP element QUERY_STRING is longer than the (1024 * 10) allowed length (was 10706）</span><br></pre></td></tr></table></figure>
-<p>可以發現已經超過 Puma 可以處理的長度。</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>這邊有<a target="_blank" rel="noopener" href="https://github.com/puma/puma/issues/2273">關於超過 Puma QUERY_STRING 最大 size 的相關 issue</a>。偉哉我公司同事後來發了一個 PR 來擴充 Puma <strong>QUERY_STRING</strong> 的長度，這個問題有解喇。</p>
-
+          <p>最近專案遇到一個狀況：form 是使用 GET 作操作，所以會遇到 url 過長的問題。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/26/about-414-error/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -252,10 +276,33 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-22 17:43:11" itemprop="dateModified" datetime="2020-12-22T17:43:11+08:00">2020-12-22</time>
+                <time title="Modified: 2020-12-26 23:11:12" itemprop="dateModified" datetime="2020-12-26T23:11:12+08:00">2020-12-26</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
+            </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2020/10/17/2020-JSDC/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/17/2020-JSDC/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -267,69 +314,14 @@
 
       
           <p>JSDC 是著名的 JS 開發者年會，這次非常榮幸能夠受邀為講者，分享 React Hooks 底層運作。</p>
-<p>之前在公司有做過零星幾個分享，這次對外大眾演講倒是第一次，其實心中非常忐忑緊張，還好身邊有很多朋友聽我試講，感恩各位大大。</p>
-<p>以此篇紀錄演講內容。</p>
-<h2 id="自己的工具自己造，咱們來-React-Hooks"><a href="#自己的工具自己造，咱們來-React-Hooks" class="headerlink" title="自己的工具自己造，咱們來 React Hooks"></a>自己的工具自己造，咱們來 React Hooks</h2><p>這次的演講主題同標題，主要想要向大家分享 React hooks 的底層運作。這次挑了 useEffect 及 useState 兩個 hooks 作討論。</p>
-<h2 id="沒有-Hooks-的世界長什麼樣子呢"><a href="#沒有-Hooks-的世界長什麼樣子呢" class="headerlink" title="沒有 Hooks 的世界長什麼樣子呢"></a>沒有 Hooks 的世界長什麼樣子呢</h2><p>Hooks 是 React 16.8 釋出的新功能，在 Hooks 尚未釋出以前，在實作 component (以下皆會用「元件」來稱呼) 會是以 class（class component） 實作。class 是 Javascript 的語法糖，讓 Javascript 能夠更加物件導向。而 Hooks 的出現讓元件能夠以 function 實作 (functional component)，更加方便簡短。</p>
-<p>試看以下程式碼：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;</span><br><span class="line">      count: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;&gt;</span><br><span class="line">        &lt;p&gt;You clicked &#123;<span class="built_in">this</span>.state.count&#125; times.&lt;/p&gt;</span><br><span class="line">        &lt;button onClick=&#123;<span class="function">() =&gt;</span> <span class="built_in">this</span>.setState(&#123; <span class="attr">count</span>: <span class="built_in">this</span>.state.count + <span class="number">1</span> &#125;)&#125;&gt; &lt;/button&gt;</span><br><span class="line">      &lt;/&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>這段程式碼是在實作一個按鈕，使用者每按一下，count 就會加一。畫面大概會長這樣：</p>
-<p><img src="/2020/10/17/2020-JSDC/counter.gif"></p>
-<p>在實作上，會需要一個  constructor function 來初始化 state，最後會有一個 render function 來把畫面呈現出來。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">this</span>.setState(&#123; <span class="attr">count</span>: <span class="built_in">this</span>.state.count + <span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
-<p>是讓 count 改變的最主要的函式。</p>
-<p>改成 hooks 版本後，程式碼如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Counter = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>)</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;p&gt;You clicked &#123; count &#125; times.&lt;/p&gt;</span><br><span class="line">      &lt;button onClick=&#123; <span class="function">() =&gt;</span> setCount(count + <span class="number">1</span>) &#125;&gt;&lt;/button&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>程式碼與 class 相比精簡相當多，setCount 這個 hook function 就能夠改變 state 的值。</p>
-<p>那麼有了 hooks 後，除了程式碼精簡許多外，還有怎麼樣的優點呢？</p>
-<h2 id="Hooks-可以解決什麼問題？"><a href="#Hooks-可以解決什麼問題？" class="headerlink" title="Hooks 可以解決什麼問題？"></a>Hooks 可以解決什麼問題？</h2><h4 id="共用邏輯可抽出做使用"><a href="#共用邏輯可抽出做使用" class="headerlink" title="共用邏輯可抽出做使用"></a>共用邏輯可抽出做使用</h4><p>hooks 基本上是 function，會繼承 function 的屬性。在寫程式的過程中，會盡量符合 「DRY」（ Don’t repeat yourself ）原則，會把重複性的程式邏輯抽出來共用，對 hooks 而言，可以抽出來做 <a target="_blank" rel="noopener" href="https://medium.com/r/?url=https://reactjs.org/docs/hooks-custom.html%23extracting-a-custom-hook">custom hooks</a>。</p>
-<h4 id="邏輯拆分更加清楚不混亂"><a href="#邏輯拆分更加清楚不混亂" class="headerlink" title="邏輯拆分更加清楚不混亂"></a>邏輯拆分更加清楚不混亂</h4><p>假設一個情境：因為某些特殊狀況需要在同一個元件裡處理兩支 API，若是以 class component 實作，會需要在同個 lifecycle （ 通常為 <strong>componentDidmount</strong> ）裡處理這兩支 API，邏輯會相當混雜。</p>
-<p>而 hooks 的出現，可以在同一個元件裡使用複數個相同的 hooks ( 通常為 useEffect )，可以讓這兩支 API 可以分開實作，邏輯更加清楚。</p>
-<p>試看以下程式碼：</p>
-<h4 id="class-component"><a href="#class-component" class="headerlink" title="class component"></a>class component</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount () &#123;</span><br><span class="line">  A API handler.....</span><br><span class="line">  B API handler.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="functional-component"><a href="#functional-component" class="headerlink" title="functional component"></a>functional component</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useEffect(<span class="function">()=&gt;</span> &#123;</span><br><span class="line">    A API handler</span><br><span class="line">&#125;)</span><br><span class="line">useEffect(<span class="function">()=&gt;</span> &#123;</span><br><span class="line">    B API handler</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="Hooks-的規則"><a href="#Hooks-的規則" class="headerlink" title="Hooks 的規則"></a>Hooks 的規則</h2><h4 id="不能在迴圈、條件式-、nested-functions-裡使用-hooks"><a href="#不能在迴圈、條件式-、nested-functions-裡使用-hooks" class="headerlink" title="不能在迴圈、條件式 、nested functions 裡使用 hooks"></a>不能在迴圈、條件式 、nested functions 裡使用 hooks</h4><p>在 function 裡面的 function 就是 nested function，例如 callback function 即是一種。<br>原因為 react 在記錄元件的 hooks 的順序是依靠 <code>fiber</code> 實作，以 linked list 方式依在元件內呼叫順序儲存 hooks，而如果在剛剛提到的三個條件做使用，會使 react 在呼叫 hooks 的時候順序亂掉，以至於會呼叫到錯的 state。</p>
-<p>fiber 廬山真面目大概長這樣子：</p>
-<img src="./fiber.png" width="500"/>
-
-<h4 id="只會在-functional-component-或是在-custom-hooks-使用-hooks"><a href="#只會在-functional-component-或是在-custom-hooks-使用-hooks" class="headerlink" title="只會在 functional component 或是在 custom hooks 使用 hooks"></a>只會在 functional component 或是在 custom hooks 使用 hooks</h4><p>custom hooks 即為元件間共用的 hooks function</p>
-<blockquote>
-<p>可以想像 hooks 實作概念為操作 array 的過程</p>
-</blockquote>
-<h2 id="實作-useState"><a href="#實作-useState" class="headerlink" title="實作 useState"></a>實作 useState</h2><p>還記得前面 Counter 例子有出現以下這行嗎？</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p>useState 是很常使用到的 hook，本身是一個用來改變現在 state 狀態的 function，回傳值為陣列。陣列解構賦值後就能取得現在 state 的狀態及改變 state 的 function。</p>
-<p>以下為以操作陣列為概念實作出的 useState 程式碼：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">React= &#123;</span><br><span class="line"> index: <span class="number">0</span>,</span><br><span class="line">  state: [],</span><br><span class="line">  useState: <span class="function">(<span class="params">initialVal</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> currentIdx = React.index</span><br><span class="line">    <span class="keyword">if</span>(!React.state[currentIdx])&#123;</span><br><span class="line">      React.state[currentIdx] = initialVal</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> currentState = React.state[currentIdx]</span><br><span class="line">    <span class="keyword">const</span> setCurrentState = <span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">      React.state[currentIdx] = val</span><br><span class="line">    &#125;</span><br><span class="line">    React.index ++</span><br><span class="line">    <span class="keyword">return</span> [currentState, setCurrentState]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="實作-useEffect"><a href="#實作-useEffect" class="headerlink" title="實作 useEffect"></a>實作 useEffect</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useEffect(<span class="function">()=&gt;</span> callback, [dependencies])</span><br></pre></td></tr></table></figure>
-<p>useEffect 為處理 side effects 的 hooks function，會用到的場景通常為處理 API、訂閱、間聽事件。</p>
-<h4 id="關於-useEffect-的執行順序"><a href="#關於-useEffect-的執行順序" class="headerlink" title="關於 useEffect 的執行順序"></a>關於 useEffect 的執行順序</h4><p>決定是否要執行的條件：有無 dependencies。</p>
-<table>
-<thead>
-<tr>
-<th>dependencies</th>
-<th>useEffect 執行時機</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>無</td>
-<td>每次 component render 後都會執行</td>
-</tr>
-<tr>
-<td>[ ]</td>
-<td>只會執行一次，往後的 render 不會執行</td>
-</tr>
-<tr>
-<td>有</td>
-<td>只有 dependencies 有變化才會執行</td>
-</tr>
-</tbody></table>
-<p>要特別注意執行順序是在元件 render 後。</p>
-<p>以下為實作 useEffect 的程式碼：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">React = &#123;</span><br><span class="line">  index: <span class="number">0</span>,</span><br><span class="line">  state: [],</span><br><span class="line">  useEffect: <span class="function">(<span class="params">callback, dependencies</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> currentIdx = React.index</span><br><span class="line">    <span class="keyword">const</span> hasChanged = React.state[currentIdx] !== dependencies</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!dependencies || hasChanged)&#123;</span><br><span class="line">      callback()</span><br><span class="line">      React.state[currentIdx] = dependencies</span><br><span class="line">    &#125;</span><br><span class="line">    React.index ++</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Recap"><a href="#Recap" class="headerlink" title="Recap"></a>Recap</h2><p>這次會分享這個主題是拜公司讀書會所賜，當時對解構 hooks 底層實作非常有興趣，於是經過一番研究後，決定分享給更多人認識 hooks。<br>這次參加 JSDC 頗有收獲，認識了很多平常有在 follow 的大大們，非常開心。</p>
-<p>此為演講 live coding <a target="_blank" rel="noopener" href="https://gist.github.com/MindyTai/ccae45fc1e87fba03312fd682298f34e">範例程式碼</a>。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/17/2020-JSDC/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -379,10 +371,33 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-22 14:16:53" itemprop="dateModified" datetime="2020-12-22T14:16:53+08:00">2020-12-22</time>
+                <time title="Modified: 2020-12-26 23:10:39" itemprop="dateModified" datetime="2020-12-26T23:10:39+08:00">2020-12-26</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
+            </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2020/04/11/how-js-asychronize-works/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/11/how-js-asychronize-works/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -393,98 +408,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>總以為世界的形狀我們早已熟悉，但到頭來卻發現並不是。 筆者每每在寫 Javascript 時，處處都會發現驚喜。 下面想舉一個曾經印象深刻的例子給大家看：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console.log(&#39;Start&#39;);</span><br><span class="line">console.log(&#39;Stop&#39;);</span><br></pre></td></tr></table></figure>
-<p>印出的結果為</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">Stop</span><br></pre></td></tr></table></figure>
-<p>那中間如果加了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setTimeOut(<span class="function">()=&gt;</span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;0 sec later&#x27;</span>);</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-<p>變成</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Start&#x27;</span>);</span><br><span class="line"></span><br><span class="line">setTimeOut(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;0 sec later&#x27;</span>);</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Stop&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>則結果竟會變成</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">Stop</span><br><span class="line">0 sec later</span><br></pre></td></tr></table></figure>
-<p>疑？怎麼會這樣呢？明明在中間加入了 0 sec later，為什麼 console 出來的順序會是這樣？<br>要搞懂這個結果，就必須先來了解 Javascript 擁有的 <strong>非同步特性</strong>。</p>
-<h2 id="阻塞-blocking-如果不存在非同步？"><a href="#阻塞-blocking-如果不存在非同步？" class="headerlink" title="阻塞(blocking) : 如果不存在非同步？"></a>阻塞(blocking) : 如果不存在非同步？</h2><p>不過，我們先來試著思考一個問題：非同步真的很重要嗎？沒有非同步的世界會怎樣呢？<br>在沒有非同步的世界裡，只剩下 <strong>同步 (Synchronous)</strong>  (這是廢話嗎)，而每天都會發生惱人的阻塞現象。</p>
-<blockquote>
-<p>阻塞的概念可以想成每年過年高速公路必塞車的現象，高速公路可以想成等等會提到的 Call Stack，而車子即相當於程式。</p>
-</blockquote>
-<p>在同步的世界裡，每跑一段程式就要花時間等待執行完畢，從 Call Stack 中跳走後，下一個程式才能執行，於是當前面某個程式很慢就會連帶影響之後的程式。在瀏覽器上我們會看到類似當機的畫面，什麼事都做不了。</p>
-<p>這種現象想當然爾會想要避免，而 Javascript 及瀏覽器做了一些事來處理這樣的狀況，那麼就來了解怎麼疏通高速公路吧！</p>
-<h2 id="一起來瞧瞧非同步的骨架"><a href="#一起來瞧瞧非同步的骨架" class="headerlink" title="一起來瞧瞧非同步的骨架"></a>一起來瞧瞧非同步的骨架</h2><p>JS 的主要特點有兩個：</p>
-<ul>
-<li>Single Thread (單線程)</li>
-<li>Synchronous (同步)</li>
-</ul>
-<p>說明 Javascript 一次只執行一件事，程式會逐行執行。<br>那為什麼在網頁我們仍可以處理像是滑鼠點擊之類看起來「一次處理很多事件」的非同步 ( asynchronous ) 事件而不會塞車呢？原因是當 Javascript 在 V8 Engine 執行時，其實也會執行瀏覽器提供的 API ( Web APIs，這裡已經不是在 V8 Engine 的範疇 )，前文提及的滑鼠點擊 (click）即屬於 Web APIs。</p>
-<blockquote>
-<p>Web APIs 讓我們可以非同步執行程式，也就是說 JS 本身並無法非同步執行，需要借助 Web APIs 才能達到非同步的效果。</p>
-</blockquote>
-<p>那非同步是怎麼運作的呢？</p>
-<p>首先，要先了解下面四點的定義：</p>
-<h3 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h3><blockquote>
-<p>Call Stack 本身為 Stack。Stack 是資料結構的一種，會遵守 LIFO (Last In, First Out) 的原則。Call Stack 會繼承 Stack 原本的特性，即「最後被 call 的 function 會在最上層，而執行完後會最先從該 stack 離開（pop off）」。而 Javascript 是 Single Thread, 所以只會有一個 Call Stack。</p>
-</blockquote>
-<p><img src="/2020/04/11/how-js-asychronize-works/call_stack.png"><br>(圖片來源 /wiki — <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack</a>)</p>
-<h3 id="Web-APIs"><a href="#Web-APIs" class="headerlink" title="Web APIs"></a>Web APIs</h3><blockquote>
-<p>瀏覽器提供的 API，例如常被使用的 setTimeout。setTimeout 是瀏覽器所提供的計時器，常常搭配 callback function 使用。</p>
-</blockquote>
-<h3 id="Task-Queue"><a href="#Task-Queue" class="headerlink" title="Task Queue"></a>Task Queue</h3><blockquote>
-<p>又可以稱作 Callback Queue，放在 Web APIs 的 function 在執行完後，會到 Task Queue 待命。（e.g. setTimeOut 在秒數執行完後，會移至 Task Queue）</p>
-</blockquote>
-<h3 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h3><blockquote>
-<p>偵測到 Call Stack 為空時，把在 Task Queue 裡等待的第一個 callback function 放到 stack 中去執行。</p>
-</blockquote>
-<p>好啦！解說到此，應該可以理解下面這張圖：</p>
-<p><img src="/2020/04/11/how-js-asychronize-works/web_api.png"><br>( Web APIs function 執行路線圖：紅色格子為使用 Web APIs 的 function )</p>
-<blockquote>
-<p>非同步的設計是讓需要執行較久時間的程式能夠移到別的地方去執行，不要阻塞到 Main Thread(Call Stack)，讓程式能夠暢通在 Call Stack 上執行。</p>
-</blockquote>
-<h3 id="舉個實例，以前面提的滑鼠點擊為例"><a href="#舉個實例，以前面提的滑鼠點擊為例" class="headerlink" title="舉個實例，以前面提的滑鼠點擊為例"></a>舉個實例，以前面提的滑鼠點擊為例</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Started.&#x27;</span>)</span><br><span class="line">$.on(<span class="string">&#x27;button&#x27;</span>, <span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">onClick</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;Button Clicked!&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Done.&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>Started</code> console 會執行，會先進入 Call Stack 中，再來執行滑鼠事件 <code>click</code> function，最後執行 console <code>Done</code></li>
-<li>click 為 Web APIs，所以之後會從 Call Stack 脫離到 Web APIs</li>
-<li>滑鼠點擊後，callback 就會到 Task Queue 中。Event Loop 在偵測 Call Stack 為空時，便會把 callback 放到 Call Stack 中去執行， onClick 這個 function 就會執行</li>
-</ul>
-<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_1.png"></p>
-<p>所以我們可以理解為在點擊滑鼠時，<code>onClick</code> function 並不會立即執行，會先到 Task Queue 中等待，直到成為 Queue 中第一位且 Stack 為空時才會執行！</p>
-<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_2.gif"></p>
-<blockquote>
-<p>操作自 <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=Y29uc29sZS5sb2coJ1N0YXJ0ZWQuJykKCiQub24oJ2J1dHRvbicsICdjbGljaycsIGZ1bmN0aW9uIG9uQ2xpY2sgKCkgewogIGNvbnNvbGUubG9nKCdCdXR0dG9uIENsaWNrZWQhJykKfSkKCmNvbnNvbGUubG9nKCdEb25lLicp!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">Loupe — by Philip Roberts</a>： Loupe 是一個由 Philip 做的視覺化工具，對瞭解 Javascript function 執行流程很有幫助。</p>
-</blockquote>
-<p>以上為 JS 如何在 <strong>Single Thread</strong> 下實現看似擁有 <strong>Multi Thread</strong> 的效果。</p>
-<h2 id="再來幾個例子"><a href="#再來幾個例子" class="headerlink" title="再來幾個例子"></a>再來幾個例子</h2><p>筆者在學習這個概念查找資料時，發現了一場精彩演講：<strong>What the heck is the event loop anyway?</strong> 講解頗為精闢，於是下面擇幾個非同步相關例子與讀者分享。</p>
-<h3 id="非同步的-Ajax-Request"><a href="#非同步的-Ajax-Request" class="headerlink" title="非同步的 Ajax Request"></a>非同步的 Ajax Request</h3><p>Philip Roberts 曾在 JSConf 舉使用屬於 WebAPIs 的 Ajax 抓取資料的例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi&#x27;</span>)</span><br><span class="line">$.get(<span class="string">&#x27;url&#x27;</span>, <span class="function"><span class="keyword">function</span> <span class="title">cb</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(data)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;JSConfEU&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>因為 Ajax 為 WebAPIs 其中一種，所以並不在 Javascript Runtime 中。</p>
-<ul>
-<li>console <code>Hi</code> 會先執行，再來 Ajax 執行請求，這時 callback 移到了 Web APIs ，然後 console <code>JSConfEU</code> 緊接著執行</li>
-<li>Ajax 發出的 request 回應後（ success 或 error ），callback function 會移到 Task Queue 中</li>
-<li>Event Loop 在偵測 Call Stack為空時且 Ajax callback 在 Task Queue 的第一位時，就會把 callback 丟到 Call Stack 中執行</li>
-</ul>
-<p>所以執行結果為：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hi</span><br><span class="line">JSConfEU</span><br><span class="line">data(類型可能為 xml、html、text、script、json）</span><br></pre></td></tr></table></figure>
-<p><img src="/2020/04/11/how-js-asychronize-works/call_stack_3.png"></p>
-<p>非同步讓 Ajax 從 sever 抓取資料到 client 的時間，<strong>可以讓 Javascript 並行 (非同步) 做別的事，減少阻塞</strong>程式運行的機率。</p>
-<h3 id="setTimeOut-不是真的就在那幾秒之後執行-callback-function"><a href="#setTimeOut-不是真的就在那幾秒之後執行-callback-function" class="headerlink" title="setTimeOut 不是真的就在那幾秒之後執行 callback function"></a>setTimeOut 不是真的就在那幾秒之後執行 callback function</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">&#x27;5sec later?&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=c2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coJzVzZWMgbGF0ZXI/JykKfSwgNTAwMCk=!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
-</blockquote>
-<p>這會怎麼執行呢？</p>
-<ul>
-<li>setTimeOut 是屬於 WebAPIs，在執行 setTimeOut 時，會從 Call Stack 跳出至 WebAPIs 執行</li>
-<li>callback function 經過 5 秒後會跳至 Callback Queue</li>
-<li>等待最後跳至 Call Stack 被執行</li>
-</ul>
-<p>這整個過程中，其實已經花費不只 5 秒，也就是說 setTimeOut 只能保證<strong>最小執行時間是 5 秒，但並不能說執行時間是 5 秒</strong>。</p>
-<h3 id="Callback-Queue-阻塞：scroll-event"><a href="#Callback-Queue-阻塞：scroll-event" class="headerlink" title="Callback Queue 阻塞：scroll event"></a>Callback Queue 阻塞：scroll event</h3><p>scroll 屬於 WebAPIs 中 Events 的一種，一般在捲動滑鼠時，短時間內會頻繁的送出 scroll 的 event，造成 DOM 節點不斷的重新運算，Callback Queue 阻塞，滑動的頁面會非常的遲緩。</p>
-<p>要解決這個問題，Lodash 有提供 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#throttle">throttle</a> 跟 <a target="_blank" rel="noopener" href="https://lodash.com/docs/4.17.15#debounce">debounce</a> 兩種 method 可以快速方便解決。</p>
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>講到這裡，我們可以理解文章開頭所舉的例子了吧！</p>
-<blockquote>
-<p>點我看 Loupe <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/?code=Y29uc29sZS5sb2coJ1N0YXJ0Jyk7CnNldFRpbWVvdXQoZnVuY3Rpb24gdGltZW91dCgpIHsKY29uc29sZS5sb2coJzBzZWMgbGF0ZXInKQp9LCAwKQpjb25zb2xlLmxvZygnU3RvcCcpOwoK!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4=">視覺化</a></p>
-</blockquote>
-<p>我們也可以清楚的知道 Javascript 如何非同步運作，達成同時具有同步以及非同步的特性。正因為如此，Javacript 是一個極為靈活彈性的語言，能夠悠遊於前端與後端，無往不利！</p>
-<p>此篇同步發表於 👉 <a target="_blank" rel="noopener" href="http://5xruby.tw/posts/how-js-synchronous-works/">五倍紅寶石</a></p>
-
+          <p>我們先來試著思考一個問題：非同步真的很重要嗎？沒有非同步的世界會怎樣呢？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/11/how-js-asychronize-works/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -534,10 +466,33 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-22 10:54:21" itemprop="dateModified" datetime="2020-12-22T10:54:21+08:00">2020-12-22</time>
+                <time title="Modified: 2020-12-26 23:10:58" itemprop="dateModified" datetime="2020-12-26T23:10:58+08:00">2020-12-26</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
+            </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2019/11/25/GCP/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/25/GCP/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -548,119 +503,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>身處在講求效率的時代，完整的開發流程當然少不了 CI/CD。什麼是 CI/CD 呢？CI ( Continuous Integration ) 中文為「持續性整合」，目的是讓專案能夠在每一次的變動中都能通過一些檢驗來確保專案品質。CD ( Continuous Deployment ) 中文則為「自動化佈署」，讓專案能夠自動在每次變動後能以最新版本呈現。<br>由於想要體會 CI/CD 到底有多方便，於是想要藉由實做一個簡單的 Node.js 專案來實際體驗看看。</p>
-<h2 id="內容架構"><a href="#內容架構" class="headerlink" title="內容架構"></a>內容架構</h2><p>1.寫簡易的 Node.js Server<br>2.使用 CircleCI 整合 eslint／jest（CI）<br>3.使用 CircleCI deploy 到 GCP App Engine（CD)</p>
-<h2 id="NodejS-Hello-CICD-demo"><a href="#NodejS-Hello-CICD-demo" class="headerlink" title="NodejS Hello CICD demo"></a>NodejS Hello CICD demo</h2><p>這是專案最終架構：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">├── app.yaml </span><br><span class="line">├── babel.config.js</span><br><span class="line">├── build</span><br><span class="line">│ └── server.js</span><br><span class="line">├── lint-staged.config.js</span><br><span class="line">├── nodemon.json</span><br><span class="line">├── package.json</span><br><span class="line">├── src</span><br><span class="line">│ └── server.js</span><br><span class="line">├── test</span><br><span class="line">│ └── server.test.js</span><br><span class="line">└── yarn.lock</span><br></pre></td></tr></table></figure>
-<p>哇！看起來很複雜？別急，下面會一一帶你做一遍！</p>
-<h2 id="Step-by-Step"><a href="#Step-by-Step" class="headerlink" title="Step by Step"></a>Step by Step</h2><h3 id="建立資料夾"><a href="#建立資料夾" class="headerlink" title="建立資料夾"></a>建立資料夾</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir demo-server</span><br><span class="line">cd demo-server</span><br></pre></td></tr></table></figure>
-<h3 id="初始化專案"><a href="#初始化專案" class="headerlink" title="初始化專案"></a>初始化專案</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init</span><br></pre></td></tr></table></figure>
-<p>這時會出現問題問你，若沒有特殊設定可以一路按 Enter 就好，回答完後就會出現 <code>package.json</code> 。</p>
-<p><img src="/2019/11/25/GCP/package.jpg" alt="這樣就能產生出 package.json 囉"><br>這樣就能產生出 package.json 囉！</p>
-<p>開發專案少不了版本控制，這樣就能開始使用 git 了 🥳</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
-<p>而不必要的檔案記得寫進 .gitignore 讓 git 忽略。</p>
-<h2 id="新增-gitignore"><a href="#新增-gitignore" class="headerlink" title="新增 .gitignore"></a>新增 .gitignore</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br></pre></td></tr></table></figure>
-<h2 id="安裝-express-及-babel"><a href="#安裝-express-及-babel" class="headerlink" title="安裝 express 及 babel"></a>安裝 express 及 babel</h2><p>express 是一個 Node.js 的後端框架，這次 demo 會用來處理 server。 由於 Node.js 處理檔案引入和匯出方法為 require 及 module.export ， 而 es6 出現了 import 及 export，如要使用就要使用 babel 來 transpile。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add express</span><br><span class="line">yarn add @babel&#x2F;preset-env @babel-node @babel&#x2F;core @babel&#x2F;cli --dev</span><br></pre></td></tr></table></figure>
-<p>babel 只有在開發會用到，注意後面要加 — dev。</p>
-<h2 id="建立-src-server-js"><a href="#建立-src-server-js" class="headerlink" title="建立 src/server.js"></a>建立 src/server.js</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">&#x27;express&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> &#123; PORT = <span class="number">3000</span> &#125; = process.env;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> IS_TEST = !!<span class="built_in">module</span>.parent; </span><br><span class="line"><span class="comment">// If there&#x27;s another file imports server.js, then module.parent will become true</span></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.status(<span class="number">200</span>).send(<span class="string">&#x27;Hello!CI/CD!&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!IS_TEST) &#123;</span><br><span class="line">  app.listen(PORT, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Server is running on PORT:&#x27;</span>, PORT);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> app;</span><br></pre></td></tr></table></figure>
-<h2 id="本機跑起來"><a href="#本機跑起來" class="headerlink" title="本機跑起來"></a>本機跑起來</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn babel-node src&#x2F;server.js</span><br></pre></td></tr></table></figure>
-<p>babel-node 會在 node runtime 即時使用 babel transpile javascript。<br>這樣就能在 localhost 跑起來了 😌</p>
-<h3 id="使用-nodemon-快速開發"><a href="#使用-nodemon-快速開發" class="headerlink" title="使用 nodemon 快速開發"></a>使用 nodemon 快速開發</h3><p>nodemon 是一個無人不知無人不曉的開發 Node.js 專案的工具，nodemon 會隨時隨地監測程式，程式一發生變動就會自動重跑，重整網頁就能夠看到變化。</p>
-<h3 id="安裝-nodemon"><a href="#安裝-nodemon" class="headerlink" title="安裝 nodemon"></a>安裝 nodemon</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add nodemon --dev</span><br></pre></td></tr></table></figure>
-<h3 id="新增-nodemon-json"><a href="#新增-nodemon-json" class="headerlink" title="新增 nodemon.json"></a>新增 nodemon.json</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;//_comment&quot;</span>: <span class="string">&quot;monitor src folder&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;watch&quot;</span>: [<span class="string">&quot;src&quot;</span>], </span><br><span class="line">  <span class="attr">&quot;//_comment&quot;</span>: <span class="string">&quot;watch .js and .json extensions&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;ext&quot;</span>: <span class="string">&quot;js json&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;exec&quot;</span>: <span class="string">&quot;babel-node src/server.js&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="在-package-json-新增-script"><a href="#在-package-json-新增-script" class="headerlink" title="在 package.json 新增 script"></a>在 package.json 新增 script</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123; </span><br><span class="line">   &quot;dev&quot;: &quot;nodemon&quot; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/11/25/GCP/nodemon.png"></p>
-<h2 id="新增-test-server-test-js"><a href="#新增-test-server-test-js" class="headerlink" title="新增 test/server.test.js"></a>新增 test/server.test.js</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> supertest <span class="keyword">from</span> <span class="string">&#x27;supertest&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> app <span class="keyword">from</span> <span class="string">&#x27;../src/server&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> PORT = <span class="number">3001</span>;</span><br><span class="line"><span class="keyword">let</span> listener;</span><br><span class="line"><span class="keyword">let</span> request;</span><br><span class="line"></span><br><span class="line">beforeAll(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  listener = app.listen(PORT);</span><br><span class="line">  request = supertest(listener);</span><br><span class="line">&#125;);</span><br><span class="line">afterAll(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> listener.close();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test(<span class="string">&#x27;Server Health Check&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> request.get(<span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">  expect(res.status).toEqual(<span class="number">200</span>);</span><br><span class="line">  expect(res.text).toBe(<span class="string">&#x27;Hello!CI/CD!&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/11/25/GCP/test.png"></p>
-<p>這個結果就表示 test 通過囉 🙃</p>
-<h2 id="安裝-eslint-及-prettier"><a href="#安裝-eslint-及-prettier" class="headerlink" title="安裝 eslint 及 prettier"></a>安裝 eslint 及 prettier</h2><p>eslint 是 javascript linter 之一，可以用來預防語法錯誤，其實最大的好處是可以維持團隊的 coding style（ex. airbnb），但因為這次是個人專案這個優點就沒有被顯現出來了 XD</p>
-<p>prettier 是要維持程式碼的整齊性，可以設定在存檔時程式碼格式化，統整團隊的規範。例如：要加雙引號還是單引號。</p>
-<p>值得注意的是在同時引用 prettier 及 eslint 時，兩者會一些功能相衝突，而可以使用 eslint-plugin-prettier 解決這個問題。</p>
-<h3 id="設定-eslint-prettier-babel"><a href="#設定-eslint-prettier-babel" class="headerlink" title="設定 eslint + prettier + babel"></a>設定 eslint + prettier + babel</h3><p>開始著手寫設定檔 .eslint.js，這次 babel parser 會用到 babel-eslint，而在 extends 會用到 eslint-config-airbnb-base/ eslint-plugin-jest / eslint-plugin-prettier， eslint-plugin-import 是用來 lint es6 的 import 及 export。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add eslint-plugin-prettier eslint prettier babel-eslint eslint-config-airbnb-base eslint-plugin-jest eslint-plugin-prettier eslint-plugin-import --dev</span><br></pre></td></tr></table></figure>
-<h3 id="eslint-js"><a href="#eslint-js" class="headerlink" title=".eslint.js"></a>.eslint.js</h3><p>下面有寫到常用的 rules，大家可以參考看看。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  parser: <span class="string">&#x27;babel-eslint&#x27;</span>,</span><br><span class="line">  parserOptions: &#123;</span><br><span class="line">    ecmaVersion: <span class="number">2020</span>,</span><br><span class="line">    sourceType: <span class="string">&#x27;module&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  env: &#123;</span><br><span class="line">    node: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&#x27;jest/globals&#x27;</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">extends</span>: [</span><br><span class="line">    <span class="string">&#x27;airbnb-base&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;plugin:jest/recommended&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;plugin:prettier/recommended&#x27;</span>,</span><br><span class="line">  ],</span><br><span class="line">  plugins: [<span class="string">&#x27;jest&#x27;</span>, <span class="string">&#x27;prettier&#x27;</span>],</span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="string">&#x27;import/prefer-default-export&#x27;</span>: <span class="string">&#x27;off&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;class-methods-use-this&#x27;</span>: <span class="string">&#x27;warn&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;consistent-return&#x27;</span>: <span class="string">&#x27;warn&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;no-unused-vars&#x27;</span>: <span class="string">&#x27;warn&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;no-console&#x27;</span>: <span class="string">&#x27;off&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;no-continue&#x27;</span>: <span class="string">&#x27;off&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;no-bitwise&#x27;</span>: <span class="string">&#x27;off&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;no-underscore-dangle&#x27;</span>: <span class="string">&#x27;off&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;no-param-reassign&#x27;</span>: [<span class="string">&#x27;error&#x27;</span>, &#123; <span class="attr">props</span>: <span class="literal">false</span> &#125;],</span><br><span class="line">    <span class="string">&#x27;no-restricted-syntax&#x27;</span>: [</span><br><span class="line">      <span class="string">&#x27;error&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;ForInStatement&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;LabeledStatement&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;WithStatement&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="prettierrc"><a href="#prettierrc" class="headerlink" title=".prettierrc"></a>.prettierrc</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;semi&quot;: true,</span><br><span class="line">  &quot;trailingComma&quot;: &quot;all&quot;,</span><br><span class="line">  &quot;singleQuote&quot;: true,</span><br><span class="line">  &quot;arrowParens&quot;: &quot;always&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/11/25/GCP/prettierrc.png"></p>
-<p>這裡可以看到相當多的 error，若想要一鍵把所有 error 解決掉，可以加上 <code>--fix</code>。</p>
-<p><img src="/2019/11/25/GCP/yarn_fix.png"></p>
-<h3 id="在-package-json-新增-script-1"><a href="#在-package-json-新增-script-1" class="headerlink" title="在 package.json 新增 script"></a>在 package.json 新增 script</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;lint&quot;: &quot;eslint . --fix&quot;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/11/25/GCP/lint_script.png"></p>
-<p>就可以一鍵跑 eslint 啦 🤪</p>
-<h2 id="避免糟糕的-commit"><a href="#避免糟糕的-commit" class="headerlink" title="避免糟糕的 commit"></a>避免糟糕的 commit</h2><p>忘記先跑 eslint 及 test 就 commit 情形難免會有，這時候在 commit 之前先做檢查就變得非常重要。這專案使用的是 <code>git hooks husky</code> 及 <code>lint-staged</code>。</p>
-<h3 id="安裝-husky-及-lint-staged"><a href="#安裝-husky-及-lint-staged" class="headerlink" title="安裝 husky 及 lint-staged"></a>安裝 husky 及 lint-staged</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add husky lint-staged --dev</span><br></pre></td></tr></table></figure>
-<h4 id="huskyrc-js"><a href="#huskyrc-js" class="headerlink" title=".huskyrc.js"></a>.huskyrc.js</h4><p>使用 husky 跑 eslint 及 test。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">  hooks: &#123;</span><br><span class="line">    &#39;pre-commit&#39;: &#39;lint-staged &amp;&amp; yarn run test&#39;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="lint-staged-config-js"><a href="#lint-staged-config-js" class="headerlink" title="lint-staged.config.js"></a>lint-staged.config.js</h4><p>在 commit 之前會做到 <code>eslint</code> 及 <code>git add</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">  &#39;*.js&#39;: [&#39;eslint . --fix&#39;, &#39;git add&#39;],</span><br><span class="line">&#125;;hus</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/11/25/GCP/husky.png"></p>
-<p>這邊可以看到 husky 幫我們先跑了 lint 後再跑 test 🤠</p>
-<h2 id="app-build"><a href="#app-build" class="headerlink" title="app build"></a>app build</h2><p>最後一步是進行 build 的動作，build 在 Node.js 專案通常是拿來做 bundle 或是 transpile，讓 node 能夠認識我們寫的 code 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;:  &#123;</span><br><span class="line">    &quot;build&quot;: &quot;rm -rf build &amp;&amp; babel src -d build --copy-files&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>p.s. <code>--copy-files</code> 會複製除了 js 以外的檔案，例如 .json</p>
-<p>接下來就可以下指令了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn run build</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/11/25/GCP/build.png"></p>
-<p>跑完後就發現多了 build 的檔案夾，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">├── build</span><br><span class="line">│   └── server.js</span><br></pre></td></tr></table></figure>
-<p>裡面有 transpile 過後的 server.js，點進去後會發現有一堆紅線等著你。</p>
-<p><img src="/2019/11/25/GCP/eslintignore.png"></p>
-<p>這紅線也太討厭了吧 (O</p>
-<p>別慌，這時候新增 <code>.eslintignore</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;build&#x2F;**</span><br></pre></td></tr></table></figure>
-<p>讓 eslint 別去檢查 build 出來的東西，紅線就會消失了！<code>build/server.js</code> 等等會拿來做 deploy 。<br>到這邊就完成了基本的 Node.js App 囉 🥳</p>
-<h3 id="CircleCI"><a href="#CircleCI" class="headerlink" title="CircleCI"></a>CircleCI</h3><p>circ因為是要透過 GitHub 進行 CI/CD，所以是以 GitHub 帳號登入 CircleCI。首先會先進到 CircleCI 介面，選擇你要 CI/CD 的專案。</p>
-<p><img src="/2019/11/25/GCP/circle_ci_1.png"></p>
-<p>OS 我選擇 Linux (相較於其他二個最輕量)，跑得比較快。因為是寫 Node.js，language 選 Node。</p>
-<p><img src="/2019/11/25/GCP/circle_ci_2.png"></p>
-<p>接下來設定在專案裡新增 circleci/config.yml，相關教學可以參考: <a target="_blank" rel="noopener" href="https://circleci.com/docs/2.0/language-javascript/">https://circleci.com/docs/2.0/language-javascript/</a></p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="number">2.1</span> <span class="comment"># use CircleCI 2.1</span></span><br><span class="line"><span class="attr">jobs:</span> <span class="comment"># a collection of steps</span></span><br><span class="line">  <span class="attr">build:</span> <span class="comment"># runs not using Workflows must have a `build` job as entry point</span></span><br><span class="line">    <span class="attr">docker:</span> <span class="comment"># run the steps with Docker</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">circleci/node:latest</span> <span class="comment"># with this image as the primary container; this is where all `steps` will run</span></span><br><span class="line">    <span class="attr">steps:</span> <span class="comment"># a collection of executable commands</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">checkout</span> <span class="comment"># special step to check out source code to working directory</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Check</span> <span class="string">Node.js</span> <span class="string">version</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">node</span> <span class="string">-v</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Install</span> <span class="string">yarn</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">&#x27;curl -o- -L https://yarnpkg.com/install.sh | bash&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">restore_cache:</span> <span class="comment"># special step to restore the dependency cache</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Restore</span> <span class="string">dependencies</span> <span class="string">from</span> <span class="string">cache</span></span><br><span class="line">          <span class="attr">key:</span> <span class="string">dependency-cache-&#123;&#123;</span> <span class="string">checksum</span> <span class="string">&quot;yarn.lock&quot;</span> <span class="string">&#125;&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Install</span> <span class="string">dependencies</span> <span class="string">if</span> <span class="string">needed</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">|</span></span><br><span class="line">            <span class="string">if</span> [ <span class="string">!</span> <span class="string">-d</span> <span class="string">node_modules</span> ]<span class="string">;</span> <span class="string">then</span></span><br><span class="line">              <span class="string">yarn</span> <span class="string">install</span> <span class="string">--frozen-lockfile</span></span><br><span class="line">            <span class="string">fi</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">save_cache:</span> <span class="comment"># special step to save the dependency cache in case there&#x27;s something new in yarn.lock</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Cache</span> <span class="string">dependencies</span></span><br><span class="line">          <span class="attr">key:</span> <span class="string">dependency-cache-&#123;&#123;</span> <span class="string">checksum</span> <span class="string">&quot;yarn.lock&quot;</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">paths:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">./node_modules</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="comment"># run lint</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Lint</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">yarn</span> <span class="string">eslint</span> <span class="string">.</span> <span class="string">--quiet</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="comment"># run tests</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Test</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">yarn</span> <span class="string">jest</span> <span class="string">--ci</span> <span class="string">--maxWorkers=2</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="comment">#run build</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Build</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">persist_to_workspace:</span> <span class="comment"># Special step used to persist a temporary file to be used by another job in the workflow.# We will run deploy later,it will be put in another job.</span></span><br><span class="line">          <span class="attr">root:</span> <span class="string">.</span></span><br><span class="line">          <span class="attr">paths:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">package.json</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">yarn.lock</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">app.yaml</span></span><br></pre></td></tr></table></figure>
-<p>把 commit push 到 repo，CircleCI 就開始幫你跑 lint / test 並 build 喔！這時候 CI 就完成了！</p>
-<p><img src="/2019/11/25/GCP/circle_ci_3.png"><br>可以看到 lint 及 test CircleCI 都幫我們跑了！</p>
-<p><img src="/2019/11/25/GCP/circle_ci_4.png"><br>成功囉！</p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>我們將使用功能十分強大的 Google App Engine(GAE)進行部署，GAE 在處理大流量(load)時，例如訂票系統或是物流系統時非常適合。不但不用自己管理 load balance 的問題。Google 還會幫你自動開關 instances，使用者付費原則，用多少就付多少。</p>
-<p>因為 GAE 是 Google Cloud Platform（GCP）下的一個服務所以若還沒有 GCP 先註冊註起來！新註冊的人可以享有一年 300 美金的試用，注意註冊時需要輸入一張信用卡才能開始使用，在試用階段 Google 並不會為向你收費，除非你主動跟他說要訂閱方案才會開啟收費流程。</p>
-<p>註冊完後我們就能夠開始使用 GCP 了，進到 Google App Engine(GAE) 畫面，接下來點擊 建立應用程式。</p>
-<p><img src="/2019/11/25/GCP/gcp_1.png"></p>
-<p>這裡可以選擇你用的機房在哪裡，雖然 Google 近年有在彰化新增機房，但是因為是免費用戶的關係，不能選擇，所以我選擇最近的機房 asia-northeast2（日本大阪），ping 較低，延遲會比較少。</p>
-<p><img src="/2019/11/25/GCP/gcp_2.png"></p>
-<p>選擇你的專案是使用何種語言，環境若沒有特殊需求選擇標準即可。到這邊已經成功建立 App Engine 應用程式了！</p>
-<p><img src="/2019/11/25/GCP/gcp_3.png"></p>
-<p>但是要操作自如還要搭配 Google Cloud SDK，可以透過指令列工具來對 GCP 服務進行操作。這邊可以進行下載以及初始化的動作：</p>
-<p><img src="/2019/11/25/GCP/gcp_4.png"></p>
-<p>點擊下載 SDK 後選擇查看快速入門導覽課程後選擇 macOS 快速入門。</p>
-<p><img src="/2019/11/25/GCP/gcp_5.png"></p>
-<p><img src="/2019/11/25/GCP/gcp_6.png"></p>
-<p>選擇 macOS 64 位元下載檔：</p>
-<p><img src="/2019/11/25/GCP/gcp_7.png"></p>
-<p>進到下載檔下 <code>./install.sh</code>，會跳出 Welcome to the Google Cloud SDK！就表示安裝完成了。</p>
-<p><img src="/2019/11/25/GCP/gcp_8.png"></p>
-<p>可以使用 <code>gcloud -v</code> 來確認是否真的安裝成功，正常的話，沒意外接下來就可以使用 gcloud 指令來進行操作了。</p>
-<p><img src="/2019/11/25/GCP/gcp_9.png"></p>
-<p>接下來照著說明文件開始 初始化並登入 gcloud SDK ，<br>就完成基本設定啦！</p>
-<p>是時候來設定 App Engine 了，要設定 App Engine 需要有 <code>app.yaml</code> 檔。</p>
-<p>這邊有簡易的設定教學可以參考: <a target="_blank" rel="noopener" href="https://cloud.google.com/appengine/docs/flexible/nodejs/configuring-your-app-with-app-yaml?hl=zh-tw">https://cloud.google.com/appengine/docs/flexible/nodejs/configuring-your-app-with-app-yaml?hl=zh-tw</a></p>
-<p>若要更為詳細的可以看看這篇: <a target="_blank" rel="noopener" href="https://cloud.google.com/appengine/docs/flexible/nodejs/reference/app-yaml?hl=zh-tw#general">https://cloud.google.com/appengine/docs/flexible/nodejs/reference/app-yaml?hl=zh-tw#general</a></p>
-<p>這是我的 <code>app.yaml</code> 設定：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">runtime:</span> <span class="string">nodejs</span> <span class="comment"># Name of the App Engine language runtime used by this application</span></span><br><span class="line"><span class="attr">env:</span> <span class="string">flex</span> <span class="comment"># Select the flexible environment</span></span><br><span class="line"></span><br><span class="line"><span class="attr">manual_scaling:</span> <span class="comment"># Enable manual scaling for a service</span></span><br><span class="line">  <span class="attr">instances:</span> <span class="number">1</span> <span class="comment"># 1 instance assigned to the service</span></span><br><span class="line"></span><br><span class="line"><span class="attr">resources:</span> <span class="comment"># Control the computing resources</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">memory_gb:</span> <span class="number">0.5</span></span><br><span class="line">  <span class="attr">disk_size_gb:</span> <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="attr">skip_files:</span> <span class="comment"># Specifies which files in the application directory are not to be uploaded to App Engine</span></span><br><span class="line"><span class="comment"># We just need build/server.js to deploy</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">node_modules/</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">.gitignore</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">.git/</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">.circleci/</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">src/</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">test/</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">.eslintrc.js</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">.huskyrc.js</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">.eslintignore</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">.prettierrc</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">babel.config.js</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">lint-staged.config.js</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">nodemon.json</span></span><br></pre></td></tr></table></figure>
-<p>接下來，我們就可以手動 deploy 啦!</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcloud app deploy</span><br></pre></td></tr></table></figure>
-<h2 id="在-CircleCI-deploy"><a href="#在-CircleCI-deploy" class="headerlink" title="在 CircleCI deploy"></a>在 CircleCI deploy</h2><p>要透過 CircleCI 部署到 GCP，需要授權 Google Cloud SDK。在 <code>circleci/config.yml</code> 再加上</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">    <span class="attr">docker:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">google/cloud-sdk</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="comment">#info: https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">attach_workspace:</span> <span class="comment"># Get saved data by configuring the attach_workspace</span></span><br><span class="line">          <span class="attr">at:</span> <span class="string">.</span> <span class="comment"># Must be absolute path or relative path from working_directory</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">ls</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">ls</span> <span class="string">-al</span> <span class="comment"># list all files including hidden files and information</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="comment">#info: https://circleci.com/docs/2.0/google-auth/</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">gcloud</span> <span class="string">env</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">|</span></span><br><span class="line">            <span class="string">echo</span> <span class="string">$GCP_KEY</span> <span class="string">&gt;</span> <span class="string">gcloud-service-key.json</span></span><br><span class="line">            <span class="string">gcloud</span> <span class="string">auth</span> <span class="string">activate-service-account</span> <span class="string">--key-file=gcloud-service-key.json</span></span><br><span class="line">            <span class="string">gcloud</span> <span class="string">--quiet</span> <span class="string">config</span> <span class="string">set</span> <span class="string">project</span> <span class="string">$&#123;GCP_PROJECT_ID&#125;</span></span><br><span class="line">            <span class="string">gcloud</span> <span class="string">--quiet</span> <span class="string">config</span> <span class="string">set</span> <span class="string">compute/zone</span> <span class="string">$&#123;GCP_REGION&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">to</span> <span class="string">App</span> <span class="string">Engine</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">gcloud</span> <span class="string">app</span> <span class="string">deploy</span></span><br><span class="line"></span><br><span class="line"><span class="attr">workflows:</span> <span class="comment">#  A set of rules for defining a collection of jobs and their run order</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">2</span></span><br><span class="line">  <span class="attr">build-deploy:</span></span><br><span class="line">    <span class="attr">jobs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">deploy:</span></span><br><span class="line">          <span class="attr">requires:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line">          <span class="attr">filters:</span> <span class="comment"># using regex filters requires the entire branch to match</span></span><br><span class="line">            <span class="attr">branches:</span></span><br><span class="line">              <span class="attr">only:</span> <span class="string">master</span> <span class="comment"># only master will run</span></span><br></pre></td></tr></table></figure>
-<p>記得到 CircleCI 填入需要的 key, <code>project_id</code>, <code>region</code> 。</p>
-<p><img src="/2019/11/25/GCP/circle_ci_5.png"></p>
-<p>用到的 key 金鑰需要到 Cloud IAM 申請:</p>
-<p><img src="/2019/11/25/GCP/gcp_10.png"></p>
-<p>都填妥後，再 depoy 一次會出現下面這個 error：</p>
-<p><img src="/2019/11/25/GCP/circle_ci_6.png"></p>
-<p>會產生這個錯誤是因為是用 GCP 的 service account 部署，而這會需要用到 App Engine Admin API，這個 API 預設會是 disable 的，這時把選項 enable 再 rerun CircleCI 就好。</p>
-<p><img src="/2019/11/25/GCP/circle_ci_7.png"></p>
-<p>這樣就 deploy 完成囉 🥳</p>
-<h2 id="前人種樹後人乘涼"><a href="#前人種樹後人乘涼" class="headerlink" title="前人種樹後人乘涼"></a>前人種樹後人乘涼</h2><p>透過簡易的 Node.js server 完整跑一次 CI/CD 流程，發現設定好 CI/CD 能夠大大節省開發專案的時間，化繁為簡、提升效率，也能夠讓工程師專心在開發上，是個非常賺的投資啊 XD 減少 murmur 的時間(X)。 別等了！趕快在自己的專案加入 CI/CD 吧！</p>
-<p>此篇同步發表於 👉 <a target="_blank" rel="noopener" href="https://5xruby.tw/posts/hello-ci-cd/">五倍紅寶石</a>。<br>GitHub repo 👉 <a target="_blank" rel="noopener" href="https://github.com/MindyTai/demo-nodejs-server">https://github.com/MindyTai/demo-nodejs-server</a></p>
-
+          <p>身處在講求效率的時代，完整的開發流程當然少不了 CI/CD。什麼是 CI/CD 呢？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/25/GCP/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -710,10 +561,33 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-20 15:42:19" itemprop="dateModified" datetime="2020-12-20T15:42:19+08:00">2020-12-20</time>
+                <time title="Modified: 2020-12-26 23:10:33" itemprop="dateModified" datetime="2020-12-26T23:10:33+08:00">2020-12-26</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CASTNET/" itemprop="url" rel="index"><span itemprop="name">CASTNET</span></a>
+                </span>
+            </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2019/07/04/%E7%B6%B2%E7%AB%99%E6%96%B0%E6%94%B6%E7%9B%8A%20%E6%8C%96%E7%A4%A6%E5%8F%96%E4%BB%A3%E5%82%B3%E7%B5%B1%E5%BB%A3%E5%91%8A/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/04/網站新收益 挖礦取代傳統廣告/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -724,25 +598,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><em>此文同步刊載於<a target="_blank" rel="noopener" href="https://castnet.nctu.edu.tw/castnet/article/11077?issueID=662">喀報</a></em></p>
-<p>根據 Torrent Freak 報導，知名 BitTorrent 網站海盜灣（The Pirate Bay）利用使用者停留在網頁上時，悄悄地讓他們的電腦進行挖礦，以賺取數位貨幣。這種行為的原理是什麼？一般人該怎麼防範？本文將從數位貨幣之母比特幣與其核心 — — 區塊鏈開始，帶領讀者一起了解電腦挖礦與海盜灣事件的相關技術。</p>
-<h2 id="比特幣-點對點交易的數位貨幣系統"><a href="#比特幣-點對點交易的數位貨幣系統" class="headerlink" title="比特幣 點對點交易的數位貨幣系統"></a>比特幣 點對點交易的數位貨幣系統</h2><blockquote>
-<p>「比特幣讓人們第一次可以在網路上交易身家財產，而且是安全的，沒有人可以挑戰其合法性。」- Marc Andreessen（Netscape創辦人）</p>
-</blockquote>
-<p>中本聰，比特幣系統創造者，其真實身份到目前未定論。他在 2008 年發表了論文〈比特幣：P2P的數位貨幣系統〉中提到，比特幣系統是一個點對點的電子支付系統，讓雙方能直接交易。相較於傳統的電子支付需仰賴金融機構作為第三方，要經過雙方提供許多額外的個人資料以作為信任基礎；比特幣系統用電腦（節點）間的共識決取代第三方的監管，能讓交易更多元化，達到最高的經濟效益。</p>
-<p>比特幣是一種數位貨幣，數位貨幣的功能就像是現實世界的實體貨幣一樣，能夠用來交換物品以產生價值，現今一塊比特幣市值大概相當於 11 萬新台幣。</p>
-<h2 id="區塊鏈-比特幣系統中心概念"><a href="#區塊鏈-比特幣系統中心概念" class="headerlink" title="區塊鏈 比特幣系統中心概念"></a>區塊鏈 比特幣系統中心概念</h2><p>比特幣系統是最先被實作出來的區塊鏈應用。在這個區塊鏈系統中，有一本帳本（ledger），儲存所有參與者的交易記錄。帳本擁有無數個副本，散佈於系統網路上的每一個節點，讓每一筆帳都能透明、低耗能又安全地被記錄下來，這也是區塊鏈的正式名稱「分散式帳本技術」的命名原因。這項技術去中心化（Decentralization）和資訊公開的特點 — — 加上為一個開源專案，人人皆能取得原始碼而創造新的區塊鏈，讓它應用極為廣泛，並迅速在各個行業中發展。</p>
-<p>2015 年 10 月，區塊鏈純商業性質平台 Ujo Music 成立。此平台讓音樂創作者在區塊鏈上登記自己的音樂以及管理自己的版權，閱聽人能夠從平台上購買音樂，音樂創作者從而獲得收益，不受第三方經紀公司的控制。閱聽人向Ujo 發出購買訊息，從電子錢包轉出數位貨幣。此時，去中心化的系統會公告在線用戶（節點）徵求「檢驗員」，檢視雙方交易的合法性、過去交易紀錄等。最快完成的「檢驗員」在取得其他節點的共識後，決定交易是否成功。成功以後，系統自動把數位貨幣依比例分配，「檢驗員」從中收到報酬。交易結束後，音樂創作者就會寄出歌曲存放位置供買家下載，買家會收到隨機發送一組亂數當作交易代碼，透過代碼取得音樂。交易中間，不需要是Ujo會員，也不需要手續費。</p>
-<h2 id="電腦挖礦-驗證區塊鏈交易的礦工"><a href="#電腦挖礦-驗證區塊鏈交易的礦工" class="headerlink" title="電腦挖礦 驗證區塊鏈交易的礦工"></a>電腦挖礦 驗證區塊鏈交易的礦工</h2><p>前文所提 Ujo Music 例子中的「檢驗員」，事實上就相當於電腦挖礦中的礦工。</p>
-<p>挖礦，是一個比喻。在網路上，系統使用特定函數設計複雜的數學難題，讓候選區塊（candidate block）的礦工運用自身資源運算出答案。得出答案後，告知其他參與的解題者，由他們驗證是否正確。驗證後，便會成為鏈上的最新區塊，而區塊鏈也會給予礦工回饋金（數位貨幣）；回饋金是一種獎勵機制，以推動礦工去建立更多節點，同時也促使礦工貢獻計算資源來幫助區塊鏈的運作及安全。挖礦事實上是對區塊鏈及礦工雙方均有利的機制。</p>
-<p>中本聰依現實世界中採礦的概念：愈到後期金礦愈少，挖到的難度愈高 — — 愈多礦工投入，解題的困難度將會節節高升，報酬將會愈低。由於難度的上升，運算資源少的礦工幾乎不可能獨自解題，於是礦工們組織礦池一起合作，以增加成功解題的機率。得到的報酬將就各個礦工的貢獻程度依比例分配，並從各個礦工報酬中抽取些微報酬以維護礦池，使礦工們驗證的候選區塊能夠放到鏈上成為正式區塊。</p>
-<p>為追求更快的挖礦速度，礦工們的硬體也要隨之提升。以比特幣來說，硬體從最初的 CPU（中央處理器）、GPU（顯示卡）、FPGA（可程式化邏輯閘陣列），到後來甚至出現專門用於挖礦的ASIC（客製化晶片），ASIC 挖礦速度約為顯卡的百倍以上。然而有些幣種的演算法屬於 Anti-ASIC，廠商難以設計出相對應的 ASIC 來進行運算。其目的是避免大量算力集中在少數人手中，維持去中心化的主旨，保護區塊鏈安全。</p>
-<h2 id="Pirate-Bay-讓用戶成為礦工"><a href="#Pirate-Bay-讓用戶成為礦工" class="headerlink" title="Pirate Bay 讓用戶成為礦工"></a>Pirate Bay 讓用戶成為礦工</h2><p>根據 Torrent Freak 報導，著名 BT 網站海盜灣在未告知用戶的情況下，在網站嵌入挖礦程式，使得使用者在瀏覽頁面時，電腦的 CPU 將協助進行門羅貨幣（Monero）的挖礦。現今一塊門羅幣市值約為 2600 新台幣，採取一種Anti-ASIC 的演算法，特色為匿名交易，隱匿性極高。事發後，海盜灣向大眾坦承，他們計畫利用這種方式來獲得收益，希望最終能夠取代傳統廣告投放。</p>
-<p>海盜灣所嵌入的挖礦程式，由為一個德國的圖床網站所開發。鑒於現今使用者多用 AdBlock 等廣告阻擋工具來阻擋廣告，導致網頁廣告收益銳減，造成網站財務困難，於是才決定開啟了這項實驗性的 Coinhive 專案，讓嵌入挖礦程式的網站藉由使用者的電腦進行電腦挖礦。網站獲得收益的同時，專案方也從中抽取約30%的收益來維持服務運作。此專案核心的挖礦程式利用 WebAssembly 技術大幅提升瀏覽器高強度運算的效率，再透過服務提供的應用程式介面（API），讓人們能輕鬆透過瀏覽器用 CPU 挖門羅幣。海盜灣正是透過這樣的方式，暗地地讓使用者幫他挖礦而獲利。</p>
-<p>但事實上，Coinhive 服務早已被普遍利用，甚至有些瀏覽器的附加元件（Add-On）皆有使用 Coinhive 服務，以進行獲利。</p>
-<p>在海盜灣事件發生後幾天，門羅幣台灣正體中文站（Monero-Taiwan）發出了公告，告知網站使用者將透過 Coinhive 在使用者的電腦進行挖礦。網站在公告中明確說明，主要是想透過這樣的方式維持社群與網站的運作。同時也公開原始碼，說明可能的風險，並教導使用者如何停止此項服務。相較於海盜灣事件，Monero-Taiwan 明確告知使用者，網站將透過使用者進行電腦挖礦以維持運作，讓使用者能選擇是否同意此做法。海盜灣未事先告知不僅傷害網站信譽，也有道德上的疑慮。</p>
-<p>使用者未來必須更加小心是否有網站或瀏覽器附加元件在未知會的情況下利用使用者的電腦進行挖礦。而判斷的方法很簡單，檢查電腦 CPU 使用率有無特別升高即可。</p>
-
+          <p>「比特幣讓人們第一次可以在網路上交易身家財產，而且是安全的，沒有人可以挑戰其合法性。」- Marc Andreessen（Netscape創辦人）</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/04/%E7%B6%B2%E7%AB%99%E6%96%B0%E6%94%B6%E7%9B%8A%20%E6%8C%96%E7%A4%A6%E5%8F%96%E4%BB%A3%E5%82%B3%E7%B5%B1%E5%BB%A3%E5%91%8A/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -792,10 +656,33 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-20 15:09:02" itemprop="dateModified" datetime="2020-12-20T15:09:02+08:00">2020-12-20</time>
+                <time title="Modified: 2020-12-26 23:11:19" itemprop="dateModified" datetime="2020-12-26T23:11:19+08:00">2020-12-26</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/INTERN/" itemprop="url" rel="index"><span itemprop="name">INTERN</span></a>
+                </span>
+            </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/04/2018仲夏夜之夢，我在五倍紅寶石實習/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -806,24 +693,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>會申請五倍紅寶石的實習最一開始的契機是系上的實習課，老師鼓勵同學出去找實習，這剛好讓一直對實習躊躇的我再也沒藉口不去外面闖闖。而大約在半年前，在偶然下，我從同校學長的facebook分享得知五倍紅寶石公司，對這家公司在做的事覺得蠻特別的，於是一直有在觀察公司的動態，後來看到公司在徵2018年暑假的實習生，於是趁此機會鼓起勇氣投投看履歷，結果非常幸運的接獲了面試通知。</p>
-<h2 id="申請流程"><a href="#申請流程" class="headerlink" title="申請流程"></a>申請流程</h2><p>我申請的流程是，把自己的作品集集結起來放在自己的網站上，並附上個人履歷直接寄至公司信箱，由於我幾乎是公司一釋出實習消息就申請了，所以有蠻長的時間可以準備面試，但最終仍覺得沒準備充裕就上陣了。面試我的面試官是蒼時跟慕凡哥，身為全公司技術力最強的蒼時，在面試時狂戳我的技術點，問到讓我覺得我差不多可以回家洗洗睡了，而慕凡哥則是問一些比較軟性的問題，像是「為什麼會知道我們公司？」、「想在這裡學什麼東西？」等等，面試過程氣氛其實是相當輕鬆的，面試長度大概是半小時左右，建議之後要申請五倍實習的人若自己本身有名片，可以準備一下，方便在面試結束之後跟面試官交換名片。雖然面試完一度覺得蠻喪氣的，但是過一陣子竟然收到錄取通知，真的既高興又驚訝，但也有點不安，擔心自己技術力上不了臺面，但往好處想，人生就是這樣才有趣啊，剛好藉此踏出舒適圈，去闖闖看。</p>
-<h2 id="序曲，實習生大會"><a href="#序曲，實習生大會" class="headerlink" title="序曲，實習生大會"></a>序曲，實習生大會</h2><p>在實習開始之前，有一次的實習生大會，主要的目的是讓實習生認識公司成員，以及告知實習應該注意的事項，透過參與這次的大會，我認識了我的mentor也認識了未來的實習夥伴們，發現大家其實都很友善也很風趣，心中不安的程度比較減輕了，反而更期待接下來的實習生活。</p>
-<h2 id="實習開始！"><a href="#實習開始！" class="headerlink" title="實習開始！"></a>實習開始！</h2><blockquote>
-<p>先接案，再做教材</p>
-</blockquote>
-<p>五倍的實習生進來公司是有既定的教材要完成的，完成教材才能接公司內部案子或是商業案，而公司針對不同的實習職缺會有不同份的教材。但由於剛好遇到公司內部官網在進行改版，我就接下了改寫官網的公司內部案子，展開人生的第一份接案生活。<br>了解要接的專案後，才發現我有很大的洞要補，Git沒什麼概念要重頭學也缺少專案協作的概念，實習初期我每天花了很多時間在補齊這些能力，加上因為新竹台北兩地通車真的是身心俱疲，到專案中期發現自己要搞懂的觀念越來越多，除了要熟悉ruby語法利用ruby做資料串接外，還要拆分共用的元件重複利用，這些都是我陌生的部分，但幸運的是公司的夥伴們都十分願意幫助我學習，真的非常感謝大家❤️過程雖然很累但我仍感到開心充實，畢竟每天一步一步堅實的走著啊。<br>專案結束後，我開始做前端React教材，這對我來說真的是新世界啊，有種思維被強制更新的感覺，但其實React概念還蠻有趣的，感覺自己可以做的事又更多了呢 XD</p>
-<blockquote>
-<p>Work hard,play hard</p>
-</blockquote>
-<p>忙碌的實習生活中除了被負責的專案占滿外，玩樂的時間也沒少。公司有一個特別的社群活動叫作「默默會」，每個禮拜二晚上固定會舉辦，不限定來參加的人，想來的人都可以來，來這裡可以做自己的事或是與在場的大家交流，有時候會有桌遊團或是switch團嗨翻現場，是個十分有意思的活動。若你是酒友，你會發現這裡是天堂(X。</p>
-<blockquote>
-<p>白天實習，晚上假日上課</p>
-</blockquote>
-<p>公司還有一個特別的地方是會提供課程給實習生上課，通常大部分的課可以自由選修，我總共上了3門課，分別是「網頁前端設計女性專班 — 台北夜間平日班」、「客製化進階 RWD 手機版網頁設計班 — 台北假日班」以及「坐上 Git 時光機-版本控制課程」，從這些課中，我補齊了基礎，也讓自己的觀念更扎實，雖然因為晚上上課，回到家都快午夜十二點了，真的連自己個人時間都沒有，但是也是因為這樣讓自己能快速學習。這陣子真的像是一個狂吸水的海綿，瘋狂學習吸收，能力跟前兩個月剛進來比，真的可以說是大躍進，回頭看這些日子，真的是好瘋狂啊，沒想到在大學最後一年的暑假也能過得這麼刺激啊 XD</p>
-<h2 id="結業式，不是終曲，是開始"><a href="#結業式，不是終曲，是開始" class="headerlink" title="結業式，不是終曲，是開始"></a>結業式，不是終曲，是開始</h2><p>在實習的最後，公司用心地為實習生舉辦了結業式，每個實習生都要上台報告這兩個月的心得，內容呈現方式不限，每個實習生都心得滿滿，大家在這裡都待的蠻愉快的，彼此相處的很融洽，也彼此教學相長。<br>到底是什麼樣的緣分讓我們聚在一起呢？真的十分幸運遇到公司大家❤️因為這次的實習讓自己未來的路逐漸清晰，我告訴自己，再更努力一點，再堅持一點，最終會成為自己想要的樣子的！</p>
-<h1 id="在理想這條路上，跪著也要走完"><a href="#在理想這條路上，跪著也要走完" class="headerlink" title="在理想這條路上，跪著也要走完"></a>在理想這條路上，跪著也要走完</h1><p>2018五倍實習生Mindy下台一鞠躬。</p>
-
+          <p>大約在半年前，在偶然下，我從同校學長的facebook分享得知五倍紅寶石公司。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -873,10 +751,33 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-20 15:34:51" itemprop="dateModified" datetime="2020-12-20T15:34:51+08:00">2020-12-20</time>
+                <time title="Modified: 2020-12-26 23:10:36" itemprop="dateModified" datetime="2020-12-26T23:10:36+08:00">2020-12-26</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CASTNET/" itemprop="url" rel="index"><span itemprop="name">CASTNET</span></a>
+                </span>
+            </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2018/04/22/%E5%8D%80%E5%A1%8A%E9%8F%88%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%8F%AF%E4%BB%A5%E5%90%83%E5%97%8E/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/22/區塊鏈是什麼？可以吃嗎/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -887,18 +788,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><em>此文同步刊載於<a target="_blank" rel="noopener" href="https://castnet.nctu.edu.tw/castnet/article/12630?issueID=689">喀報</a></em></p>
-<blockquote>
-<p>第一代數位革命帶給我們資訊豐富的網際網路，以區塊鏈技術為基礎的第二代數位革命，則帶給我們充滿價值的網際網路。 ──《區塊鏈革命》作者 Don Tapscott</p>
-</blockquote>
-<p>比特幣早在 2009 年就在網路上流通，隨著時間的推演，比特幣的底層技術區塊鏈越來越成熟，直至 2016 年時，區塊鏈終於普遍被認為是一項有前景的技術，其不需要中間人監管的特性，讓技術人員紛紛開始投入研究。究竟令人著迷的的區塊鏈為何物？</p>
-<h2 id="拜占庭問題催生區塊鏈概念"><a href="#拜占庭問題催生區塊鏈概念" class="headerlink" title="拜占庭問題催生區塊鏈概念"></a>拜占庭問題催生區塊鏈概念</h2><p>談到為何有區塊鏈的誕生，就要搞清楚何謂拜占庭問題。在國土極為遼闊的東羅馬帝國時代，戰爭頻仍，將軍們常帶領士兵各自前往分配的要塞駐守，而每個要塞距離都十分地遠，各個將軍之間很難互相傳遞訊息，若是在已知有內賊的情況下，形勢更加雪上加霜。如何在這樣的狀況下彼此取得共識、傳遞正確訊息以及決定是否出兵，就是著名的「拜占庭問題 ( The Byzantine Generals Problem )」。<br>區塊鏈相關概念是 1982 年美國計算機科學家萊斯利．蘭波特試圖在運算領域解決拜占庭問題時衍生而出。蘭波特建立具容錯性的分散式獨立系統，也是當今被視為區塊鏈的雛形。該系統不需要依靠全部節點仍可順利運作，並讓彼此陌生的節點達成共識，使資訊內容傳遞一致。<br>相關的研究一直在進行著，而在 2008 年世界金融危機，雷曼兄弟倒閉後兩週，一位自稱中本聰的人發表了〈比特幣:一種點對點的電子現金系統〉論文，該文中的比特幣即建立在區塊鏈上。隔年，中本聰率先實作出比特幣系統，區塊鏈於焉出世。</p>
-<h2 id="區塊鏈為何方神聖"><a href="#區塊鏈為何方神聖" class="headerlink" title="區塊鏈為何方神聖"></a>區塊鏈為何方神聖</h2><p>區塊鏈是比特幣的底層技術，那它到底如何運作？其實可以把區塊鏈想像成是帳本系統。把區塊鏈以字拆開，「區塊」是帳本的內頁，用來記錄交易，並標有頁碼（蓋時間戳），這不僅能夠防止重複支付問題，也能確保區塊的前後相連。那麽時間戳由誰來蓋？由一群參與記帳的「礦工」來執行這個任務。中本聰讓他們去競爭記帳權，規則是在正確記帳的同時也要解 SHA256演算法難題，誰最先解出題目，誰就能得到記帳權並獲得獎勵（二十五個比特幣）。<br>「鏈」則是指在每個礦工的電腦中都保存著相同的帳本，裡頭的每一筆資料皆要互相達成共識，才能確保帳本內容是同步的。換句話說，礦工都擁有同一份帳本，而每一筆交易都必須由全部記帳者核對正確才能被記錄於帳本中，這樣的機制使中本聰完美地創造出「去中心化」的信用系統，以群體共識取代中央信任，不需要中間人的存在。<br>區塊鏈不可忽略的特性是安全性十足。在網路世界，資安是令人擔憂的問題，而區塊鍊藉由必須讓礦工集體達成共識才能記錄於帳本的特性，使得駭客若想變更交易紀錄，必須讓 51% 的礦工達成共識，這比單單駭入銀行系統還難上許多，這個特性使得區塊鏈安全性較高。</p>
-<p>區塊鏈可以細分為私有鍊（private blockchain）、公共鍊（public blockchain）及聯盟鍊（consortium blockchain）。它們之間的關係可以想像成是學校課程。公共鍊是大學通識課，供任何人選修，每筆交易都是匿名公開，是區塊鏈最原始的樣貌，知名的比特幣區塊鏈即屬此類。這樣的特性無法滿足企業對交易資訊隱私的要求，於是出現具有排他性的私有鍊以及聯盟鍊。私有鍊有限制性，可以比擬做限大學本科系選修的課，而聯盟鍊則居於公共鏈及私有鏈中間，可以比擬做某學程開的課，不限任何系只要是該學程的學生都能選修。<br>事物總有一體兩面，講完優點，就該講缺點了。區塊鏈雖能確保資料在傳遞過程中不被竄改，但並沒辦法驗證作為源頭的資料是否正確，是導致現今區塊鏈無法普遍應用在各行業的主因，舉例來說，某物流公司運用區塊鏈技術來紀錄貨物從發出到接受過程中的所有資訊，然而若運送人員作假標示成已出貨，因區塊鏈無法驗證源頭資料，使客戶無從知曉鏈上資訊的真實性。另外，區塊鏈運作效率仍有待提升，當在鏈上的礦工越來越多時，就會加長取得共識的時間，處理速度也會越來越緩慢。雖然已陸續研究出應對方法，但可惜的是目前仍沒辦法完美地解決問題。</p>
-<h2 id="ICO與代幣經濟"><a href="#ICO與代幣經濟" class="headerlink" title="ICO與代幣經濟"></a>ICO與代幣經濟</h2><p>區塊鏈的應用十分多元，ICO（Initial Coin Offering，中譯：首次代幣眾籌）即是基於區塊鏈概念衍生而出。ICO 可以比擬做區塊鏈世界的 IPO（Initial Public Offerings，中譯：首次公開募股），ICO 通常結合專案發行數位貨幣，概念相當於IPO的公司股票，差別是 ICO 的貨幣募資後能夠兌換服務，而這樣的特性衍生出代幣經濟。舉個例子，假設現在要買雞排，那就要拿 60元跟店家換一塊雞排，而在代幣經濟下，就像是去電子遊樂場換限量的代幣一樣，拿錢去換「雞排幣」，然後再用「雞排幣」去買雞排，發行「雞排幣」的動作就是 ICO。值得討論的是，直接拿法幣買跟用代幣「雞排幣」買有什麼差別？其實，發行「雞排幣」的行為對不論是消費者還是生產者某種程度上都是更有利的。對生產者而言，能夠降低生產風險，在投入大部分成本之前，就能基於募資的程度先勘查市場；對消費而言，能夠因為「雞排幣」的稀有性而讓幣值水漲船高，使得「雞排幣」有類似股票的特性。</p>
-<p>在投資 ICO 專案以前，通常有白皮書（相當於說明書）可以看，這可以讓人判斷是否要投資，換句話說，我們可以推得白皮書是需要受管制的。若不在適當管制之下，白皮書內容就能夠隨意增添，天花亂墜的內容將可能造成投資者吃虧。現今 ICO 的多數國家包括台灣都沒有明確的法令規範，這使得內容品質優劣不一，有些專案甚至不提供白皮書，在這樣的情況下，漸漸有端看發起人的名氣決定是否投資的情勢，讓投機者有機可趁。中國、韓國則採嚴禁態度，視 ICO 為非法行為；而德國、日本也逐漸正視其問題，強化 ICO 的法規，防止民眾因為盲從而造成財物損失。</p>
-<h2 id="是未來還是泡沫"><a href="#是未來還是泡沫" class="headerlink" title="是未來還是泡沫"></a>是未來還是泡沫</h2><p>區塊鏈的出現達成了資產交易的去中心化，免除了是否要信任中間者的疑慮，加上應用的多元性，為人們的生活帶來相當大的方便。然而，有心者仍可利用區塊鏈特性造成他人利益的損害，例如前面提過的 ICO 專案，即是看準投資人對代幣經濟的信心，而賺取利潤；另外，人稱「股壇長毛」的大衛韋伯曾說過建立在區塊鏈上的比特幣是世上首個分散式的龐式騙局，在加密貨幣市場上擁有大批資源的大戶掌控相當大比例的貨幣，運用技巧讓幣值大起大落，高賣低買，謀取利益。區塊鏈是一門具高競爭力、高前景的技術，但就如同雙面刃一樣，必須小心發展。儘管風險不低，仍是一場你我不能錯過的數位革命。</p>
-
+          <p>第一代數位革命帶給我們資訊豐富的網際網路，以區塊鏈技術為基礎的第二代數位革命，則帶給我們充滿價值的網際網路。 ──《區塊鏈革命》作者 Don Tapscott</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/04/22/%E5%8D%80%E5%A1%8A%E9%8F%88%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%8F%AF%E4%BB%A5%E5%90%83%E5%97%8E/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -957,10 +855,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          TABLE OF CONTENTS
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          OVERVIEW
         </li>
       </ul>
 
@@ -983,12 +881,24 @@
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/MindyTai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;MindyTai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
 
 
 
@@ -1015,10 +925,8 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder"></span>
+  <span class="author" itemprop="copyrightHolder">All Rights Reserved.</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
-  </div>
 
         
 
@@ -1043,7 +951,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/pisces.js"></script>
+<script src="/js/schemes/muse.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -1072,6 +980,17 @@
   
 
   
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fromzerotoyee.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
 
 </body>
 </html>
