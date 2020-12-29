@@ -28,7 +28,7 @@
 <meta property="og:description" content="最近開始寫 Ruby，在專案碰到一些我認為蠻重要的小細節，做一下小小紀錄。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2020-12-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-29T09:54:52.596Z">
+<meta property="article:modified_time" content="2020-12-29T10:01:33.068Z">
 <meta property="article:tag" content="Ruby">
 <meta name="twitter:card" content="summary">
 
@@ -180,7 +180,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-12-29 00:00:00 / Modified: 17:54:52" itemprop="dateCreated datePublished" datetime="2020-12-29T00:00:00+08:00">2020-12-29</time>
+              <time title="Created: 2020-12-29 00:00:00 / Modified: 18:01:33" itemprop="dateCreated datePublished" datetime="2020-12-29T00:00:00+08:00">2020-12-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -220,40 +220,45 @@
       
         <ul>
 <li>善用 <code>attr_reader</code>、<code>attr_accessor</code>、<code>attr_writer</code><ul>
-<li>方便之後會在外部用到</li>
+<li>方便之後外部使用</li>
 <li><code>initialize</code> 會使用實體變數，之後即可使用 method 呼叫該變數</li>
-<li><code>attr_reader</code>  產生 getter，<code>attr_writer</code> 產生 setter，而 attr_accessor 則會產生 <code>getter</code> 及 <code>setter</code>。</li>
+<li><code>attr_reader</code> 產生 getter，<code>attr_writer</code> 產生 setter，而 attr_accessor 則會產生 <code>getter</code> 及 <code>setter</code></li>
 </ul>
 </li>
 </ul>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tom</span></span></span><br><span class="line">  <span class="keyword">attr_accessor</span> <span class="symbol">:age</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(<span class="symbol">age:</span> <span class="number">20</span>)</span></span></span><br><span class="line">    <span class="variable">@age</span> = age</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">tom = Tom.new(<span class="symbol">age:</span> <span class="number">30</span>)</span><br><span class="line">puts tom.age</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><p>要測試的東西提取到 <code>public</code> method，比較好測試。</p>
-</li>
-<li><p>格式化時間： </p>
-<ul>
+<li>要測試的東西提取到 <code>public</code> method，比較好測試。</li>
+<li>格式化時間： <ul>
 <li>可以使用 <code>Datetime#strftime</code> </li>
 <li>透過 <code>I18n</code> 格式化<ul>
 <li>I18n.l( Time.now )</li>
-<li>I18n.l( Time.now, :format =&gt; :default )<br>e.x.<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">time:</span></span><br><span class="line">    <span class="attr">am:</span> <span class="string">午前</span></span><br><span class="line">    <span class="attr">formats:</span></span><br><span class="line">      <span class="attr">default:</span> <span class="string">&quot;%Y年%m月%d日(%a) %H時%M分%S秒 %z&quot;</span></span><br><span class="line">      <span class="attr">long:</span> <span class="string">&quot;%Y/%m/%d %H:%M&quot;</span></span><br><span class="line">      <span class="attr">short:</span> <span class="string">&quot;%m/%d %H:%M&quot;</span></span><br><span class="line">      <span class="attr">only_date:</span> <span class="string">&quot;%Y/%m/%d&quot;</span></span><br><span class="line">      <span class="attr">time_only:</span> <span class="string">&quot;%H:%M&quot;</span></span><br><span class="line">      <span class="attr">without_seconds:</span> <span class="string">&#x27;%Y/%m/%d(%a)%H:%M&#x27;</span></span><br><span class="line">      <span class="attr">full_slashed:</span> <span class="string">&#x27;%Y/%m/%d(%a)%H:%M&#x27;</span></span><br><span class="line">      <span class="attr">full_localized:</span> <span class="string">&quot;%Y年%m月%d日(%a)%H:%M&quot;</span></span><br><span class="line">    <span class="attr">pm:</span> <span class="string">午後</span></span><br></pre></td></tr></table></figure>
-</li>
+<li>I18n.l( Time.now, :format =&gt; :default )</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p>如果變數被重複使用，多個地方重複出現，拆開實作為佳。</p>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">//example</span></span><br><span class="line"><span class="string">//ja.yml</span></span><br><span class="line">  <span class="attr">time:</span></span><br><span class="line">    <span class="attr">am:</span> <span class="string">午前</span></span><br><span class="line">    <span class="attr">formats:</span></span><br><span class="line">      <span class="attr">default:</span> <span class="string">&quot;%Y年%m月%d日(%a) %H時%M分%S秒 %z&quot;</span></span><br><span class="line">      <span class="attr">long:</span> <span class="string">&quot;%Y/%m/%d %H:%M&quot;</span></span><br><span class="line">      <span class="attr">short:</span> <span class="string">&quot;%m/%d %H:%M&quot;</span></span><br><span class="line">      <span class="attr">only_date:</span> <span class="string">&quot;%Y/%m/%d&quot;</span></span><br><span class="line">      <span class="attr">time_only:</span> <span class="string">&quot;%H:%M&quot;</span></span><br><span class="line">      <span class="attr">without_seconds:</span> <span class="string">&#x27;%Y/%m/%d(%a)%H:%M&#x27;</span></span><br><span class="line">      <span class="attr">full_slashed:</span> <span class="string">&#x27;%Y/%m/%d(%a)%H:%M&#x27;</span></span><br><span class="line">      <span class="attr">full_localized:</span> <span class="string">&quot;%Y年%m月%d日(%a)%H:%M&quot;</span></span><br><span class="line">  <span class="attr">pm:</span> <span class="string">午後</span></span><br></pre></td></tr></table></figure>
+
 <ul>
+<li>如果變數被重複使用，多個地方重複出現，拆開實作為佳。<ul>
 <li>如何拆開：寫成 <code>private</code> method</li>
 <li>拆開後可以在 <code>public</code>  method 任意使用</li>
-<li>使用 <code>||=</code> <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">whitelist_users_count</span></span></span><br><span class="line">    whitelist_users_count = users.date_range(recent_one_week).count</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">private</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">users</span></span></span><br><span class="line">        <span class="variable">@users</span> <span class="params">||</span>= User.where(<span class="string">&#x27;email !~~* ? AND created_at &lt;= ?&#x27;</span>, <span class="string">&#x27;%5xruby%&#x27;</span>, end_date)</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>使用 <code>||=</code></li>
 </ul>
 </li>
-<li><p>多多善用 <code>array</code> append</p>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">whitelist_users_count</span></span></span><br><span class="line">    whitelist_users_count = users.date_range(recent_one_week).count</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">private</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">users</span></span></span><br><span class="line">        <span class="variable">@users</span> <span class="params">||</span>= User.where(<span class="string">&#x27;email !~~* ? AND created_at &lt;= ?&#x27;</span>, <span class="string">&#x27;%5xruby%&#x27;</span>, end_date)</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>多多善用 <code>&lt;&lt;</code> operator <ul>
+<li>add items to the result array</li>
+<li>之前比較常寫 <code>JS</code>，對於這個寫法比較陌生，需要再熟悉一下。 </li>
+</ul>
 </li>
 </ul>
-<p>比較常寫 <code>JS</code>，對於這個寫法比較陌生，需要再熟悉一下。<br> <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">message</span></span></span><br><span class="line">    message=[]</span><br><span class="line">    message &lt;&lt; <span class="string">&quot;a&quot;</span></span><br><span class="line">    message &lt;&lt; <span class="string">&quot;b&quot;</span></span><br><span class="line">    message.join(<span class="string">&quot;&amp;&quot;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">puts message <span class="comment"># a&amp;b</span></span><br></pre></td></tr></table></figure></p>
-
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">message</span></span></span><br><span class="line">    message=[]</span><br><span class="line">    message &lt;&lt; <span class="string">&quot;a&quot;</span></span><br><span class="line">    message &lt;&lt; <span class="string">&quot;b&quot;</span></span><br><span class="line">    message.join(<span class="string">&quot;&amp;&quot;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">puts message <span class="comment"># a&amp;b</span></span><br></pre></td></tr></table></figure>
     </div>
 
     
