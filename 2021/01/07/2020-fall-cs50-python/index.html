@@ -28,7 +28,7 @@
 <meta property="og:description" content="CS50 week 6，這次要來認識 Python，此篇為課堂筆記。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2021-01-06T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-01-07T16:03:34.516Z">
+<meta property="article:modified_time" content="2021-01-07T17:13:35.983Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://example.com/2021/01/07/2020-fall-cs50-python/">
@@ -186,7 +186,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-08 00:03:34" itemprop="dateModified" datetime="2021-01-08T00:03:34+08:00">2021-01-08</time>
+                <time title="Modified: 2021-01-08 01:13:35" itemprop="dateModified" datetime="2021-01-08T01:13:35+08:00">2021-01-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,35 +241,48 @@
 <ul>
 <li>set, collection of <code>unique</code> values, or values <code>without duplicates</code></li>
 </ul>
-<h2 id="Samples"><a href="#Samples" class="headerlink" title="Samples"></a>Samples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> cs50 <span class="keyword">import</span> get_string</span><br><span class="line"></span><br><span class="line">answer = get_string(<span class="string">&quot;What&#x27;s your name?&quot;</span>) <span class="comment">#type &quot;Tom&quot;</span></span><br><span class="line">print(<span class="string">f&quot;Hello, <span class="subst">&#123;answer&#125;</span>&quot;</span>) <span class="comment">#Hello, Tom</span></span><br></pre></td></tr></table></figure>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> cs50 <span class="keyword">import</span> get_string</span><br><span class="line"></span><br><span class="line">answer = get_string(<span class="string">&quot;What&#x27;s your name?&quot;</span>) <span class="comment">#type &quot;Tom&quot;</span></span><br><span class="line">print(<span class="string">f&quot;Hello, <span class="subst">&#123;answer&#125;</span>&quot;</span>) <span class="comment">#Hello, Tom</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>f: format string，可以在字串裡使用變數，變數需要使用 <code>&#123;&#125;</code></li>
 <li>每一行的最後面可以不打 semicolon</li>
-<li>變數前不用宣告 <code>data type</code>，type 由數值定義，是 <code>loosely type</code>。</li>
+<li>變數前不用宣告 <code>data type</code>，type 由數值定義，python 是 <code>loosely type</code> 的語言。</li>
 </ul>
+<hr>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]:</span><br><span class="line">    print(i) </span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line"><span class="comment"># 3</span></span><br></pre></td></tr></table></figure>
+<hr>
+
+<p><strong>class range(start, stop[, step])</strong><br><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/functions.html#func-range">Official Doc - range()</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):</span><br><span class="line">    print(i)</span><br><span class="line"><span class="comment">#0</span></span><br><span class="line"><span class="comment">#2</span></span><br><span class="line"><span class="comment">#4</span></span><br><span class="line"><span class="comment">#6</span></span><br><span class="line"><span class="comment">#8</span></span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/functions.html#func-range">official doc - range</a></p>
+<hr>
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">answer = <span class="built_in">input</span>(<span class="string">&quot;What&#x27;s your name?&quot;</span>) <span class="comment"># type &quot;Tom&quot;</span></span><br><span class="line">print(<span class="string">f&quot;Hi, <span class="subst">&#123;answer&#125;</span>&quot;</span>)<span class="comment"># Hi, Tom</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>input</code>: prompt questions <ul>
 <li>python 內建的語法，與 <code>cs50</code> library 中的 <code>get_string</code> 相等作用</li>
 </ul>
 </li>
-<li><code>string</code> 使用<code>single quote(&#39;&#39;)</code> 或是 <code>double quotes(&quot;&quot;)</code> 都可以</li>
+<li><code>string</code> 使用 <strong>single quote</strong> <code>&#39;&#39;</code> 或是 <strong>double quotes</strong> <code>&quot;&quot;</code> 都可以</li>
 </ul>
+<hr>
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;x:&quot;</span>)) <span class="comment">#1</span></span><br><span class="line">y = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;y:&quot;</span>)) <span class="comment">#2</span></span><br><span class="line"></span><br><span class="line">print(x / y) <span class="comment">#0.5</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>注意 <code>input(&quot;x:&quot;)</code> 輸入的值為 <code>string</code>，要加 <code>int</code> 轉型成數字。</li>
-<li>In python, every thing is <code>Object</code><ul>
-<li>objects were <code>first class</code></li>
+<li>在 python 中，每一個東西都是 <code>Object</code><ul>
+<li><code>Objects</code> 是 <em>第一等公民</em></li>
 </ul>
 </li>
 </ul>
+<hr>
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    print(<span class="string">&quot;*&quot;</span>, end=<span class="string">&quot;&quot;</span>) <span class="comment">#****</span></span><br></pre></td></tr></table></figure>
 <p>相當於以下</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">&quot;*&quot;</span>*<span class="number">4</span>) <span class="comment">#****</span></span><br></pre></td></tr></table></figure>
+<hr>
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        print(<span class="string">&quot;*&quot;</span>, end=<span class="string">&quot;&quot;</span>)</span><br><span class="line">    print() <span class="comment"># add a new line</span></span><br><span class="line"><span class="comment"># ***</span></span><br><span class="line"><span class="comment"># ***</span></span><br><span class="line"><span class="comment"># ***</span></span><br></pre></td></tr></table></figure>
+<hr>
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scores = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">print(<span class="string">f&quot;Average: <span class="subst">&#123;<span class="built_in">int</span>(<span class="built_in">sum</span>(scores)/ <span class="built_in">len</span>(scores))&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment">#Average: 2</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/functions.html">Built-In Functions</a><ul>
@@ -278,6 +291,8 @@
 </ul>
 </li>
 </ul>
+<hr>
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">scores = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    scores.append(i) <span class="comment">#scores = [0,1,2]</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">f&quot;Average:  <span class="subst">&#123;<span class="built_in">sum</span>(scores)/ <span class="built_in">len</span>(scores)&#125;</span>&quot;</span>) <span class="comment">#Average: 1.0</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://docs.python.org/3/tutorial/datastructures.html">Data Structures</a><ul>
@@ -285,7 +300,9 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ints = [<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="number">1</span> <span class="keyword">in</span> ints:</span><br><span class="line">    print(<span class="string">&quot;Found&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">&quot;Not Found.&quot;</span>)</span><br><span class="line"><span class="comment">#Found</span></span><br></pre></td></tr></table></figure>
+<hr>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">c</span><br><span class="line">ints = [<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="number">1</span> <span class="keyword">in</span> ints:</span><br><span class="line">    print(<span class="string">&quot;Found 1!&quot;</span>)</span><br><span class="line"><span class="keyword">elif</span> <span class="number">2</span> <span class="keyword">in</span> ints:</span><br><span class="line">    print(<span class="string">&quot;Found 2!&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">&quot;Not Found.&quot;</span>)</span><br><span class="line"><span class="comment">#Found</span></span><br></pre></td></tr></table></figure>
 <h2 id="輕鬆做到-SWAP"><a href="#輕鬆做到-SWAP" class="headerlink" title="輕鬆做到 SWAP"></a>輕鬆做到 SWAP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">1</span></span><br><span class="line">y=<span class="number">2</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">f&quot;x is <span class="subst">&#123;x&#125;</span>, y is <span class="subst">&#123;y&#125;</span>&quot;</span>) <span class="comment">#x is 1, y is 2</span></span><br><span class="line">x, y = y, x</span><br><span class="line">print(<span class="string">f&quot;x is <span class="subst">&#123;x&#125;</span>, y is <span class="subst">&#123;y&#125;</span>&quot;</span>) <span class="comment">#x is 2, y is 1</span></span><br></pre></td></tr></table></figure>
     </div>
 
@@ -374,7 +391,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Built-In-Data-Types-%E7%AF%80%E9%8C%84%E8%87%AA-Notes"><span class="nav-number">1.</span> <span class="nav-text">Built-In Data Types (節錄自 Notes)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Samples"><span class="nav-number">2.</span> <span class="nav-text">Samples</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BC%95%E9%AC%86%E5%81%9A%E5%88%B0-SWAP"><span class="nav-number">3.</span> <span class="nav-text">輕鬆做到 SWAP</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Built-In-Data-Types-%E7%AF%80%E9%8C%84%E8%87%AA-Notes"><span class="nav-number">1.</span> <span class="nav-text">Built-In Data Types (節錄自 Notes)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Examples"><span class="nav-number">2.</span> <span class="nav-text">Examples</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BC%95%E9%AC%86%E5%81%9A%E5%88%B0-SWAP"><span class="nav-number">3.</span> <span class="nav-text">輕鬆做到 SWAP</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
