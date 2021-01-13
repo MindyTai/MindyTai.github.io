@@ -20,19 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="大約在半年前，在偶然下，我從同校學長的facebook分享得知五倍紅寶石公司。">
+  <meta name="description" content="此篇為學習 Linked Lists 的重點筆記。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2018 仲夏夜之夢，我在五倍紅寶石實習">
-<meta property="og:url" content="http://example.com/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/index.html">
+<meta property="og:title" content="Data Structure | Linked Lists">
+<meta property="og:url" content="http://example.com/2021/12/29/linked-lists/index.html">
 <meta property="og:site_name" content="From Zero to Yee">
-<meta property="og:description" content="大約在半年前，在偶然下，我從同校學長的facebook分享得知五倍紅寶石公司。">
+<meta property="og:description" content="此篇為學習 Linked Lists 的重點筆記。">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2018-09-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-26T15:11:19.205Z">
-<meta property="article:tag" content="INTERN">
+<meta property="og:image" content="http://example.com/2021/12/29/linked-lists/singly-linked-list.png">
+<meta property="article:published_time" content="2021-12-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-13T02:46:34.533Z">
+<meta property="article:tag" content="Data Structure">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/12/29/linked-lists/singly-linked-list.png">
 
-<link rel="canonical" href="http://example.com/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/">
+<link rel="canonical" href="http://example.com/2021/12/29/linked-lists/">
 
 
 <script id="page-configurations">
@@ -45,7 +47,7 @@
   };
 </script>
 
-  <title>2018 仲夏夜之夢，我在五倍紅寶石實習 | From Zero to Yee</title>
+  <title>Data Structure | Linked Lists | From Zero to Yee</title>
   
 
 
@@ -157,7 +159,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/29/linked-lists/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -170,7 +172,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          2018 仲夏夜之夢，我在五倍紅寶石實習
+          Data Structure | Linked Lists
         </h1>
 
         <div class="post-meta">
@@ -180,14 +182,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2018-09-04 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-04T00:00:00+08:00">2018-09-04</time>
+              <time title="Created: 2021-12-29 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-29T00:00:00+08:00">2021-12-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-26 23:11:19" itemprop="dateModified" datetime="2020-12-26T23:11:19+08:00">2020-12-26</time>
+                <time title="Modified: 2021-01-13 10:46:34" itemprop="dateModified" datetime="2021-01-13T10:46:34+08:00">2021-01-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -195,7 +197,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/INTERN/" itemprop="url" rel="index"><span itemprop="name">INTERN</span></a>
+                  <a href="/categories/Data-Structure/" itemprop="url" rel="index"><span itemprop="name">Data Structure</span></a>
                 </span>
             </span>
 
@@ -208,13 +210,13 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/04/2018仲夏夜之夢，我在五倍紅寶石實習/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/12/29/linked-lists/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/12/29/linked-lists/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
-            <div class="post-description">大約在半年前，在偶然下，我從同校學長的facebook分享得知五倍紅寶石公司。</div>
+            <div class="post-description">此篇為學習 Linked Lists 的重點筆記。</div>
 
         </div>
       </header>
@@ -225,23 +227,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>會申請五倍紅寶石的實習最一開始的契機是系上的實習課，老師鼓勵同學出去找實習，這剛好讓一直對實習躊躇的我再也沒藉口不去外面闖闖。而大約在半年前，在偶然下，我從同校學長的facebook分享得知五倍紅寶石公司，對這家公司在做的事覺得蠻特別的，於是一直有在觀察公司的動態，後來看到公司在徵2018年暑假的實習生，於是趁此機會鼓起勇氣投投看履歷，結果非常幸運的接獲了面試通知。</p>
-<h2 id="申請流程"><a href="#申請流程" class="headerlink" title="申請流程"></a>申請流程</h2><p>我申請的流程是，把自己的作品集集結起來放在自己的網站上，並附上個人履歷直接寄至公司信箱，由於我幾乎是公司一釋出實習消息就申請了，所以有蠻長的時間可以準備面試，但最終仍覺得沒準備充裕就上陣了。面試我的面試官是蒼時跟慕凡哥，身為全公司技術力最強的蒼時，在面試時狂戳我的技術點，問到讓我覺得我差不多可以回家洗洗睡了，而慕凡哥則是問一些比較軟性的問題，像是「為什麼會知道我們公司？」、「想在這裡學什麼東西？」等等，面試過程氣氛其實是相當輕鬆的，面試長度大概是半小時左右，建議之後要申請五倍實習的人若自己本身有名片，可以準備一下，方便在面試結束之後跟面試官交換名片。雖然面試完一度覺得蠻喪氣的，但是過一陣子竟然收到錄取通知，真的既高興又驚訝，但也有點不安，擔心自己技術力上不了臺面，但往好處想，人生就是這樣才有趣啊，剛好藉此踏出舒適圈，去闖闖看。</p>
-<h2 id="序曲，實習生大會"><a href="#序曲，實習生大會" class="headerlink" title="序曲，實習生大會"></a>序曲，實習生大會</h2><p>在實習開始之前，有一次的實習生大會，主要的目的是讓實習生認識公司成員，以及告知實習應該注意的事項，透過參與這次的大會，我認識了我的mentor也認識了未來的實習夥伴們，發現大家其實都很友善也很風趣，心中不安的程度比較減輕了，反而更期待接下來的實習生活。</p>
-<h2 id="實習開始！"><a href="#實習開始！" class="headerlink" title="實習開始！"></a>實習開始！</h2><blockquote>
-<p>先接案，再做教材</p>
-</blockquote>
-<p>五倍的實習生進來公司是有既定的教材要完成的，完成教材才能接公司內部案子或是商業案，而公司針對不同的實習職缺會有不同份的教材。但由於剛好遇到公司內部官網在進行改版，我就接下了改寫官網的公司內部案子，展開人生的第一份接案生活。<br>了解要接的專案後，才發現我有很大的洞要補，Git沒什麼概念要重頭學也缺少專案協作的概念，實習初期我每天花了很多時間在補齊這些能力，加上因為新竹台北兩地通車真的是身心俱疲，到專案中期發現自己要搞懂的觀念越來越多，除了要熟悉ruby語法利用ruby做資料串接外，還要拆分共用的元件重複利用，這些都是我陌生的部分，但幸運的是公司的夥伴們都十分願意幫助我學習，真的非常感謝大家❤️過程雖然很累但我仍感到開心充實，畢竟每天一步一步堅實的走著啊。<br>專案結束後，我開始做前端React教材，這對我來說真的是新世界啊，有種思維被強制更新的感覺，但其實React概念還蠻有趣的，感覺自己可以做的事又更多了呢 XD</p>
-<blockquote>
-<p>Work hard,play hard</p>
-</blockquote>
-<p>忙碌的實習生活中除了被負責的專案占滿外，玩樂的時間也沒少。公司有一個特別的社群活動叫作「默默會」，每個禮拜二晚上固定會舉辦，不限定來參加的人，想來的人都可以來，來這裡可以做自己的事或是與在場的大家交流，有時候會有桌遊團或是switch團嗨翻現場，是個十分有意思的活動。若你是酒友，你會發現這裡是天堂(X。</p>
-<blockquote>
-<p>白天實習，晚上假日上課</p>
-</blockquote>
-<p>公司還有一個特別的地方是會提供課程給實習生上課，通常大部分的課可以自由選修，我總共上了3門課，分別是「網頁前端設計女性專班 — 台北夜間平日班」、「客製化進階 RWD 手機版網頁設計班 — 台北假日班」以及「坐上 Git 時光機-版本控制課程」，從這些課中，我補齊了基礎，也讓自己的觀念更扎實，雖然因為晚上上課，回到家都快午夜十二點了，真的連自己個人時間都沒有，但是也是因為這樣讓自己能快速學習。這陣子真的像是一個狂吸水的海綿，瘋狂學習吸收，能力跟前兩個月剛進來比，真的可以說是大躍進，回頭看這些日子，真的是好瘋狂啊，沒想到在大學最後一年的暑假也能過得這麼刺激啊 XD</p>
-<h2 id="結業式，不是終曲，是開始"><a href="#結業式，不是終曲，是開始" class="headerlink" title="結業式，不是終曲，是開始"></a>結業式，不是終曲，是開始</h2><p>在實習的最後，公司用心地為實習生舉辦了結業式，每個實習生都要上台報告這兩個月的心得，內容呈現方式不限，每個實習生都心得滿滿，大家在這裡都待的蠻愉快的，彼此相處的很融洽，也彼此教學相長。<br>到底是什麼樣的緣分讓我們聚在一起呢？真的十分幸運遇到公司大家❤️因為這次的實習讓自己未來的路逐漸清晰，我告訴自己，再更努力一點，再堅持一點，最終會成為自己想要的樣子的！</p>
-<h1 id="在理想這條路上，跪著也要走完"><a href="#在理想這條路上，跪著也要走完" class="headerlink" title="在理想這條路上，跪著也要走完"></a>在理想這條路上，跪著也要走完</h1><p>2018五倍實習生Mindy下台一鞠躬。</p>
+        <p>此篇為 Udemy<a target="_blank" rel="noopener" href="https://www.udemy.com/course/js-algorithms-and-data-structures-masterclass/">「JavaScript Algorithms and Data Structures Masterclass」</a>的學習筆記系列。</p>
+<h2 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h2><p>由一連串的 nodes 組成。<br>1.head node (Linked List 開頭)<br>2.tail node (Linked List 結尾)<br>3.length</p>
+<p><img src="/2021/12/29/linked-lists/singly-linked-list.png"></p>
+<h5 style="display: flex; justify-content: center">(取自課堂 PPT)<h5>
+
+<h2 id="那什麼是-Node？"><a href="#那什麼是-Node？" class="headerlink" title="那什麼是 Node？"></a>那什麼是 Node？</h2><p>中文翻譯為「節點」。<br>內容包含：<br>1.value<br>2.指向 <code>其他節點或是null</code> 的 pointer</p>
+<h2 id="應用的情景"><a href="#應用的情景" class="headerlink" title="應用的情景"></a>應用的情景</h2><p>通常在遇到需要大量處理資料的時候，<code>linked-lists</code> 能夠快速插入/移除 node。</p>
+<h2 id="Arrays-V-S-Lists"><a href="#Arrays-V-S-Lists" class="headerlink" title="Arrays V.S. Lists"></a>Arrays V.S. Lists</h2><p>Lists: </p>
+<ul>
+<li>沒有 <code>index</code></li>
+<li>多個 node 相連組成</li>
+<li>無法隨機存取 node，需要從頭開始掃一遍尋找 node</li>
+</ul>
+<p>Arrays:</p>
+<ul>
+<li>有 <code>index</code></li>
+<li>在插入或是刪除的成本上會比 <code>Lists</code> 費時，其他 <code>index</code> 會被接連改動。</li>
+<li>可以藉由 <code>index</code> 快速拿取 node</li>
+</ul>
 
     </div>
 
@@ -251,7 +255,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/INTERN/" rel="tag"># INTERN</a>
+              <a href="/tags/Data-Structure/" rel="tag"># Data Structure</a>
           </div>
 
         
@@ -260,13 +264,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2018/04/22/%E5%8D%80%E5%A1%8A%E9%8F%88%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%8F%AF%E4%BB%A5%E5%90%83%E5%97%8E/" rel="prev" title="區塊鏈是什麼？可以吃嗎？">
-      <i class="fa fa-chevron-left"></i> 區塊鏈是什麼？可以吃嗎？
+    <a href="/2021/01/07/2020-fall-cs50-python/" rel="prev" title="This was CS50 - Lecture 6 (Python)">
+      <i class="fa fa-chevron-left"></i> This was CS50 - Lecture 6 (Python)
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/07/04/%E7%B6%B2%E7%AB%99%E6%96%B0%E6%94%B6%E7%9B%8A%20%E6%8C%96%E7%A4%A6%E5%8F%96%E4%BB%A3%E5%82%B3%E7%B5%B1%E5%BB%A3%E5%91%8A/" rel="next" title="網站新收益 挖礦取代傳統廣告">
-      網站新收益 挖礦取代傳統廣告 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -336,7 +337,45 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B3%E8%AB%8B%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">申請流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E6%9B%B2%EF%BC%8C%E5%AF%A6%E7%BF%92%E7%94%9F%E5%A4%A7%E6%9C%83"><span class="nav-number">2.</span> <span class="nav-text">序曲，實習生大會</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E7%BF%92%E9%96%8B%E5%A7%8B%EF%BC%81"><span class="nav-number">3.</span> <span class="nav-text">實習開始！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E6%A5%AD%E5%BC%8F%EF%BC%8C%E4%B8%8D%E6%98%AF%E7%B5%82%E6%9B%B2%EF%BC%8C%E6%98%AF%E9%96%8B%E5%A7%8B"><span class="nav-number">4.</span> <span class="nav-text">結業式，不是終曲，是開始</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E7%90%86%E6%83%B3%E9%80%99%E6%A2%9D%E8%B7%AF%E4%B8%8A%EF%BC%8C%E8%B7%AA%E8%91%97%E4%B9%9F%E8%A6%81%E8%B5%B0%E5%AE%8C"><span class="nav-number"></span> <span class="nav-text">在理想這條路上，跪著也要走完</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E7%BE%A9"><span class="nav-number">1.</span> <span class="nav-text">定義</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">(取自課堂 PPT)
+
+那什麼是 Node？中文翻譯為「節點」。
+內容包含：
+1.value
+2.指向 其他節點或是null 的 pointer
+應用的情景通常在遇到需要大量處理資料的時候，linked-lists 能夠快速插入&#x2F;移除 node。
+Arrays V.S. ListsLists: 
+
+沒有 index
+多個 node 相連組成
+無法隨機存取 node，需要從頭開始掃一遍尋找 node
+
+Arrays:
+
+有 index
+在插入或是刪除的成本上會比 Lists 費時，其他 index 會被接連改動。
+可以藉由 index 快速拿取 node
+
+</span></a></li><li class="nav-item nav-level-5"><a class="nav-link"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">
+
+那什麼是 Node？中文翻譯為「節點」。
+內容包含：
+1.value
+2.指向 其他節點或是null 的 pointer
+應用的情景通常在遇到需要大量處理資料的時候，linked-lists 能夠快速插入&#x2F;移除 node。
+Arrays V.S. ListsLists: 
+
+沒有 index
+多個 node 相連組成
+無法隨機存取 node，需要從頭開始掃一遍尋找 node
+
+Arrays:
+
+有 index
+在插入或是刪除的成本上會比 Lists 費時，其他 index 會被接連改動。
+可以藉由 index 快速拿取 node
+
+</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%A3%E4%BB%80%E9%BA%BC%E6%98%AF-Node%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">那什麼是 Node？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E7%9A%84%E6%83%85%E6%99%AF"><span class="nav-number">3.</span> <span class="nav-text">應用的情景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Arrays-V-S-Lists"><span class="nav-number">4.</span> <span class="nav-text">Arrays V.S. Lists</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -466,9 +505,9 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "http://example.com/2018/09/04/2018%E4%BB%B2%E5%A4%8F%E5%A4%9C%E4%B9%8B%E5%A4%A2%EF%BC%8C%E6%88%91%E5%9C%A8%E4%BA%94%E5%80%8D%E7%B4%85%E5%AF%B6%E7%9F%B3%E5%AF%A6%E7%BF%92/";
-    this.page.identifier = "2018/09/04/2018仲夏夜之夢，我在五倍紅寶石實習/";
-    this.page.title = "2018 仲夏夜之夢，我在五倍紅寶石實習";
+    this.page.url = "http://example.com/2021/12/29/linked-lists/";
+    this.page.identifier = "2021/12/29/linked-lists/";
+    this.page.title = "Data Structure | Linked Lists";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
