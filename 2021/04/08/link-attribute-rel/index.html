@@ -28,7 +28,7 @@
 <meta property="og:description" content="rel&#x3D;&#39;noopener&#39; 是捨碗糕？">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2021-04-07T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-04-08T10:01:41.502Z">
+<meta property="article:modified_time" content="2021-04-08T10:17:51.923Z">
 <meta property="article:tag" content="SEO">
 <meta name="twitter:card" content="summary">
 
@@ -181,7 +181,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-08 00:00:00 / Modified: 18:01:41" itemprop="dateCreated datePublished" datetime="2021-04-08T00:00:00+08:00">2021-04-08</time>
+              <time title="Created: 2021-04-08 00:00:00 / Modified: 18:17:51" itemprop="dateCreated datePublished" datetime="2021-04-08T00:00:00+08:00">2021-04-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,21 +219,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>因為專案的關係，研究 SEO 相關知識，對於頻繁使用的 </p>
+        <p>因為專案的關係，研究 SEO 相關知識，對於頻繁使用的 <code>rel=&#39;noopener&#39;</code> 有一些認識。發現小小的 <code>rel</code>，其實大有學問呢！</p>
+<p><code>rel</code> 通常會與 <code>&lt;a&gt;</code> 做使用：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&#x27;https://xxx.com&#x27;</span> <span class="attr">target</span>=<span class="string">&#x27;_blank&#x27;</span> <span class="attr">rel</span>=<span class="string">&#x27;noopener&#x27;</span>&gt;</span>Click me.<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><code>rel</code> 有一些認識。發現小小的 <code>rel</code>，其實大有學問呢！</p>
 <p><code>rel</code> 是負責說明當前文檔與欲連結過去文檔之間的關係，像是常用到的 <code>說明引入外部樣式表的 rel:&#39;stylesheet&#39;</code>。</p>
 <p>而專案大量使用的 <code>rel:noopener</code> 之前較少遇過，引發我的好奇心，花了一些時間研究，得到一些心得，以下作為紀錄。</p>
-<p><code>noopener</code> 是為防止 <code>target_blank</code> 所造成的風險所設計，什麼意思呢？</p>
-<p>一般我們在引入 <code>&lt;link&gt;</code> 可能會是這樣寫：</p>
+<br>
+
+<p><code>noopener</code> 是為防止 <code>target: &#39;_blank&#39;</code> 所造成的風險所設計，什麼意思呢？</p>
+<p>一般我們在引入 <code>&lt;a&gt;</code> 可能會是這樣寫：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&#x27;https://xxx.com&#x27;</span> <span class="attr">target</span>=<span class="string">&#x27;_blank&#x27;</span> &gt;</span>Click me.<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>讓使用者會以開新分頁的方式連到 <code>https://xxx.com</code>。</p>
-<p>但其實連過去後會產生一個值得注意的現象：<br>user 可以在瀏覽器 console 執行</p>
+<p>但其實連過去後會產生一個值得注意的現象，user 可以在新開的分頁 console 執行以下動作：</p>
 <pre><code class="js">window.opener.location = &#39;https://www.google.com&#39;;</code></pre>
-<p>這時候你會發現前一頁突然導向了 Google！<br>這其實會影響原本網站流量，間接影響 SEO，這對重視 SEO 的網站可是一大敗筆呀~</p>
-<p>而為了防止這個現象，需要另外加 <code>noopener</code>，來讓 <code>window</code> 物件裡面的 <code>opener</code> 為 <code>null</code>，就不能竄改前一頁的網址了！<br>哇，感覺真的很方便，但是之後每次都要這樣加嗎？好麻煩喔！</p>
+<p>這時候你會發現前一頁突然導向了 Google！<br>這其實會影響原本網站流量，間接影響 SEO，這對重視 SEO 的網站可是一大敗筆呀~<br>而為了防止這個現象，需要另外加 <code>noopener</code>，來讓 <code>window</code> 物件裡面的 <code>opener</code> 為 <code>null</code>，就不能竄改前一頁的網址了！<br>哇，感覺真的很方便，但是之後每次都要這樣加嗎？好麻煩喔！</p>
+<br>
+
 <p>別急！</p>
-<p>在今年(2021) 3/22，<a target="_blank" rel="noopener" href="https://www.chromestatus.com/feature/6140064063029248">Chrome</a>及<a target="_blank" rel="noopener" href="https://webkit.org/blog/8475/release-notes-for-safari-technology-preview-68/">Safari</a>宣布這為預設行為，不用再另外自己加了！<br>那如果因為特殊需求需要更改 <code>window.opener</code>，那加上 <code> rel=&quot;opener&quot;</code> 就可以了喔！</p>
+<br>
+
+<p>在今年(2021) 3/22，<a target="_blank" rel="noopener" href="https://www.chromestatus.com/feature/6140064063029248">Chrome</a> 及 <a target="_blank" rel="noopener" href="https://webkit.org/blog/8475/release-notes-for-safari-technology-preview-68/">Safari</a> 宣布這為預設行為，不用再另外自己加了！<br>那如果因為特殊需求需要更改 <code>window.opener</code>，那加上 <code> rel=&quot;opener&quot;</code> 就可以了喔！</p>
 <p>以上小小分享希望有幫助到大家！</p>
 
     </div>
