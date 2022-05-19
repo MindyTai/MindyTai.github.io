@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="每個月找一個時間來為專案的 dependencies 做個健檢吧，讓專案能夠繼續穩健的開發下去！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何安全且有效率的更新 project dependencies？">
+<meta property="og:url" content="http://example.com/2022/05/19/how-to-upgrade-dependencies-efficiently-and-safely/index.html">
+<meta property="og:site_name" content="From Zero to Yee">
+<meta property="og:description" content="每個月找一個時間來為專案的 dependencies 做個健檢吧，讓專案能夠繼續穩健的開發下去！">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/Zi6zYmW.png">
+<meta property="og:image" content="https://i.imgur.com/HhClDse.jpg">
+<meta property="og:image" content="https://i.imgur.com/p3X0YmF.png">
+<meta property="og:image" content="https://i.imgur.com/3wCkg15.png">
+<meta property="article:published_time" content="2022-05-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-19T16:10:15.145Z">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/Zi6zYmW.png">
+
+<link rel="canonical" href="http://example.com/2022/05/19/how-to-upgrade-dependencies-efficiently-and-safely/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-tw'
+  };
+</script>
+
+  <title>如何安全且有效率的更新 project dependencies？ | From Zero to Yee</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">From Zero to Yee</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>HOME</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>CATEGORIES</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>ARCHIVE</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/19/how-to-upgrade-dependencies-efficiently-and-safely/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="From Zero to Yee">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何安全且有效率的更新 project dependencies？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-19 00:00:00" itemprop="dateCreated datePublished" datetime="2022-05-19T00:00:00+08:00">2022-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-20 00:10:15" itemprop="dateModified" datetime="2022-05-20T00:10:15+08:00">2022-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/05/19/how-to-upgrade-dependencies-efficiently-and-safely/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/19/how-to-upgrade-dependencies-efficiently-and-safely/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">每個月找一個時間來為專案的 dependencies 做個健檢吧，讓專案能夠繼續穩健的開發下去！</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="如何安全且有效率的更新-project-dependencies？"><a href="#如何安全且有效率的更新-project-dependencies？" class="headerlink" title="如何安全且有效率的更新 project dependencies？"></a>如何安全且有效率的更新 project dependencies？</h1><p>如果要起一個 JavaScript 的專案，通常會遇到需要安裝一些 packages 的狀況。這個看似非常稀鬆平常的工作，其實潛藏著許多值得注意的狀況。</p>
+<h4 id="狀況一：假設專案的協作人員不只有自己的話，也許會遇到別人也幫專案安裝-packages，而自己沒注意到到底新裝了哪些，久而久之可能會有冗余的-dependencies-的問題。"><a href="#狀況一：假設專案的協作人員不只有自己的話，也許會遇到別人也幫專案安裝-packages，而自己沒注意到到底新裝了哪些，久而久之可能會有冗余的-dependencies-的問題。" class="headerlink" title="狀況一：假設專案的協作人員不只有自己的話，也許會遇到別人也幫專案安裝 packages，而自己沒注意到到底新裝了哪些，久而久之可能會有冗余的 dependencies 的問題。"></a>狀況一：假設專案的協作人員不只有自己的話，也許會遇到別人也幫專案安裝 packages，而自己沒注意到到底新裝了哪些，久而久之可能會有冗余的 dependencies 的問題。</h4><h4 id="狀況二：dependencies-安裝已一陣時間，可能會有安全性的疑慮。"><a href="#狀況二：dependencies-安裝已一陣時間，可能會有安全性的疑慮。" class="headerlink" title="狀況二：dependencies 安裝已一陣時間，可能會有安全性的疑慮。"></a>狀況二：dependencies 安裝已一陣時間，可能會有安全性的疑慮。</h4><h4 id="狀況三：dependencies-安裝已一段時間，沒有定期更新，導致有-breaking-change-產生。"><a href="#狀況三：dependencies-安裝已一段時間，沒有定期更新，導致有-breaking-change-產生。" class="headerlink" title="狀況三：dependencies 安裝已一段時間，沒有定期更新，導致有 breaking change 產生。"></a>狀況三：dependencies 安裝已一段時間，沒有定期更新，導致有 breaking change 產生。</h4><p>以下針對這三種常見狀況提出平常可以建立的好習慣：</p>
+<h3 id="1-掌握專案的-dependencies"><a href="#1-掌握專案的-dependencies" class="headerlink" title="(1)掌握專案的 dependencies"></a>(1)掌握專案的 dependencies</h3><p>就像我們需要健康檢查一樣，專案建議能夠定期安排一次為 dependencies 做檢查，翻出 package.json 來看看。</p>
+<h4 id="Step-1-建議掌握的要點"><a href="#Step-1-建議掌握的要點" class="headerlink" title="Step 1.建議掌握的要點"></a>Step 1.建議掌握的要點</h4><ol>
+<li>各自是裝來達成什麼樣的目的？</li>
+<li>真的需要嗎？會不會其實也可以自己簡單的實作出來？</li>
+<li>確認裝在正確的位置</li>
+</ol>
+<p>以 <a target="_blank" rel="noopener" href="https://docs.npmjs.com/specifying-dependencies-and-devdependencies-in-a-package-json-file">Npm</a>  及 <a target="_blank" rel="noopener" href="https://classic.yarnpkg.com/en/docs/dependency-types#toc-dependencies">Yarn</a> 官方的定義：<br>如果是在 production 環境也會用到的 dependency，建議放在 <code>dependencies</code>，如果是在開發、測試環境下才會用到，就可以放在 <code>devDependencies</code>。</p>
+<h4 id="Step-2-確認後刪除冗余-dependencies"><a href="#Step-2-確認後刪除冗余-dependencies" class="headerlink" title="Step 2.確認後刪除冗余 dependencies"></a>Step 2.確認後刪除冗余 dependencies</h4><h6 id="Yarn-使用者"><a href="#Yarn-使用者" class="headerlink" title="Yarn 使用者"></a><a target="_blank" rel="noopener" href="https://yarnpkg.com/">Yarn</a> 使用者</h6><p><code>yarn remove your-dependency</code></p>
+<h6 id="Npm-使用者"><a href="#Npm-使用者" class="headerlink" title="Npm 使用者"></a><a target="_blank" rel="noopener" href="https://www.npmjs.com/">Npm</a> 使用者</h6><p><code>npm uninstall your-dependency</code></p>
+<h3 id="2-關注專案的-dependencies-的資安疑慮"><a href="#2-關注專案的-dependencies-的資安疑慮" class="headerlink" title="(2)關注專案的 dependencies 的資安疑慮"></a>(2)關注專案的 dependencies 的資安疑慮</h3><p>packages 通常隔一段時間都會更新，常見的更新原因包括有 known vulnerabilities 的出現。</p>
+<h4 id="👉-掃一遍專案的-dependencies，並列出細節，但不去解決問題"><a href="#👉-掃一遍專案的-dependencies，並列出細節，但不去解決問題" class="headerlink" title="👉 掃一遍專案的 dependencies，並列出細節，但不去解決問題"></a>👉 掃一遍專案的 dependencies，並列出細節，但不去解決問題</h4><h5 id="Yarn-使用者-1"><a href="#Yarn-使用者-1" class="headerlink" title="Yarn 使用者"></a>Yarn 使用者</h5><p><code>yarn audit</code></p>
+<h5 id="Npm-使用者-1"><a href="#Npm-使用者-1" class="headerlink" title="Npm 使用者"></a>Npm 使用者</h5><p><code>npm audit</code></p>
+<h4 id="👉-掃一遍專案的-dependencies，並安裝已有的對應版本，解決問題"><a href="#👉-掃一遍專案的-dependencies，並安裝已有的對應版本，解決問題" class="headerlink" title="👉 掃一遍專案的 dependencies，並安裝已有的對應版本，解決問題"></a>👉 掃一遍專案的 dependencies，並安裝已有的對應版本，解決問題</h4><h5 id="Yarn-使用者-2"><a href="#Yarn-使用者-2" class="headerlink" title="Yarn 使用者"></a>Yarn 使用者</h5><p>本身沒有內建此功能，不過有一個小工具 <a target="_blank" rel="noopener" href="https://github.com/antongolub/yarn-audit-fix">yarn-audit-fix</a> 可以拿來達成此功能。</p>
+<h5 id="Npm-使用者-2"><a href="#Npm-使用者-2" class="headerlink" title="Npm 使用者"></a>Npm 使用者</h5><p><code>npm audit fix</code></p>
+<h4 id="👉-使用-GitHub-內建的-dependabot-vulnerabilities-alerts"><a href="#👉-使用-GitHub-內建的-dependabot-vulnerabilities-alerts" class="headerlink" title="👉 使用 GitHub 內建的 dependabot vulnerabilities alerts"></a>👉 使用 GitHub 內建的 <a target="_blank" rel="noopener" href="https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates">dependabot vulnerabilities alerts</a></h4><h5 id="如何開啟"><a href="#如何開啟" class="headerlink" title="如何開啟"></a>如何開啟</h5><blockquote>
+<p>Settings &gt; Code security and analysis &gt; Dependabot alerts &gt; Enable</p>
+</blockquote>
+<p><img src="https://i.imgur.com/Zi6zYmW.png"></p>
+<h5 id="偵測到有-vulnerabilities-時，也會寄信通知"><a href="#偵測到有-vulnerabilities-時，也會寄信通知" class="headerlink" title="偵測到有 vulnerabilities 時，也會寄信通知"></a>偵測到有 vulnerabilities 時，也會寄信通知</h5><img src="https://i.imgur.com/HhClDse.jpg" width="200"/>
+
+
+<h3 id="3-定期關注在使用的-dependencies-版本是否變動"><a href="#3-定期關注在使用的-dependencies-版本是否變動" class="headerlink" title="(3)定期關注在使用的 dependencies 版本是否變動"></a>(3)定期關注在使用的 dependencies 版本是否變動</h3><p>這項非常重要，通常 dependencies 升級的原因不外乎是增加新功能、解 bug，或是剛剛提過的資安疑慮。</p>
+<h4 id="Step-1-檢查已安裝的-packages-是否有更新的版本了，有的話列出來"><a href="#Step-1-檢查已安裝的-packages-是否有更新的版本了，有的話列出來" class="headerlink" title="Step 1. 檢查已安裝的 packages 是否有更新的版本了，有的話列出來"></a>Step 1. 檢查已安裝的 packages 是否有更新的版本了，有的話列出來</h4><h5 id="Npm-使用者-3"><a href="#Npm-使用者-3" class="headerlink" title="Npm 使用者"></a>Npm 使用者</h5><p><code>$ npm outdated</code></p>
+<p>內容為以下：<br>取自 <a target="_blank" rel="noopener" href="https://docs.npmjs.com/cli/v8/commands/npm-outdated/#an-example">Npm doc example</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Package      Current   Wanted   Latest  Location                  Depended by</span><br><span class="line">glob          5.0.15   5.0.15    6.0.1  node_modules&#x2F;glob         dependent-package-name</span><br></pre></td></tr></table></figure>
+<h5 id="Yarn-使用者-3"><a href="#Yarn-使用者-3" class="headerlink" title="Yarn 使用者"></a>Yarn 使用者</h5><p><code>$ yarn outdated</code><br>內容為以下：<br>取自 <a target="_blank" rel="noopener" href="https://classic.yarnpkg.com/lang/en/docs/cli/outdated/#toc-yarn-outdated">Yarn doc example</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Package    Current Wanted Latest Package Type    URL</span><br><span class="line">lodash     4.15.0  4.15.0 4.16.4 devDependencies https:&#x2F;&#x2F;github.com&#x2F;lodash&#x2F;lodash#readme</span><br></pre></td></tr></table></figure>
+<h3 id="Step-2-選定要更新的-packages-做更新"><a href="#Step-2-選定要更新的-packages-做更新" class="headerlink" title="Step 2.選定要更新的 packages 做更新"></a>Step 2.選定要更新的 packages 做更新</h3><h4 id="事前作業"><a href="#事前作業" class="headerlink" title="事前作業"></a>事前作業</h4><p>參考 packages 的 CHANGELOG (例如：<a target="_blank" rel="noopener" href="https://github.com/facebook/react/blob/master/CHANGELOG.md">React’s CHANGELOG</a>) 或是 Release Note (例如：<a target="_blank" rel="noopener" href="https://github.com/facebook/react/releases/tag/v18.1.0">React’s Release Note</a>) 來為因升級而產生的變動做準備</p>
+<h4 id="狀況ㄧ：更新到-package-json-鎖定好的版號範圍"><a href="#狀況ㄧ：更新到-package-json-鎖定好的版號範圍" class="headerlink" title="狀況ㄧ：更新到 package.json 鎖定好的版號範圍"></a>狀況ㄧ：更新到 package.json 鎖定好的版號範圍</h4><h5 id="Npm-使用者-4"><a href="#Npm-使用者-4" class="headerlink" title="Npm 使用者"></a>Npm 使用者</h5><p><code>$ npm update</code></p>
+<h5 id="Yarn-使用者-4"><a href="#Yarn-使用者-4" class="headerlink" title="Yarn 使用者"></a>Yarn 使用者</h5><p><code>$ yarn upgrade</code></p>
+<h4 id="狀況二：更新到不在-package-json-定義好的版號範圍"><a href="#狀況二：更新到不在-package-json-定義好的版號範圍" class="headerlink" title="狀況二：更新到不在 package.json 定義好的版號範圍"></a>狀況二：更新到不在 package.json 定義好的版號範圍</h4><h5 id="Npm-使用者-5"><a href="#Npm-使用者-5" class="headerlink" title="Npm 使用者"></a>Npm 使用者</h5><p>因為 Npm 沒有內建達到此需求的工具，建議安裝 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/npm-check">npm-check</a>。<br><code>$ npm-check -u</code> (-u 表示可以以互動介面的方式來讓使用者來選擇要進行的更新)</p>
+<p><img src="https://i.imgur.com/p3X0YmF.png"><br>(取自 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/npm-check">npm-check</a>)</p>
+<h5 id="Yarn-使用者-5"><a href="#Yarn-使用者-5" class="headerlink" title="Yarn 使用者"></a>Yarn 使用者</h5><p>與 Npm 相反，Yarn 有內建的互動式工具來讓使用者選擇要進行的更新</p>
+<p><code>$ yarn upgrade-interactive --latest</code></p>
+<p><img src="https://i.imgur.com/3wCkg15.png"><br>(取自 <a target="_blank" rel="noopener" href="https://classic.yarnpkg.com/lang/en/docs/cli/upgrade-interactive/#toc-yarn-upgrade-interactive">Yarn doc</a>)</p>
+<h3 id="Step-3-升級後跑測試，檢查有沒有哪邊地方壞掉"><a href="#Step-3-升級後跑測試，檢查有沒有哪邊地方壞掉" class="headerlink" title="Step 3.升級後跑測試，檢查有沒有哪邊地方壞掉"></a>Step 3.升級後跑測試，檢查有沒有哪邊地方壞掉</h3><p>如果專案有寫測試，例如單元測試或是 E2E 測試都可以拿來跑看看，檢查有沒有地方因為升級後來沒做相對應的處理而受到影響。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>以上三點提供給讀者參考看看囉！每個月找一個時間來為專案的 dependencies 做個健檢吧，讓專案能夠繼續穩健的開發下去！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JS/" rel="tag"># JS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/19/ms-teams-and-github-integration/" rel="prev" title="Github + Teams Integration">
+      <i class="fa fa-chevron-left"></i> Github + Teams Integration
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+         
+          <div style="">
+	        
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+	        </div>
+         
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          TABLE OF CONTENTS
+        </li>
+        <li class="sidebar-nav-overview">
+          OVERVIEW
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%89%E5%85%A8%E4%B8%94%E6%9C%89%E6%95%88%E7%8E%87%E7%9A%84%E6%9B%B4%E6%96%B0-project-dependencies%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">如何安全且有效率的更新 project dependencies？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%80%E6%B3%81%E4%B8%80%EF%BC%9A%E5%81%87%E8%A8%AD%E5%B0%88%E6%A1%88%E7%9A%84%E5%8D%94%E4%BD%9C%E4%BA%BA%E5%93%A1%E4%B8%8D%E5%8F%AA%E6%9C%89%E8%87%AA%E5%B7%B1%E7%9A%84%E8%A9%B1%EF%BC%8C%E4%B9%9F%E8%A8%B1%E6%9C%83%E9%81%87%E5%88%B0%E5%88%A5%E4%BA%BA%E4%B9%9F%E5%B9%AB%E5%B0%88%E6%A1%88%E5%AE%89%E8%A3%9D-packages%EF%BC%8C%E8%80%8C%E8%87%AA%E5%B7%B1%E6%B2%92%E6%B3%A8%E6%84%8F%E5%88%B0%E5%88%B0%E5%BA%95%E6%96%B0%E8%A3%9D%E4%BA%86%E5%93%AA%E4%BA%9B%EF%BC%8C%E4%B9%85%E8%80%8C%E4%B9%85%E4%B9%8B%E5%8F%AF%E8%83%BD%E6%9C%83%E6%9C%89%E5%86%97%E4%BD%99%E7%9A%84-dependencies-%E7%9A%84%E5%95%8F%E9%A1%8C%E3%80%82"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">狀況一：假設專案的協作人員不只有自己的話，也許會遇到別人也幫專案安裝 packages，而自己沒注意到到底新裝了哪些，久而久之可能會有冗余的 dependencies 的問題。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%80%E6%B3%81%E4%BA%8C%EF%BC%9Adependencies-%E5%AE%89%E8%A3%9D%E5%B7%B2%E4%B8%80%E9%99%A3%E6%99%82%E9%96%93%EF%BC%8C%E5%8F%AF%E8%83%BD%E6%9C%83%E6%9C%89%E5%AE%89%E5%85%A8%E6%80%A7%E7%9A%84%E7%96%91%E6%85%AE%E3%80%82"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">狀況二：dependencies 安裝已一陣時間，可能會有安全性的疑慮。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%80%E6%B3%81%E4%B8%89%EF%BC%9Adependencies-%E5%AE%89%E8%A3%9D%E5%B7%B2%E4%B8%80%E6%AE%B5%E6%99%82%E9%96%93%EF%BC%8C%E6%B2%92%E6%9C%89%E5%AE%9A%E6%9C%9F%E6%9B%B4%E6%96%B0%EF%BC%8C%E5%B0%8E%E8%87%B4%E6%9C%89-breaking-change-%E7%94%A2%E7%94%9F%E3%80%82"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">狀況三：dependencies 安裝已一段時間，沒有定期更新，導致有 breaking change 產生。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8E%8C%E6%8F%A1%E5%B0%88%E6%A1%88%E7%9A%84-dependencies"><span class="nav-number">1.0.1.</span> <span class="nav-text">(1)掌握專案的 dependencies</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-1-%E5%BB%BA%E8%AD%B0%E6%8E%8C%E6%8F%A1%E7%9A%84%E8%A6%81%E9%BB%9E"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">Step 1.建議掌握的要點</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-2-%E7%A2%BA%E8%AA%8D%E5%BE%8C%E5%88%AA%E9%99%A4%E5%86%97%E4%BD%99-dependencies"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">Step 2.確認後刪除冗余 dependencies</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Yarn-%E4%BD%BF%E7%94%A8%E8%80%85"><span class="nav-number">1.0.1.2.0.1.</span> <span class="nav-text">Yarn 使用者</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Npm-%E4%BD%BF%E7%94%A8%E8%80%85"><span class="nav-number">1.0.1.2.0.2.</span> <span class="nav-text">Npm 使用者</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%97%9C%E6%B3%A8%E5%B0%88%E6%A1%88%E7%9A%84-dependencies-%E7%9A%84%E8%B3%87%E5%AE%89%E7%96%91%E6%85%AE"><span class="nav-number">1.0.2.</span> <span class="nav-text">(2)關注專案的 dependencies 的資安疑慮</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%91%89-%E6%8E%83%E4%B8%80%E9%81%8D%E5%B0%88%E6%A1%88%E7%9A%84-dependencies%EF%BC%8C%E4%B8%A6%E5%88%97%E5%87%BA%E7%B4%B0%E7%AF%80%EF%BC%8C%E4%BD%86%E4%B8%8D%E5%8E%BB%E8%A7%A3%E6%B1%BA%E5%95%8F%E9%A1%8C"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">👉 掃一遍專案的 dependencies，並列出細節，但不去解決問題</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Yarn-%E4%BD%BF%E7%94%A8%E8%80%85-1"><span class="nav-number">1.0.2.1.1.</span> <span class="nav-text">Yarn 使用者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Npm-%E4%BD%BF%E7%94%A8%E8%80%85-1"><span class="nav-number">1.0.2.1.2.</span> <span class="nav-text">Npm 使用者</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%91%89-%E6%8E%83%E4%B8%80%E9%81%8D%E5%B0%88%E6%A1%88%E7%9A%84-dependencies%EF%BC%8C%E4%B8%A6%E5%AE%89%E8%A3%9D%E5%B7%B2%E6%9C%89%E7%9A%84%E5%B0%8D%E6%87%89%E7%89%88%E6%9C%AC%EF%BC%8C%E8%A7%A3%E6%B1%BA%E5%95%8F%E9%A1%8C"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">👉 掃一遍專案的 dependencies，並安裝已有的對應版本，解決問題</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Yarn-%E4%BD%BF%E7%94%A8%E8%80%85-2"><span class="nav-number">1.0.2.2.1.</span> <span class="nav-text">Yarn 使用者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Npm-%E4%BD%BF%E7%94%A8%E8%80%85-2"><span class="nav-number">1.0.2.2.2.</span> <span class="nav-text">Npm 使用者</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%91%89-%E4%BD%BF%E7%94%A8-GitHub-%E5%85%A7%E5%BB%BA%E7%9A%84-dependabot-vulnerabilities-alerts"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">👉 使用 GitHub 內建的 dependabot vulnerabilities alerts</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%95%9F"><span class="nav-number">1.0.2.3.1.</span> <span class="nav-text">如何開啟</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%81%B5%E6%B8%AC%E5%88%B0%E6%9C%89-vulnerabilities-%E6%99%82%EF%BC%8C%E4%B9%9F%E6%9C%83%E5%AF%84%E4%BF%A1%E9%80%9A%E7%9F%A5"><span class="nav-number">1.0.2.3.2.</span> <span class="nav-text">偵測到有 vulnerabilities 時，也會寄信通知</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%9A%E6%9C%9F%E9%97%9C%E6%B3%A8%E5%9C%A8%E4%BD%BF%E7%94%A8%E7%9A%84-dependencies-%E7%89%88%E6%9C%AC%E6%98%AF%E5%90%A6%E8%AE%8A%E5%8B%95"><span class="nav-number">1.0.3.</span> <span class="nav-text">(3)定期關注在使用的 dependencies 版本是否變動</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-1-%E6%AA%A2%E6%9F%A5%E5%B7%B2%E5%AE%89%E8%A3%9D%E7%9A%84-packages-%E6%98%AF%E5%90%A6%E6%9C%89%E6%9B%B4%E6%96%B0%E7%9A%84%E7%89%88%E6%9C%AC%E4%BA%86%EF%BC%8C%E6%9C%89%E7%9A%84%E8%A9%B1%E5%88%97%E5%87%BA%E4%BE%86"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">Step 1. 檢查已安裝的 packages 是否有更新的版本了，有的話列出來</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Npm-%E4%BD%BF%E7%94%A8%E8%80%85-3"><span class="nav-number">1.0.3.1.1.</span> <span class="nav-text">Npm 使用者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Yarn-%E4%BD%BF%E7%94%A8%E8%80%85-3"><span class="nav-number">1.0.3.1.2.</span> <span class="nav-text">Yarn 使用者</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-2-%E9%81%B8%E5%AE%9A%E8%A6%81%E6%9B%B4%E6%96%B0%E7%9A%84-packages-%E5%81%9A%E6%9B%B4%E6%96%B0"><span class="nav-number">1.0.4.</span> <span class="nav-text">Step 2.選定要更新的 packages 做更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%89%8D%E4%BD%9C%E6%A5%AD"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">事前作業</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%80%E6%B3%81%E3%84%A7%EF%BC%9A%E6%9B%B4%E6%96%B0%E5%88%B0-package-json-%E9%8E%96%E5%AE%9A%E5%A5%BD%E7%9A%84%E7%89%88%E8%99%9F%E7%AF%84%E5%9C%8D"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">狀況ㄧ：更新到 package.json 鎖定好的版號範圍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Npm-%E4%BD%BF%E7%94%A8%E8%80%85-4"><span class="nav-number">1.0.4.2.1.</span> <span class="nav-text">Npm 使用者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Yarn-%E4%BD%BF%E7%94%A8%E8%80%85-4"><span class="nav-number">1.0.4.2.2.</span> <span class="nav-text">Yarn 使用者</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%80%E6%B3%81%E4%BA%8C%EF%BC%9A%E6%9B%B4%E6%96%B0%E5%88%B0%E4%B8%8D%E5%9C%A8-package-json-%E5%AE%9A%E7%BE%A9%E5%A5%BD%E7%9A%84%E7%89%88%E8%99%9F%E7%AF%84%E5%9C%8D"><span class="nav-number">1.0.4.3.</span> <span class="nav-text">狀況二：更新到不在 package.json 定義好的版號範圍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Npm-%E4%BD%BF%E7%94%A8%E8%80%85-5"><span class="nav-number">1.0.4.3.1.</span> <span class="nav-text">Npm 使用者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Yarn-%E4%BD%BF%E7%94%A8%E8%80%85-5"><span class="nav-number">1.0.4.3.2.</span> <span class="nav-text">Yarn 使用者</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-3-%E5%8D%87%E7%B4%9A%E5%BE%8C%E8%B7%91%E6%B8%AC%E8%A9%A6%EF%BC%8C%E6%AA%A2%E6%9F%A5%E6%9C%89%E6%B2%92%E6%9C%89%E5%93%AA%E9%82%8A%E5%9C%B0%E6%96%B9%E5%A3%9E%E6%8E%89"><span class="nav-number">1.0.5.</span> <span class="nav-text">Step 3.升級後跑測試，檢查有沒有哪邊地方壞掉</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">1.1.</span> <span class="nav-text">總結</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name"></p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/MindyTai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;MindyTai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">All Rights Reserved</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fromzerotoyee.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://example.com/2022/05/19/how-to-upgrade-dependencies-efficiently-and-safely/";
+    this.page.identifier = "2022/05/19/how-to-upgrade-dependencies-efficiently-and-safely/";
+    this.page.title = "如何安全且有效率的更新 project dependencies？";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://fromzerotoyee.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
